@@ -3,6 +3,7 @@ import LandingPage from './components/LandingPage';
 import RegisterPage from './components/RegisterPage';
 import LoginPage from './components/LoginPage';
 import DashboardPage from './components/DashboardPage';
+import BoardPage from './components/BoardPage';
 import ProtectedRoute from './components/ProtectedRoute';
 
 
@@ -24,6 +25,14 @@ const router = createBrowserRouter([
     element: (
       <ProtectedRoute>
         <DashboardPage />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: '/boards/:boardId', // New route for a specific board
+    element: (
+      <ProtectedRoute>
+        <BoardPage />
       </ProtectedRoute>
     ),
   },
