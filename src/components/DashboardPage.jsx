@@ -11,6 +11,8 @@ const DashboardPage = () => {
   const [editBoardName, setEditBoardName] = useState('');
   const [editBoardId, setEditBoardId] = useState('');
   const [newBoardColor, setNewBoardColor] = useState('#ffffff');
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [deleteBoardId, setDeleteBoardId] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -111,16 +113,23 @@ const DashboardPage = () => {
     }
   };
 
-  const handleDeleteBoard = async (boardId) => {
+  const handleOpenDeleteModal = (boardId) => {
+    setDeleteBoardId(boardId);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleConfirmDeleteBoard = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/boards/${boardId}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/boards/${deleteBoardId}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
         },
       });
       if (response.ok) {
-        setBoards(boards.filter(board => board._id !== boardId));
+        setBoards(boards.filter(board => board._id !== deleteBoardId));
+        setIsDeleteModalOpen(false);
+        setDeleteBoardId('');
       } else {
         const data = await response.json();
         setError(data.message);
@@ -179,7 +188,7 @@ const DashboardPage = () => {
                 </button>
                 <button
                   className="text-red-500 mt-2 ml-4"
-                  onClick={() => handleDeleteBoard(board._id)}
+                  onClick={() => handleOpenDeleteModal(board._id)}
                 >
                   Delete
                 </button>
@@ -241,7 +250,7 @@ const DashboardPage = () => {
               />
             </div>
             <button
-              className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+              className="bg-green-500 text-white px-4 py-2 rounded mr-2"
               onClick={handleEditBoard}
             >
               Save Changes
@@ -255,11 +264,33 @@ const DashboardPage = () => {
           </div>
         </div>
       )}
+
+      {isDeleteModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded shadow">
+            <h2 className="text-xl font-bold mb-4">Are you sure?</h2>
+            <p className="mb-4">Do you really want to delete this board?</p>
+            <button
+              className="bg-red-500 text-white px-4 py-2 rounded mr-2"
+              onClick={handleConfirmDeleteBoard}
+            >
+              Yes, Delete
+            </button>
+            <button
+              className="bg-gray-500 text-white px-4 py-2 rounded"
+              onClick={() => setIsDeleteModalOpen(false)}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
 export default DashboardPage;
+
 
 
 
