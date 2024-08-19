@@ -297,7 +297,7 @@ function BoardPage() {
         <Droppable droppableId="all-lists" direction="horizontal">
           {(provided) => (
             <div
-              className="flex gap-4 overflow-x-auto"
+              className="flex gap-4 overflow-x-auto items-start"
               {...provided.droppableProps}
               ref={provided.innerRef}
             >

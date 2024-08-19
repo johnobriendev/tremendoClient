@@ -1,9 +1,44 @@
 import React from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import Card from './Card';
+import { BsThreeDots } from "react-icons/bs";
+
 
 function List({ list, cards, newCardName, editListName, setEditListName, setNewCardName, handleCreateCard, handleDeleteList, handleListNameChange }) {
+  
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [listColor, setListColor] = useState('bg-white');
+  
+  
   const listCards = cards.filter(card => card.listId === list._id).sort((a, b) => a.position - b.position);
+
+
+  const menuRef = useRef(null);
+
+  const handleClickOutside = (event) => {
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      setMenuOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+
+  const handleDeleteClick = () => {
+    setShowModal(true);
+  };
+
+  const confirmDelete = () => {
+    handleDeleteList(list._id);
+    setShowModal(false);
+  };
 
   return (
     <Draggable draggableId={list._id} index={list.position - 1}>
@@ -14,7 +49,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
           {...provided.dragHandleProps}
           className="bg-white shadow rounded-md p-4 w-80"
         >
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between gap-2 mb-4">
             <input
               type="text"
               value={editListName[list._id] || list.name}
@@ -22,13 +57,41 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
               onBlur={() => handleListNameChange(list._id, editListName[list._id])}
               placeholder="List Name"
               className="p-2 border rounded w-full"
+              style={{ backgroundColor: listColor }}
             />
-            <button
-              onClick={() => handleDeleteList(list._id)}
-              className="text-red-500 hover:text-red-600"
-            >
-              Delete
-            </button>
+            <div className="relative" ref={menuRef}>
+              <button
+                onClick={() => setMenuOpen(!menuOpen)}
+                className="text-gray-500 hover:text-gray-600"
+              >
+                <BsThreeDots />
+              </button>
+              {menuOpen && (
+                <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg">
+                  <button
+                    onClick={handleDeleteClick}
+                    className="block px-4 py-2 text-red-500 hover:bg-gray-100 w-full text-left"
+                  >
+                    Delete List
+                  </button>
+                  <div className="block px-4 py-2 hover:bg-gray-100 w-full text-left">
+                    <label className="block text-gray-700 mb-2">Background Color</label>
+                    <input
+                      type="color"
+                      className="w-16 h-8"
+                      value={listColor}
+                      onChange={(e) => setListColor(e.target.value)}
+                    />
+                  </div>
+                  <button
+                    onClick={() => setMenuOpen(false)}
+                    className="block px-4 py-2 hover:bg-gray-100 w-full text-left"
+                  >
+                    Close
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
           <Droppable droppableId={list._id} type="CARD">
             {(provided) => (
@@ -59,6 +122,26 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
               </div>
             )}
           </Droppable>
+
+          {showModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+              <div className="bg-white p-6 rounded-md shadow-lg">
+                <h2 className="text-lg mb-4">Are you sure you want to delete this list?</h2>
+                <button
+                  onClick={confirmDelete}
+                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mr-4"
+                >
+                  Delete
+                </button>
+                <button
+                  onClick={() => setShowModal(false)}
+                  className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </Draggable>
