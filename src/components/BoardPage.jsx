@@ -275,7 +275,7 @@ function BoardPage() {
   
   
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className="p-6 bg-gray-100 min-h-screen w-full overflow-x-auto">
       <Link to='/dashboard' className=' text-sky-500'>Home</Link>
       <h1 className="text-2xl font-bold mt-6 mb-6">{board?.name}</h1>
       <div className="flex gap-4 mb-6">
@@ -297,9 +297,10 @@ function BoardPage() {
         <Droppable droppableId="all-lists" direction="horizontal">
           {(provided) => (
             <div
-              className="flex gap-4 overflow-x-auto items-start"
+              className="flex gap-4 items-start"
               {...provided.droppableProps}
               ref={provided.innerRef}
+              style={{ width: '100%' }} 
             >
               {lists.map((list, index) => (
                 <List
