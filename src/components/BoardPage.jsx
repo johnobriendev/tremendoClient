@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import List from './List'; // Import List component
+
+//{"boardId": ObjectId("66bec4ce5da67329e61e60c6")}
+
 
 function BoardPage() {
   const { boardId } = useParams();
@@ -10,54 +16,56 @@ function BoardPage() {
   const [newCardName, setNewCardName] = useState('');
   const [editListName, setEditListName] = useState({});
 
-  useEffect(() => {
-    const fetchBoardData = async () => {
-      try {
-        const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+  const fetchBoardData = async () => {
+    try {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
-        // Fetch board data
-        const boardResponse = await fetch(`${apiBaseUrl}/boards/${boardId}`, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-        if (!boardResponse.ok) {
-          throw new Error(`Error fetching board: ${boardResponse.statusText}`);
-        }
-        const boardData = await boardResponse.json();
-        setBoard(boardData);
-
-        // Fetch lists data
-        const listsResponse = await fetch(`${apiBaseUrl}/lists/${boardId}/lists`, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-        if (!listsResponse.ok) {
-          throw new Error(`Error fetching lists: ${listsResponse.statusText}`);
-        }
-        const listsData = await listsResponse.json();
-        setLists(listsData);
-
-        // Fetch cards data
-        const cardsResponse = await fetch(`${apiBaseUrl}/cards/${boardId}/cards`, {
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-        if (!cardsResponse.ok) {
-          throw new Error(`Error fetching cards: ${cardsResponse.statusText}`);
-        }
-        const cardsData = await cardsResponse.json();
-        setCards(cardsData);
-      } catch (error) {
-        console.error('Error fetching board data:', error);
+      // Fetch board data
+      const boardResponse = await fetch(`${apiBaseUrl}/boards/${boardId}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      if (!boardResponse.ok) {
+        throw new Error(`Error fetching board: ${boardResponse.statusText}`);
       }
-    };
+      const boardData = await boardResponse.json();
+      setBoard(boardData);
 
+      // Fetch lists data
+      const listsResponse = await fetch(`${apiBaseUrl}/lists/${boardId}/lists`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      if (!listsResponse.ok) {
+        throw new Error(`Error fetching lists: ${listsResponse.statusText}`);
+      }
+      const listsData = await listsResponse.json();
+      setLists(listsData);
+
+      // Fetch cards data
+      const cardsResponse = await fetch(`${apiBaseUrl}/cards/${boardId}/cards`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      if (!cardsResponse.ok) {
+        throw new Error(`Error fetching cards: ${cardsResponse.statusText}`);
+      }
+      const cardsData = await cardsResponse.json();
+      setCards(cardsData);
+    } catch (error) {
+      console.error('Error fetching board data:', error);
+    }
+  };
+
+
+
+  useEffect(() => {
     fetchBoardData();
   }, [boardId]);
 
@@ -88,40 +96,6 @@ function BoardPage() {
     }
   };
 
-  const handleCreateCard = async (listId) => {
-    const cardName = newCardName[listId]?.trim(); // Get the card name and trim spaces
-    if (!cardName) return; // Exit if card name is empty
-  
-    try {
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-      const response = await fetch(`${apiBaseUrl}/cards/${boardId}/cards`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({
-          listId,
-          name: cardName,
-          position: cards.filter(card => card.listId === listId).length + 1, // Position at the end of the list
-        }),
-      });
-  
-      if (!response.ok) {
-        throw new Error(`Error creating card: ${response.statusText}`);
-      }
-  
-      const newCard = await response.json();
-      setCards([...cards, newCard]); // Add the new card to the state
-      setNewCardName({ ...newCardName, [listId]: '' }); // Clear the input field for the current list
-    } catch (error) {
-      console.error('Error creating card:', error);
-    }
-  };
-  
-
- 
- 
   const handleListNameChange = async (listId, newName) => {
     try {
       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -162,108 +136,197 @@ function BoardPage() {
       console.error('Error deleting list:', error);
     }
   };
+
+
+  const handleCreateCard = async (listId) => {
+    const cardName = newCardName[listId]?.trim(); // Get the card name and trim spaces
+    if (!cardName) return; // Exit if card name is empty
+  
+    try {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+      const response = await fetch(`${apiBaseUrl}/cards/${boardId}/cards`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({
+          listId,
+          name: cardName,
+          position: cards.filter(card => card.listId === listId).length + 1, // Position at the end of the list
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error(`Error creating card: ${response.statusText}`);
+      }
+  
+      const newCard = await response.json();
+      setCards([...cards, newCard]); // Add the new card to the state
+      setNewCardName({ ...newCardName, [listId]: '' }); // Clear the input field for the current list
+    } catch (error) {
+      console.error('Error creating card:', error);
+    }
+  };
+
+  const handleDragEnd = async (result) => {
+    const { destination, source, draggableId, type } = result;
+  
+    // If there's no destination, the card was dropped outside a valid droppable area
+    if (!destination) return;
+  
+    // If the card was dropped back into its original position, do nothing
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+  
+    // If we're dealing with a card drag
+    if (type === 'CARD') {
+      const startListId = source.droppableId;
+      const endListId = destination.droppableId;
+      const draggedCardId = draggableId;
+  
+      // Create a new array of cards
+      let newCards = [...cards];
+  
+      // Find the moved card
+      const movedCard = newCards.find(card => card._id === draggedCardId);
+  
+      // Remove the card from its original position
+      newCards = newCards.filter(card => card._id !== draggedCardId);
+  
+      // Update the listId if the card moved to a different list
+      if (startListId !== endListId) {
+        movedCard.listId = endListId;
+      }
+  
+      // // Insert the card at its new position
+      // newCards.splice(
+      //   newCards.findIndex(card => card.listId === endListId) + destination.index,
+      //   0,
+      //   movedCard
+      // );
+
+            // Find the correct insertion index
+      const destinationCards = newCards.filter(card => card.listId === endListId);
+      const insertIndex = newCards.findIndex(card => card._id === destinationCards[destination.index]?._id);
+
+      // Insert the card at its new position
+      if (insertIndex !== -1) {
+        newCards.splice(insertIndex, 0, movedCard);
+      } else {
+        newCards.push(movedCard);
+      }
+
+      // Update positions for all cards in the affected list(s)
+      const affectedListIds = new Set([startListId, endListId]);
+      newCards = newCards.map(card => {
+        if (affectedListIds.has(card.listId)) {
+          const listCards = newCards.filter(c => c.listId === card.listId);
+          return { ...card, position: listCards.indexOf(card) + 1 };
+        }
+        return card;
+      });
+
+      //   // Update positions for all cards in the affected list(s)
+      // const affectedListIds = new Set([startListId, endListId]);
+      // newCards = newCards.map(card => {
+      //   if (affectedListIds.has(card.listId)) {
+      //     const listCards = newCards.filter(c => c.listId === card.listId);
+      //     const newPosition = listCards.indexOf(card) + 1;
+      //     return { ...card, position: newPosition };
+      //   }
+      //   return card;
+      // });
+
+      // Log the updated cards for debugging
+      console.log('Updated cards:', newCards);
+  
+      // Optimistically update the state
+      setCards(newCards);
+
+            // Update the backend
+      try {
+        const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+        const updatedCards = newCards.filter(card => affectedListIds.has(card.listId));
+
+        await Promise.all(updatedCards.map(card =>
+          fetch(`${apiBaseUrl}/cards/cards/${card._id}`, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+            body: JSON.stringify({ 
+              position: card.position,
+              listId: card.listId
+            }),
+          })
+        ));
+      } catch (error) {
+        console.error('Error updating card positions:', error);
+        fetchBoardData();
+      }
+    }
+  };
+  
+  
   return (
-    <div className="flex overflow-x-auto space-x-4 p-4">
-      {lists.map((list) => (
-        <div key={list._id} className="flex-shrink-0 w-64 bg-gray-100 p-4 rounded-md shadow-md">
-          <div className="flex justify-between items-center mb-2">
-            <input
-              type="text"
-              value={editListName[list._id] || list.name}
-              onChange={(e) => setEditListName({ ...editListName, [list._id]: e.target.value })}
-              onBlur={() => handleListNameChange(list._id, editListName[list._id] || list.name)}
-              className="text-lg font-semibold border p-1 rounded"
-            />
-            <button
-              onClick={() => handleDeleteList(list._id)}
-              className="text-red-500 hover:text-red-700 ml-2"
-            >
-              Delete
-            </button>
-          </div>
-          <div>
-            {cards.filter(card => card.listId === list._id).map(card => (
-              <div key={card._id} className="bg-white p-2 mb-2 rounded shadow-sm">
-                <h3 className="font-semibold">{card.name}</h3>
-                <p>{card.description}</p>
-              </div>
-            ))}
-            <input
-              type="text"
-              value={newCardName[list._id] || ''}
-              onChange={(e) => setNewCardName({ ...newCardName, [list._id]: e.target.value })}
-              placeholder="New card name"
-              className="border p-2 rounded mb-2 w-full"
-            />
-            <button
-              onClick={() => handleCreateCard(list._id)}
-              className="bg-blue-500 text-white p-2 rounded w-full"
-            >
-              Add Card
-            </button>
-          </div>
-        </div>
-      ))}
-      <div className="flex-shrink-0 w-64 bg-gray-100 p-4 rounded-md shadow-md">
+    <div className="p-6 bg-gray-100 min-h-screen">
+      <Link to='/dashboard' className=' text-sky-500'>Home</Link>
+      <h1 className="text-2xl font-bold mt-6 mb-6">{board?.name}</h1>
+      <div className="flex gap-4 mb-6">
         <input
           type="text"
           value={newListName}
           onChange={(e) => setNewListName(e.target.value)}
-          placeholder="New list name"
-          className="border p-2 rounded w-full mb-2"
+          placeholder="New List Name"
+          className="p-2 border rounded w-full"
         />
         <button
           onClick={handleCreateList}
-          className="bg-blue-500 text-white p-2 rounded w-full"
+          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
         >
-          Add List
+          Create List
         </button>
       </div>
+      <DragDropContext onDragEnd={handleDragEnd}>
+        <Droppable droppableId="all-lists" direction="horizontal">
+          {(provided) => (
+            <div
+              className="flex gap-4 overflow-x-auto"
+              {...provided.droppableProps}
+              ref={provided.innerRef}
+            >
+              {lists.map((list, index) => (
+                <List
+                  key={list._id}
+                  list={list}
+                  cards={cards}
+                  newCardName={newCardName}
+                  editListName={editListName}
+                  setEditListName={setEditListName}
+                  setNewCardName={setNewCardName}
+                  handleCreateCard={handleCreateCard}
+                  handleDeleteList={handleDeleteList}
+                  handleListNameChange={handleListNameChange}
+                />
+              ))}
+              {provided.placeholder}
+            </div>
+          )}
+        </Droppable>
+      </DragDropContext>
     </div>
   );
-  // return (
-  //   <div className="flex overflow-x-auto">
-  //     {lists.map((list) => (
-  //       <div key={list._id} className="flex-shrink-0 w-64 bg-gray-100 m-2 p-4 rounded-md shadow-md">
-  //         <div className="flex justify-between items-center">
-  //           <input
-  //             type="text"
-  //             value={list.name}
-  //             onChange={(e) => handleListNameChange(list._id, e.target.value)}
-  //             className="text-lg font-semibold"
-  //           />
-  //           <button onClick={() => handleDeleteList(list._id)}>Delete</button>
-  //         </div>
-  //         <div className="mt-2">
-  //           {list.cards && list.cards.map(card => (
-  //             <div key={card._id} className="bg-white p-2 mb-2 rounded shadow-sm">
-  //               <h3 className="font-semibold">{card.name}</h3>
-  //               <p>{card.description}</p>
-  //             </div>
-  //           ))}
-  //           <input
-  //             type="text"
-  //             value={newCardName}
-  //             onChange={(e) => setNewCardName(e.target.value)}
-  //             placeholder="New card name"
-  //             className="border p-2 rounded"
-  //           />
-  //           <button onClick={() => handleCreateCard(list._id)} className="bg-blue-500 text-white p-2 rounded">Add Card</button>
-  //         </div>
-  //       </div>
-  //     ))}
-  //     <div className="flex-shrink-0 w-64 bg-gray-100 m-2 p-4 rounded-md shadow-md">
-  //       <input
-  //         type="text"
-  //         value={newListName}
-  //         onChange={(e) => setNewListName(e.target.value)}
-  //         placeholder="New list name"
-  //         className="border p-2 rounded w-full"
-  //       />
-  //       <button onClick={handleCreateList} className="bg-blue-500 text-white p-2 rounded mt-2">Add List</button>
-  //     </div>
-  //   </div>
-  // );
+
+
+
+
+ 
 }
 
 export default BoardPage;
@@ -271,64 +334,4 @@ export default BoardPage;
 
 
 
-
-// import React, { useEffect, useState } from 'react';
-// import { useParams } from 'react-router-dom';
-
-// function BoardPage() {
-//   const { boardId } = useParams();
-//   const [board, setBoard] = useState(null);
-//   const [lists, setLists] = useState([]);
-
-//   useEffect(() => {
-//     const fetchBoardData = async () => {
-//       try {
-
-//         const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-
-//         // Fetch board data
-//         const boardResponse = await fetch(`${apiBaseUrl}/boards/${boardId}`, {
-//           headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: `Bearer ${localStorage.getItem('token')}`,
-//           },
-//         });
-//         if (!boardResponse.ok) {
-//           throw new Error(`Error fetching board: ${boardResponse.statusText}`);
-//         }
-//         const boardData = await boardResponse.json();
-//         setBoard(boardData);
-
-//         // Fetch lists data
-//         const listsResponse = await fetch(`${apiBaseUrl}/lists/${boardId}/lists`, {
-//           headers: {
-//             'Content-Type': 'application/json',
-//             Authorization: `Bearer ${localStorage.getItem('token')}`,
-//           },
-//         });
-//         if (!listsResponse.ok) {
-//           throw new Error(`Error fetching lists: ${listsResponse.statusText}`);
-//         }
-//         const listsData = await listsResponse.json();
-//         setLists(listsData);
-//       } catch (error) {
-//         console.error('Error fetching board data:', error);
-//       }
-//     };
-
-//     fetchBoardData();
-//   }, [boardId]);
-
-//   return (
-//     <div>
-//       {board && <h1>{board.name}</h1>}
-//       {lists.map((list) => (
-//         <div key={list._id} style={{ order: list.position }}>
-//           <h2>{list.name}</h2>
-//         </div>
-//       ))}
-//     </div>
-//   );
-// }
-
-// export default BoardPage;
+  
