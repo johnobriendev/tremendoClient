@@ -5,6 +5,9 @@ import Card from './Card';
 import { BsThreeDots } from "react-icons/bs";
 
 
+
+
+
 function List({ list, cards, newCardName, editListName, setEditListName, setNewCardName, handleCreateCard, handleDeleteList, handleListNameChange }) {
   
   const [menuOpen, setMenuOpen] = useState(false);
@@ -38,6 +41,48 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
   const confirmDelete = () => {
     handleDeleteList(list._id);
     setShowModal(false);
+  };
+
+
+  const handleUpdateCard = async (cardId, updates) => {
+    try {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+      const response = await fetch(`${apiBaseUrl}/cards/cards/${cardId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify(updates),
+      });
+      if (!response.ok) {
+        throw new Error(`Error updating card: ${response.statusText}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error updating card:', error);
+      throw error;
+    }
+  };
+  
+  const handleDeleteCard = async (cardId) => {
+    try {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+      const response = await fetch(`${apiBaseUrl}/cards/cards/${cardId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`Error deleting card: ${response.statusText}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error('Error deleting card:', error);
+      throw error;
+    }
   };
 
   return (
@@ -101,7 +146,14 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                 {...provided.droppableProps}
               >
                 {listCards.map((card, index) => (
-                  <Card key={card._id} card={card} index={index} />
+                  <Card 
+                  key={card._id} 
+                  card={card} 
+                  index={index} 
+                  onUpdateCard={handleUpdateCard}
+                  onDeleteCard={handleDeleteCard}
+                  
+                  />
                 ))}
                 {provided.placeholder}
                 <div className="mt-4">
@@ -151,7 +203,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
 export default List;
 
 
-// // List.js
+
 // import React from 'react';
 // import { Droppable } from 'react-beautiful-dnd';
 // import Card from './Card';
