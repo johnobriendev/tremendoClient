@@ -5,6 +5,9 @@ import LoginPage from './components/LoginPage';
 import DashboardPage from './components/DashboardPage';
 import BoardPage from './components/BoardPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import { CardsProvider } from './contexts/CardsContext';
+
+
 
 
 const router = createBrowserRouter([
@@ -39,7 +42,12 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return(
+    <CardsProvider>
+      <RouterProvider router={router} />
+    </CardsProvider>
+
+  );
 }
 
 export default App;

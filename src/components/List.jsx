@@ -8,7 +8,7 @@ import { BsThreeDots } from "react-icons/bs";
 
 
 
-function List({ list, cards, newCardName, editListName, setEditListName, setNewCardName, handleCreateCard, handleDeleteList, handleListNameChange }) {
+function List({ list, cards, newCardName, editListName, setEditListName, setNewCardName, handleCreateCard, handleDeleteList, handleListNameChange, handleUpdateCard, handleDeleteCard }) {
   
   const [menuOpen, setMenuOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -44,46 +44,46 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
   };
 
 
-  const handleUpdateCard = async (cardId, updates) => {
-    try {
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-      const response = await fetch(`${apiBaseUrl}/cards/cards/${cardId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify(updates),
-      });
-      if (!response.ok) {
-        throw new Error(`Error updating card: ${response.statusText}`);
-      }
-      return await response.json();
-    } catch (error) {
-      console.error('Error updating card:', error);
-      throw error;
-    }
-  };
+  // const handleUpdateCard = async (cardId, updates) => {
+  //   try {
+  //     const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+  //     const response = await fetch(`${apiBaseUrl}/cards/cards/${cardId}`, {
+  //       method: 'PUT',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${localStorage.getItem('token')}`,
+  //       },
+  //       body: JSON.stringify(updates),
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error(`Error updating card: ${response.statusText}`);
+  //     }
+  //     return await response.json();
+  //   } catch (error) {
+  //     console.error('Error updating card:', error);
+  //     throw error;
+  //   }
+  // };
   
-  const handleDeleteCard = async (cardId) => {
-    try {
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-      const response = await fetch(`${apiBaseUrl}/cards/cards/${cardId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`Error deleting card: ${response.statusText}`);
-      }
-      return await response.json();
-    } catch (error) {
-      console.error('Error deleting card:', error);
-      throw error;
-    }
-  };
+  // const handleDeleteCard = async (cardId) => {
+  //   try {
+  //     const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+  //     const response = await fetch(`${apiBaseUrl}/cards/cards/${cardId}`, {
+  //       method: 'DELETE',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${localStorage.getItem('token')}`,
+  //       },
+  //     });
+  //     if (!response.ok) {
+  //       throw new Error(`Error deleting card: ${response.statusText}`);
+  //     }
+  //     return await response.json();
+  //   } catch (error) {
+  //     console.error('Error deleting card:', error);
+  //     throw error;
+  //   }
+  // };
 
   return (
     <Draggable draggableId={list._id} index={list.position - 1}>

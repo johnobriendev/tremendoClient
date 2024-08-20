@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import List from './List'; // Import List component
+import { CardsContext } from '../contexts/CardsContext';
 
 //{"boardId": ObjectId("66bec4ce5da67329e61e60c6")}
 
@@ -169,6 +170,52 @@ function BoardPage() {
     }
   };
 
+  // Add the functions here
+const handleUpdateCard = async (cardId, updates) => {
+  try {
+    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+    const response = await fetch(`${apiBaseUrl}/cards/cards/${cardId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+      body: JSON.stringify(updates),
+    });
+    if (!response.ok) {
+      throw new Error(`Error updating card: ${response.statusText}`);
+    }
+    const updatedCard = await response.json();
+    
+    // Update the card in the local state
+    setCards(cards.map(card => card._id === cardId ? updatedCard : card));
+  } catch (error) {
+    console.error('Error updating card:', error);
+    throw error;
+  }
+};
+
+const handleDeleteCard = async (cardId) => {
+  try {
+    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+    const response = await fetch(`${apiBaseUrl}/cards/cards/${cardId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`Error deleting card: ${response.statusText}`);
+    }
+    // Remove the deleted card from the local state
+    setCards(cards.filter(card => card._id !== cardId));
+  } catch (error) {
+    console.error('Error deleting card:', error);
+    throw error;
+  }
+};
+
   const handleDragEnd = async (result) => {
     const { destination, source, draggableId, type } = result;
   
@@ -314,6 +361,8 @@ function BoardPage() {
                   handleCreateCard={handleCreateCard}
                   handleDeleteList={handleDeleteList}
                   handleListNameChange={handleListNameChange}
+                  handleUpdateCard={handleUpdateCard} 
+                  handleDeleteCard={handleDeleteCard} 
                 />
               ))}
               {provided.placeholder}
