@@ -43,48 +43,6 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
     setShowModal(false);
   };
 
-
-  // const handleUpdateCard = async (cardId, updates) => {
-  //   try {
-  //     const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-  //     const response = await fetch(`${apiBaseUrl}/cards/cards/${cardId}`, {
-  //       method: 'PUT',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         Authorization: `Bearer ${localStorage.getItem('token')}`,
-  //       },
-  //       body: JSON.stringify(updates),
-  //     });
-  //     if (!response.ok) {
-  //       throw new Error(`Error updating card: ${response.statusText}`);
-  //     }
-  //     return await response.json();
-  //   } catch (error) {
-  //     console.error('Error updating card:', error);
-  //     throw error;
-  //   }
-  // };
-  
-  // const handleDeleteCard = async (cardId) => {
-  //   try {
-  //     const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-  //     const response = await fetch(`${apiBaseUrl}/cards/cards/${cardId}`, {
-  //       method: 'DELETE',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         Authorization: `Bearer ${localStorage.getItem('token')}`,
-  //       },
-  //     });
-  //     if (!response.ok) {
-  //       throw new Error(`Error deleting card: ${response.statusText}`);
-  //     }
-  //     return await response.json();
-  //   } catch (error) {
-  //     console.error('Error deleting card:', error);
-  //     throw error;
-  //   }
-  // };
-
   return (
     <Draggable draggableId={list._id} index={list.position - 1}>
       {(provided) => (
@@ -112,7 +70,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                 <BsThreeDots />
               </button>
               {menuOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white border rounded shadow-lg">
+                <div className="absolute right-0 mt-2 w-48 z-10 bg-white border rounded shadow-lg">
                   <button
                     onClick={handleDeleteClick}
                     className="block px-4 py-2 text-red-500 hover:bg-gray-100 w-full text-left"
