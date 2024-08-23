@@ -13,19 +13,32 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
   const optionsRef = useRef(null);
   const deleteModalRef = useRef(null);
 
+
+  const handleSaveAndClose = async () => {
+    if (editingName && newName !== card.name) {
+      try {
+        await onUpdateCard(card._id, { name: newName });
+      } catch (error) {
+        console.error("Error updating card name:", error);
+      }
+    }
+    setEditingName(false);
+    setShowOptions(false);
+  };
+
   // Close options when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
-      if (optionsRef.current && !optionsRef.current.contains(event.target)) {
-        setShowOptions(false);
-        setEditingName(false);
+      if (optionsRef.current && !optionsRef.current.contains(event.target) && !inputRef.current.contains(event.target)
+      ) {
+        handleSaveAndClose();
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [editingName, newName]);
 
   // Close delete modal when clicking outside
   useEffect(() => {
@@ -45,6 +58,11 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
   const handleEditClick = () => {
     setEditingName(true);
     setShowOptions(true);
+    setTimeout(() => {
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 0);
   };
 
   const handleDeleteClick = () => {
@@ -54,7 +72,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
  
   const handleCloseOptions = () => {
     setShowOptions(false);
-    setEditingName(false);
+    // setEditingName(false);
   };
 
   const handleCloseDeleteModal = () => {
@@ -93,10 +111,11 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
           <div className="flex justify-between items-center w-full">
             {editingName ? (
                 <input
+                  ref={inputRef}
                   type="text"
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
-                  onBlur={handleSaveName}
+                  onBlur={handleSaveAndClose}
                   className="bg-transparent border-none focus:outline-none flex-grow"
                 />
                 // <textarea
@@ -128,7 +147,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
                 Delete Card
               </button>
               {/* Add other options here */}
-              <button onClick={handleCloseOptions} className="text-gray-600 hover:text-gray-900">
+              <button onClick={handleSaveAndClose} className="text-gray-600 hover:text-gray-900">
                 Close
               </button>
             </div>
