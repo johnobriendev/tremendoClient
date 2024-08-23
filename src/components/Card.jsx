@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import { MdOutlineModeEdit } from "react-icons/md";
 
@@ -8,6 +8,39 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [editingName, setEditingName] = useState(false);
   const [newName, setNewName] = useState(card.name);
+
+  const inputRef = useRef(null);
+  const optionsRef = useRef(null);
+  const deleteModalRef = useRef(null);
+
+  // Close options when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (optionsRef.current && !optionsRef.current.contains(event.target)) {
+        setShowOptions(false);
+        setEditingName(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // Close delete modal when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (deleteModalRef.current && !deleteModalRef.current.contains(event.target)) {
+        setShowDeleteModal(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+
 
   const handleEditClick = () => {
     setEditingName(true);
@@ -66,6 +99,15 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
                   onBlur={handleSaveName}
                   className="bg-transparent border-none focus:outline-none flex-grow"
                 />
+                // <textarea
+                // ref={inputRef}
+                // value={newName}
+                // onChange={(e) => setNewName(e.target.value)}
+                // onBlur={handleSaveName}
+                // className="bg-transparent border-none focus:outline-none resize-none overflow-hidden flex-grow"
+                // style={{ minHeight: '20px', maxHeight: '100px', height: 'auto' }}
+                // rows={1}
+                // />
               ) : (
                 <span className="flex-grow">{card.name}</span>
               )}
@@ -78,7 +120,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
           
           {/* Options Menu */}
           {showOptions && (
-            <div className="absolute top-10 right-2 bg-white shadow-lg rounded border border-gray-300 p-2 z-10">
+            <div ref={optionsRef} className="absolute top-10 right-2 bg-white shadow-lg rounded border border-gray-300 p-2 z-10">
               <button
                 onClick={handleDeleteClick}
                 className="text-red-600 hover:text-red-800"
@@ -95,7 +137,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
           {/* Delete Confirmation Modal */}
           {showDeleteModal && (
             <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-20">
-              <div className="bg-white p-6 rounded shadow-lg">
+              <div ref={deleteModalRef} className="bg-white p-6 rounded shadow-lg">
                 <p className="text-lg mb-4">Are you sure you want to delete this card?</p>
                 <div className="flex justify-end gap-4">
                   <button
