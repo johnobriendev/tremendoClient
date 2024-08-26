@@ -9,8 +9,10 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
   const [editingName, setEditingName] = useState(false);
   const [newName, setNewName] = useState(card.name);
 
+  const cardRef = useRef(null);
   const inputRef = useRef(null);
   const optionsRef = useRef(null);
+  const deleteButtonRef = useRef(null);
   const deleteModalRef = useRef(null);
 
 
@@ -26,23 +28,12 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
     setShowOptions(false);
   };
 
-  // Close options when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
-      if (optionsRef.current && !optionsRef.current.contains(event.target) && !inputRef.current.contains(event.target)
-      ) {
+      if (cardRef.current && !cardRef.current.contains(event.target)) {
         handleSaveAndClose();
+        setShowOptions(false);
       }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [editingName, newName]);
-
-  // Close delete modal when clicking outside
-  useEffect(() => {
-    function handleClickOutside(event) {
       if (deleteModalRef.current && !deleteModalRef.current.contains(event.target)) {
         setShowDeleteModal(false);
       }
@@ -53,9 +44,50 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
     };
   }, []);
 
+  // // Close options when clicking outside
+  // useEffect(() => {
+  //   function handleClickOutside(event) {
+  //     if (showDeleteModal) return; 
+  //     if (
+  //       optionsRef.current && 
+  //       !optionsRef.current.contains(event.target) && 
+  //       !inputRef.current.contains(event.target) &&
+  //       !deleteButtonRef.current.contains(event.target)
+  //     ) {
+  //       handleSaveAndClose();
+  //     }
+  //   }
+  //   document.addEventListener('mousedown', handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleClickOutside);
+  //   };
+  // }, [editingName, newName, showDeleteModal]);
+
+  // // Close delete modal when clicking outside
+  // useEffect(() => {
+  //   function handleClickOutside(event) {
+  //     if (deleteModalRef.current && !deleteModalRef.current.contains(event.target)) {
+  //       setShowDeleteModal(false);
+  //     }
+  //   }
+  //   document.addEventListener('mousedown', handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleClickOutside);
+  //   };
+  // }, []);
+
+  const handleCardClick = (event) => {
+    if (deleteButtonRef.current && deleteButtonRef.current.contains(event.target)) {
+      setShowDeleteModal(true);
+      setShowOptions(false);
+    } else if (optionsRef.current && !optionsRef.current.contains(event.target)) {
+      setShowOptions(false);
+    }
+  };
 
 
-  const handleEditClick = () => {
+  const handleEditClick = (event) => {
+    event.stopPropagation();
     setEditingName(true);
     setShowOptions(true);
     setTimeout(() => {
@@ -64,39 +96,22 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
       }
     }, 0);
   };
-
-  const handleDeleteClick = () => {
+  const handleDeleteClick = (event) => {
+    event.stopPropagation();
     setShowDeleteModal(true);
-  };
-
- 
-  const handleCloseOptions = () => {
-    setShowOptions(false);
-    // setEditingName(false);
-  };
-
-  const handleCloseDeleteModal = () => {
-    setShowDeleteModal(false);
-  };
-
-  const handleSaveName = async () => {
-    try {
-      await onUpdateCard(card._id, { name: newName });
-      setEditingName(false);
-      setShowOptions(false);
-    } catch (error) {
-      console.error("Error updating card name:", error);
-    }
+    setShowOptions(false); // Close options menu
   };
 
   const handleDeleteConfirm = async () => {
     try {
       await onDeleteCard(card._id);
-      handleCloseDeleteModal();
+      setShowDeleteModal(false);
     } catch (error) {
       console.error("Error deleting card:", error);
     }
   };
+
+  
 
 
   return (
@@ -107,6 +122,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           className="relative bg-gray-100 p-4 rounded mb-2 shadow hover:border hover:border-gray-400 group transition-transform duration-300 ease-in-out flex justify-between items-center"
+          onClick={handleCardClick}
         >
           <div className="flex justify-between items-center w-full">
             {editingName ? (
@@ -116,17 +132,9 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
                   onBlur={handleSaveAndClose}
+                  onClick={(e) => e.stopPropagation()}
                   className="bg-transparent border-none focus:outline-none flex-grow"
                 />
-                // <textarea
-                // ref={inputRef}
-                // value={newName}
-                // onChange={(e) => setNewName(e.target.value)}
-                // onBlur={handleSaveName}
-                // className="bg-transparent border-none focus:outline-none resize-none overflow-hidden flex-grow"
-                // style={{ minHeight: '20px', maxHeight: '100px', height: 'auto' }}
-                // rows={1}
-                // />
               ) : (
                 <span className="flex-grow">{card.name}</span>
               )}
@@ -139,8 +147,12 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
           
           {/* Options Menu */}
           {showOptions && (
-            <div ref={optionsRef} className="absolute top-10 right-2 bg-white shadow-lg rounded border border-gray-300 p-2 z-10">
+            <div 
+            ref={optionsRef} 
+            className="absolute top-10 right-2 bg-white shadow-lg rounded border border-gray-300 p-2 z-10"
+            onClick={(e) => e.stopPropagation()}>
               <button
+               
                 onClick={handleDeleteClick}
                 className="text-red-600 hover:text-red-800"
               >
@@ -156,7 +168,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
           {/* Delete Confirmation Modal */}
           {showDeleteModal && (
             <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-20">
-              <div ref={deleteModalRef} className="bg-white p-6 rounded shadow-lg">
+              <div ref={deleteModalRef} className="bg-white p-6 rounded shadow-lg" onClick={(e) => e.stopPropagation()} >
                 <p className="text-lg mb-4">Are you sure you want to delete this card?</p>
                 <div className="flex justify-end gap-4">
                   <button
@@ -166,7 +178,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
                     Yes, Delete
                   </button>
                   <button
-                    onClick={handleCloseDeleteModal}
+                    onClick={() => setShowDeleteModal(false)}
                     className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
                   >
                     Cancel
@@ -185,25 +197,4 @@ export default Card;
 
 
 
-// import React from 'react';
-// import { Draggable } from 'react-beautiful-dnd';
-
-// function Card({ card, index }) {
-//   return (
-//     <Draggable draggableId={card._id} index={index}>
-//       {(provided) => (
-//         <div
-//           ref={provided.innerRef}
-//           {...provided.draggableProps}
-//           {...provided.dragHandleProps}
-//           className="bg-gray-100 p-2 rounded mb-2 shadow"
-//         >
-//           {card.name}
-//         </div>
-//       )}
-//     </Draggable>
-//   );
-// }
-
-// export default Card;
 
