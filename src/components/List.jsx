@@ -50,7 +50,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="bg-white shadow rounded-md p-4 min-w-[264px]"
+          className="bg-white shadow rounded-md p-4 w-[264px]"
         >
           <div className="flex items-center justify-between gap-2 mb-4">
             <input
