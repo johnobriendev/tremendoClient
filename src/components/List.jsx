@@ -20,19 +20,33 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
 
 
   const menuRef = useRef(null);
+  const modalRef = useRef(null);
   const cardInputRef = useRef(null);
+
 
   const handleClickOutside = (event) => {
     if (menuRef.current && !menuRef.current.contains(event.target)) {
       setMenuOpen(false);
     }
-    if (showModal && !document.querySelector('.modal').contains(event.target)) {
+    if (showModal && modalRef.current && !modalRef.current.contains(event.target)) {
       setShowModal(false);
     }
     if (cardInputRef.current && !cardInputRef.current.contains(event.target)) {
       setShowCardInput(false);
     }
   };
+
+  // const handleClickOutside = (event) => {
+  //   if (menuRef.current && !menuRef.current.contains(event.target)) {
+  //     setMenuOpen(false);
+  //   }
+  //   if (showModal && !document.querySelector('.modal').contains(event.target)) {
+  //     setShowModal(false);
+  //   }
+  //   if (cardInputRef.current && !cardInputRef.current.contains(event.target)) {
+  //     setShowCardInput(false);
+  //   }
+  // };
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
@@ -44,6 +58,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
 
   const handleDeleteClick = () => {
     setShowModal(true);
+    setMenuOpen(false);
   };
 
   const confirmDelete = () => {
@@ -64,7 +79,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="bg-white shadow rounded-md p-4 w-[264px]"
+          className="bg-white shadow rounded-md p-4 min-w-[264px] max-w-[264px] flex flex-col"
         >
           <div className="flex items-center justify-between gap-2 mb-4">
             <input
@@ -149,27 +164,11 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                   ) : (
                     <button
                       onClick={() => setShowCardInput(true)}
-                      className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                      className="bg-green-500 text-white px-4 py-2 rounded hover:bg-blue-600"
                     >
                       Add Card
                     </button>
                   )}
-                 
-                 
-                 
-                  {/* <input
-                    type="text"
-                    value={newCardName[list._id] || ''}
-                    onChange={(e) => setNewCardName({ ...newCardName, [list._id]: e.target.value })}
-                    placeholder="New Card Name"
-                    className="p-2 border rounded w-full"
-                  />
-                  <button
-                    onClick={() => handleCreateCard(list._id)}
-                    className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mt-2"
-                  >
-                    Add Card
-                  </button> */}
                 </div>
               </div>
             )}
@@ -177,7 +176,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
 
           {showModal && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center modal">
-              <div className="bg-white p-6 rounded-md shadow-lg">
+              <div className="bg-white p-6 rounded-md shadow-lg" ref={modalRef}>
                 <h2 className="text-lg mb-4">Are you sure you want to delete this list?</h2>
                 <button
                   onClick={confirmDelete}

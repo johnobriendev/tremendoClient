@@ -5,7 +5,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import List from './List'; // Import List component
 import { CardsContext } from '../contexts/CardsContext';
 
-//{"boardId": ObjectId("66bec4ce5da67329e61e60c6")}
+
 
 
 function BoardPage() {
