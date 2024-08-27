@@ -43,9 +43,9 @@ const router = createBrowserRouter([
 
 function App() {
   return(
-    <CardsProvider>
+    // <CardsProvider>
       <RouterProvider router={router} />
-    </CardsProvider>
+    // </CardsProvider>
 
   );
 }
