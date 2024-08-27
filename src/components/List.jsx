@@ -13,16 +13,24 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
   const [menuOpen, setMenuOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [listColor, setListColor] = useState('bg-white');
+  const [showCardInput, setShowCardInput] = useState(false);
   
   
   const listCards = cards.filter(card => card.listId === list._id).sort((a, b) => a.position - b.position);
 
 
   const menuRef = useRef(null);
+  const cardInputRef = useRef(null);
 
   const handleClickOutside = (event) => {
     if (menuRef.current && !menuRef.current.contains(event.target)) {
       setMenuOpen(false);
+    }
+    if (showModal && !document.querySelector('.modal').contains(event.target)) {
+      setShowModal(false);
+    }
+    if (cardInputRef.current && !cardInputRef.current.contains(event.target)) {
+      setShowCardInput(false);
     }
   };
 
@@ -31,7 +39,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [showModal, showCardInput]);
 
 
   const handleDeleteClick = () => {
@@ -41,6 +49,12 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
   const confirmDelete = () => {
     handleDeleteList(list._id);
     setShowModal(false);
+  };
+
+  const handleAddCardKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleCreateCard(list._id);
+    }
   };
 
   return (
@@ -115,7 +129,35 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                 ))}
                 {provided.placeholder}
                 <div className="mt-4">
-                  <input
+                {showCardInput ? (
+                    <div ref={cardInputRef}>
+                      <input
+                        type="text"
+                        value={newCardName[list._id] || ''}
+                        onChange={(e) => setNewCardName({ ...newCardName, [list._id]: e.target.value })}
+                        onKeyPress={handleAddCardKeyPress}
+                        placeholder="New Card Name"
+                        className="p-2 border rounded w-full"
+                      />
+                      <button
+                        onClick={() => handleCreateCard(list._id)}
+                        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mt-2"
+                      >
+                        Add Card
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setShowCardInput(true)}
+                      className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                    >
+                      Add Card
+                    </button>
+                  )}
+                 
+                 
+                 
+                  {/* <input
                     type="text"
                     value={newCardName[list._id] || ''}
                     onChange={(e) => setNewCardName({ ...newCardName, [list._id]: e.target.value })}
@@ -127,14 +169,14 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                     className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mt-2"
                   >
                     Add Card
-                  </button>
+                  </button> */}
                 </div>
               </div>
             )}
           </Droppable>
 
           {showModal && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center modal">
               <div className="bg-white p-6 rounded-md shadow-lg">
                 <h2 className="text-lg mb-4">Are you sure you want to delete this list?</h2>
                 <button

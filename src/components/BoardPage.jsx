@@ -322,7 +322,7 @@ const handleDeleteCard = async (cardId) => {
   
   
   return (
-    <div className="p-6 bg-gray-100 min-h-screen w-full overflow-x-auto">
+    <div className="p-6 bg-gray-300 min-h-screen w-full overflow-x-auto">
       <Link to='/dashboard' className=' text-sky-500'>Home</Link>
       <h1 className="text-2xl font-bold mt-6 mb-6">{board?.name}</h1>
       <div className="flex gap-4 mb-6">
@@ -344,7 +344,7 @@ const handleDeleteCard = async (cardId) => {
         <Droppable droppableId="all-lists" direction="horizontal">
           {(provided) => (
             <div
-              className="flex gap-4 items-start"
+              className="flex gap-4 items-start w-full"
               {...provided.droppableProps}
               ref={provided.innerRef}
               style={{ width: '100%' }} 
