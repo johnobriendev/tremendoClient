@@ -16,7 +16,12 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
   const deleteModalRef = useRef(null);
 
 
-  const handleSaveAndClose = async () => {
+  const handleSaveAndClose = async (e) => {
+      // Check if the blur event is caused by the delete button being clicked
+    if (e && e.relatedTarget && e.relatedTarget.id === 'delete-button') {
+      return; // Skip saving and closing if the delete button is clicked
+    }
+    
     if (editingName && newName !== card.name) {
       try {
         await onUpdateCard(card._id, { name: newName });
@@ -52,11 +57,12 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
   const handleEditClick = () => {
     setEditingName(true);
     setShowOptions(true);
-    // setTimeout(() => {
+    setTimeout(() => {
       
-    //     inputRef.current.focus();
+        inputRef.current.focus();
+        inputRef.current.select();
      
-    // }, 0);
+    }, 0);
     //deleting this fixed modal errors with onblur
   };
   const handleDeleteClick = () => {
@@ -98,11 +104,11 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
                   className="bg-transparent border-none focus:outline-none flex-grow"
                 />
               ) : (
-                <span className="flex-grow">{card.name}</span>
+                <span className="flex-grow break-words">{card.name}</span>
               )}
             <MdOutlineModeEdit
               onClick={handleEditClick}
-              className="text-gray-500 invisible group-hover:visible cursor-pointer transition-transform duration-300 ease-in-out"
+              className="text-gray-500 invisible group-hover:visible cursor-pointer transition-transform duration-300 ease-in-out flex-shrink-0"
               size={20}
             />
           </div>
@@ -113,7 +119,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
             ref={optionsRef} 
             className="absolute top-10 right-2 bg-white shadow-lg rounded border border-gray-300 p-2 z-10">
               <button
-               
+                id='delete-button'
                 onClick={handleDeleteClick}
                 className="text-red-600 hover:text-red-800"
               >
