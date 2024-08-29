@@ -101,6 +101,11 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
                   onBlur={handleSaveAndClose}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      handleSaveAndClose(); // Save and close when Enter is pressed
+                    }
+                  }}
                   className="bg-transparent border-none focus:outline-none flex-grow"
                 />
               ) : (
