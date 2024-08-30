@@ -69,6 +69,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
   
     setShowDeleteModal(true);
     setShowOptions(false); // Close options menu
+    handleSaveAndClose();
   };
 
   const handleDeleteConfirm = async () => {
@@ -90,10 +91,10 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="relative bg-gray-100 p-4 rounded mb-2 shadow hover:border hover:border-gray-400 group transition-transform duration-300 ease-in-out flex justify-between items-center"
+          className="relative bg-gray-100 p-4  rounded mb-2 shadow hover:border hover:border-gray-400 group transition-transform duration-300 ease-in-out flex justify-between items-center"
           
         >
-          <div className="flex justify-between items-center w-full z-0">
+          <div className=" relative  w-full z-0">
             {editingName ? (
                 <input
                   ref={inputRef}
@@ -106,14 +107,14 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
                       handleSaveAndClose(); // Save and close when Enter is pressed
                     }
                   }}
-                  className="bg-transparent border-none focus:outline-none flex-grow"
+                  className="bg-transparent border-none focus:outline-none w-full"
                 />
               ) : (
-                <span className="flex-grow break-words">{card.name}</span>
+                <span className="block pr-8">{card.name}</span>
               )}
             <MdOutlineModeEdit
               onClick={handleEditClick}
-              className="text-gray-500 invisible group-hover:visible cursor-pointer transition-transform duration-300 ease-in-out flex-shrink-0"
+              className="text-gray-500 absolute -top-2 -right-2  opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity duration-300 ease-in-out"
               size={20}
             />
           </div>
