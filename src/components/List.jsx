@@ -23,6 +23,13 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
   const modalRef = useRef(null);
   const cardInputRef = useRef(null);
 
+  const handleListNameKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      handleListNameChange(list._id, editListName[list._id]);
+      e.target.blur(); // Remove focus from the input field
+    }
+  };
+
 
   const handleClickOutside = (event) => {
     if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -87,6 +94,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
               value={editListName[list._id] || list.name}
               onChange={(e) => setEditListName({ ...editListName, [list._id]: e.target.value })}
               onBlur={() => handleListNameChange(list._id, editListName[list._id])}
+              onKeyPress={handleListNameKeyPress}
               placeholder="List Name"
               className="p-2 border rounded w-full"
               style={{ backgroundColor: listColor }}
