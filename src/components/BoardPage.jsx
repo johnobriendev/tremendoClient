@@ -362,8 +362,8 @@ const handleDeleteCard = async (cardId) => {
   
   
   return (
-    <div className=" bg-gray-300 h-screen w-full overflow-x-auto p-6">
-      <div className=''>
+    <div className=" bg-gray-300 h-screen w-full overflow-x-auto">
+      <div className='p-6'>
         <Link to='/dashboard' className=' text-sky-500'>Home</Link>
         <h1 className="text-2xl font-bold mt-6 mb-6">{board?.name}</h1>
         {/* <div className="flex gap-4 mb-6">
@@ -383,73 +383,77 @@ const handleDeleteCard = async (cardId) => {
         </div> */}
       </div>
       <DragDropContext onDragEnd={handleDragEnd}>
-        <Droppable droppableId="all-lists" direction="horizontal">
-          {(provided) => (
-            <div
-              className="flex gap-4 items-start w-full"
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-              // style={{ width: '100%' }} 
-            >
-              {lists.map((list, index) => (
-                <List
-                  key={list._id}
-                  list={list}
-                  cards={cards}
-                  newCardName={newCardName}
-                  editListName={editListName}
-                  setEditListName={setEditListName}
-                  setNewCardName={setNewCardName}
-                  handleCreateCard={handleCreateCard}
-                  handleDeleteList={handleDeleteList}
-                  handleListNameChange={handleListNameChange}
-                  handleUpdateCard={handleUpdateCard} 
-                  handleDeleteCard={handleDeleteCard} 
-                  index={index}
-                />
-              ))}
-              {provided.placeholder}
-              <div className="w-[264px] shrink-0">
-                {!isAddingList ? (
-                  <button
-                    onClick={() => setIsAddingList(true)}
-                    className="w-full bg-gray-200 hover:bg-gray-100 text-gray-700 font-semibold py-2 px-4 rounded shadow-xl"
-                  >
-                    + Add a list
-                  </button>
-                ) : (
-                  <div ref={newListInputRef} className="bg-white p-2 rounded">
-                    <input
-                      type="text"
-                      value={newListName}
-                      onChange={(e) => setNewListName(e.target.value)}
-                      onKeyPress={handleKeyPress}
-                      placeholder="Enter list title..."
-                      className="w-full p-2 border rounded mb-2"
-                    />
-                    <div className="flex justify-between">
-                      <button
-                        onClick={handleCreateList}
-                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-                      >
-                        Add List
-                      </button>
-                      <button
-                        onClick={() => {
-                          setIsAddingList(false);
-                          setNewListName('');
-                        }}
-                        className="text-gray-500 hover:text-gray-700"
-                      >
-                        ✕
-                      </button>
+        <div className='px-6 pb-6 overflow-x-auto'>
+          <Droppable droppableId="all-lists" direction="horizontal">
+            {(provided) => (
+              <div
+                className="flex gap-4 items-start w-full"
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+                // style={{ width: '100%' }} 
+              >
+                {lists.map((list, index) => (
+                  <List
+                    key={list._id}
+                    list={list}
+                    cards={cards}
+                    newCardName={newCardName}
+                    editListName={editListName}
+                    setEditListName={setEditListName}
+                    setNewCardName={setNewCardName}
+                    handleCreateCard={handleCreateCard}
+                    handleDeleteList={handleDeleteList}
+                    handleListNameChange={handleListNameChange}
+                    handleUpdateCard={handleUpdateCard} 
+                    handleDeleteCard={handleDeleteCard} 
+                    index={index}
+                  />
+                ))}
+                {provided.placeholder}
+                <div className="w-[264px] shrink-0 mr-6">
+                  {!isAddingList ? (
+                    <button
+                      onClick={() => setIsAddingList(true)}
+                      className="w-full bg-gray-200 hover:bg-gray-100 text-gray-700 font-semibold py-2 px-4 rounded shadow-xl"
+                    >
+                      + Add a list
+                    </button>
+                  ) : (
+                    <div ref={newListInputRef} className="bg-white p-2 rounded">
+                      <input
+                        type="text"
+                        value={newListName}
+                        onChange={(e) => setNewListName(e.target.value)}
+                        onKeyPress={handleKeyPress}
+                        placeholder="Enter list title..."
+                        className="w-full p-2 border rounded mb-2"
+                      />
+                      <div className="flex justify-between">
+                        <button
+                          onClick={handleCreateList}
+                          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                        >
+                          Add List
+                        </button>
+                        <button
+                          onClick={() => {
+                            setIsAddingList(false);
+                            setNewListName('');
+                          }}
+                          className="text-gray-500 hover:text-gray-700"
+                        >
+                          ✕
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
-            </div>
-          )}
-        </Droppable>
+            )}
+          </Droppable>
+
+        </div>
+        
       </DragDropContext>
     </div>
   );
