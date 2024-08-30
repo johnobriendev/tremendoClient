@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import List from './List'; // Import List component
-import { CardsContext } from '../contexts/CardsContext';
+
 
 
 
@@ -322,23 +322,25 @@ const handleDeleteCard = async (cardId) => {
   
   
   return (
-    <div className="p-6 bg-gray-300 min-h-screen w-full overflow-x-auto">
-      <Link to='/dashboard' className=' text-sky-500'>Home</Link>
-      <h1 className="text-2xl font-bold mt-6 mb-6">{board?.name}</h1>
-      <div className="flex gap-4 mb-6">
-        <input
-          type="text"
-          value={newListName}
-          onChange={(e) => setNewListName(e.target.value)}
-          placeholder="New List Name"
-          className="p-2 border rounded w-full"
-        />
-        <button
-          onClick={handleCreateList}
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
-          Create List
-        </button>
+    <div className=" bg-gray-300 h-screen w-full overflow-x-auto  p-6">
+      <div className=''>
+        <Link to='/dashboard' className=' text-sky-500'>Home</Link>
+        <h1 className="text-2xl font-bold mt-6 mb-6">{board?.name}</h1>
+        <div className="flex gap-4 mb-6">
+          <input
+            type="text"
+            value={newListName}
+            onChange={(e) => setNewListName(e.target.value)}
+            placeholder="New List Name"
+            className="p-2 border rounded w-full"
+          />
+          <button
+            onClick={handleCreateList}
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+          >
+            Create List
+          </button>
+        </div>
       </div>
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="all-lists" direction="horizontal">
@@ -372,10 +374,6 @@ const handleDeleteCard = async (cardId) => {
       </DragDropContext>
     </div>
   );
-
-
-
-
  
 }
 
