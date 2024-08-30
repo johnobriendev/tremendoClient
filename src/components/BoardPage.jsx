@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -16,6 +16,11 @@ function BoardPage() {
   const [newListName, setNewListName] = useState('');
   const [newCardName, setNewCardName] = useState('');
   const [editListName, setEditListName] = useState({});
+
+  //list input stuff
+  const [isAddingList, setIsAddingList] = useState(false);
+  const newListInputRef = useRef(null);
+
 
   const fetchBoardData = async () => {
     try {
@@ -70,6 +75,14 @@ function BoardPage() {
     fetchBoardData();
   }, [boardId]);
 
+
+  //list input stuff
+  useEffect(() => {
+    if (isAddingList && newListInputRef.current) {
+      newListInputRef.current.focus();
+    }
+  }, [isAddingList]);
+
   const handleCreateList = async () => {
     if (newListName.trim() === '') return;
 
@@ -92,10 +105,37 @@ function BoardPage() {
       const newList = await response.json();
       setLists([...lists, newList]);
       setNewListName('');
+      //list input stuff
+      setIsAddingList(false);
+
     } catch (error) {
       console.error('Error creating list:', error);
     }
   };
+
+
+  //list input stuff
+  const handleClickOutside = (event) => {
+    if (newListInputRef.current && !newListInputRef.current.contains(event.target)) {
+      setIsAddingList(false);
+      setNewListName('');
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleCreateList();
+    }
+  };
+
+
 
   const handleListNameChange = async (listId, newName) => {
     try {
@@ -322,11 +362,11 @@ const handleDeleteCard = async (cardId) => {
   
   
   return (
-    <div className=" bg-gray-300 h-screen w-full overflow-x-auto  p-6">
+    <div className=" bg-gray-300 h-screen w-full overflow-x-auto p-6">
       <div className=''>
         <Link to='/dashboard' className=' text-sky-500'>Home</Link>
         <h1 className="text-2xl font-bold mt-6 mb-6">{board?.name}</h1>
-        <div className="flex gap-4 mb-6">
+        {/* <div className="flex gap-4 mb-6">
           <input
             type="text"
             value={newListName}
@@ -340,7 +380,7 @@ const handleDeleteCard = async (cardId) => {
           >
             Create List
           </button>
-        </div>
+        </div> */}
       </div>
       <DragDropContext onDragEnd={handleDragEnd}>
         <Droppable droppableId="all-lists" direction="horizontal">
@@ -349,7 +389,7 @@ const handleDeleteCard = async (cardId) => {
               className="flex gap-4 items-start w-full"
               {...provided.droppableProps}
               ref={provided.innerRef}
-              style={{ width: '100%' }} 
+              // style={{ width: '100%' }} 
             >
               {lists.map((list, index) => (
                 <List
@@ -365,9 +405,48 @@ const handleDeleteCard = async (cardId) => {
                   handleListNameChange={handleListNameChange}
                   handleUpdateCard={handleUpdateCard} 
                   handleDeleteCard={handleDeleteCard} 
+                  index={index}
                 />
               ))}
               {provided.placeholder}
+              <div className="w-[264px] shrink-0">
+                {!isAddingList ? (
+                  <button
+                    onClick={() => setIsAddingList(true)}
+                    className="w-full bg-gray-200 hover:bg-gray-100 text-gray-700 font-semibold py-2 px-4 rounded shadow-xl"
+                  >
+                    + Add a list
+                  </button>
+                ) : (
+                  <div ref={newListInputRef} className="bg-white p-2 rounded">
+                    <input
+                      type="text"
+                      value={newListName}
+                      onChange={(e) => setNewListName(e.target.value)}
+                      onKeyPress={handleKeyPress}
+                      placeholder="Enter list title..."
+                      className="w-full p-2 border rounded mb-2"
+                    />
+                    <div className="flex justify-between">
+                      <button
+                        onClick={handleCreateList}
+                        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                      >
+                        Add List
+                      </button>
+                      <button
+                        onClick={() => {
+                          setIsAddingList(false);
+                          setNewListName('');
+                        }}
+                        className="text-gray-500 hover:text-gray-700"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </Droppable>
