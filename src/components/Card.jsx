@@ -96,7 +96,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
         >
           <div className=" relative  w-full z-0">
             {editingName ? (
-                <input
+                <textarea
                   ref={inputRef}
                   type="text"
                   value={newName}
