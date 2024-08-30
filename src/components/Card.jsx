@@ -10,7 +10,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
   const [newName, setNewName] = useState(card.name);
 
   const cardRef = useRef(null);
-  const inputRef = useRef(null);
+  const textareaRef = useRef(null);
   const optionsRef = useRef(null);
   // const deleteButtonRef = useRef(null);
   const deleteModalRef = useRef(null);
@@ -52,17 +52,24 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
     };
   }, [showOptions, showDeleteModal]);
 
+  useEffect(() => {
+    if (editingName && textareaRef.current) {
+      textareaRef.current.focus();
+      textareaRef.current.select();
+    }
+  }, [editingName]);
+
 
 
   const handleEditClick = () => {
     setEditingName(true);
     setShowOptions(true);
-    setTimeout(() => {
+    // setTimeout(() => {
       
-        inputRef.current.focus();
-        inputRef.current.select();
+    //     inputRef.current.focus();
+    //     inputRef.current.select();
      
-    }, 0);
+    // }, 0);
     //deleting this fixed modal errors with onblur
   };
   const handleDeleteClick = () => {
@@ -88,7 +95,12 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
     <Draggable draggableId={card._id} index={index}>
       {(provided) => (
         <div
-          ref={provided.innerRef}
+          ref={(el) => {
+            provided.innerRef(el);
+            cardRef.current = el;
+          }}
+
+          // ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           className="relative bg-gray-100 p-4  rounded mb-2 shadow hover:border hover:border-gray-400 group transition-transform duration-300 ease-in-out flex justify-between items-center"
@@ -97,20 +109,20 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
           <div className=" relative  w-full z-0">
             {editingName ? (
                 <textarea
-                  ref={inputRef}
-                  type="text"
+                  ref={textareaRef}
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
                   onBlur={handleSaveAndClose}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
+                    if (e.key === 'Enter' && !e.shiftKey) {
                       handleSaveAndClose(); // Save and close when Enter is pressed
                     }
                   }}
-                  className="bg-transparent border-none focus:outline-none w-full"
+                  className="bg-transparent border-none focus:outline-none w-full resize-none overflow-hidden"
+                  style={{ minHeight: '1.5em' }}
                 />
               ) : (
-                <span className="block pr-8">{card.name}</span>
+                <span className="block pr-8 whitespace-pre-wrap">{card.name}</span>
               )}
             <MdOutlineModeEdit
               onClick={handleEditClick}
@@ -123,7 +135,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
           {showOptions && (
             <div 
             ref={optionsRef} 
-            className="absolute top-10 right-2 bg-white shadow-lg rounded border border-gray-300 p-2 z-10">
+            className="absolute top-0 -right-24 bg-white shadow-lg rounded border border-gray-300 p-2 z-10 flex flex-col">
               <button
                 id='delete-button'
                 onClick={handleDeleteClick}
