@@ -53,37 +53,6 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
     };
   }, [showOptions, showDeleteModal]);
 
-  // useEffect(() => {
-  //   if (editingName && textareaRef.current) {
-  //     textareaRef.current.focus();
-  //     textareaRef.current.select();
-  //   }
-  // }, [editingName]);
-
-  // useEffect(() => {
-  //   if (editingName && textareaRef.current && contentRef.current) {
-  //     const content = contentRef.current;
-  //     const textarea = textareaRef.current;
-      
-  //     // Match width
-  //     textarea.style.width = `${content.offsetWidth}px`;
-      
-  //     // Match height
-  //     textarea.style.height = 'auto';
-  //     textarea.style.height = `${content.offsetHeight}px`;
-      
-  //     // Focus and select text
-  //     textarea.focus();
-  //     textarea.select();
-  //   }
-  // }, [editingName]);
-
-  // const handleTextareaChange = (e) => {
-  //   setNewName(e.target.value);
-  //   e.target.style.height = 'auto';
-  //   e.target.style.height = `${e.target.scrollHeight}px`;
-  // };
-
 
 
   const handleEditClick = () => {
@@ -143,7 +112,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
                       handleSaveAndClose(); // Save and close when Enter is pressed
                     }
                   }}
-                  className="bg-transparent border-none focus:outline-none w-full resize-none overflow-hidden p-0"
+                  className="bg-transparent border-none focus:outline-none w-full resize-none p-0 z-10"
                 />
               ) : (
                 <span className="block pr-8 ">{card.name}</span>
@@ -159,7 +128,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
           {showOptions && (
             <div 
             ref={optionsRef} 
-            className="absolute top-0 -right-24 bg-white shadow-lg rounded border border-gray-300 p-2 z-10 flex flex-col">
+            className="absolute  top-0 right-0 bg-white shadow-lg rounded border border-gray-300 p-2 z-30 flex flex-col">
               <button
                 id='delete-button'
                 onClick={handleDeleteClick}

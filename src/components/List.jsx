@@ -75,9 +75,9 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="relative bg-white shadow rounded-md p-4 min-w-[264px] max-w-[264px] flex flex-col"
+          className="relative bg-white shadow rounded-md p-4 w-64 max-h-[calc(100vh-10rem)] flex flex-col z-10"
         >
-          <div className="flex items-center justify-between gap-2 mb-4">
+          <div className="flex items-center justify-between gap-2 mb-4 ">
             <input
               type="text"
               value={editListName[list._id] || list.name}
@@ -125,22 +125,27 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
           <Droppable droppableId={list._id} type="CARD">
             {(provided) => (
               <div
-                className="flex flex-col gap-1 "
+                className="flex-grow overflow-y-auto mb-4 "
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >
-                {listCards.map((card, index) => (
-                  <Card 
-                  key={card._id} 
-                  card={card} 
-                  index={index} 
-                  onUpdateCard={handleUpdateCard}
-                  onDeleteCard={handleDeleteCard}
-                  
-                  />
-                ))}
-                {provided.placeholder}
-                <div className="mt-4">
+                <div className="space-y-2">
+                  {listCards.map((card, cardIndex) => (
+                    <Card 
+                      key={card._id} 
+                      card={card} 
+                      index={cardIndex} 
+                      onUpdateCard={handleUpdateCard}
+                      onDeleteCard={handleDeleteCard}
+                    />
+                  ))}
+                  {provided.placeholder}
+                </div>
+               
+              </div>
+            )}
+          </Droppable>
+          <div className="mt-4">
                 {showCardInput ? (
                     <div ref={cardInputRef}>
                       <input
@@ -166,11 +171,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                       Add Card
                     </button>
                   )}
-                </div>
-              </div>
-            )}
-          </Droppable>
-
+           </div>
           {showModal && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
               <div className="bg-white p-6 rounded-md shadow-lg" ref={modalRef}>
