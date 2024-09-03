@@ -43,17 +43,6 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
     }
   };
 
-  // const handleClickOutside = (event) => {
-  //   if (menuRef.current && !menuRef.current.contains(event.target)) {
-  //     setMenuOpen(false);
-  //   }
-  //   if (showModal && !document.querySelector('.modal').contains(event.target)) {
-  //     setShowModal(false);
-  //   }
-  //   if (cardInputRef.current && !cardInputRef.current.contains(event.target)) {
-  //     setShowCardInput(false);
-  //   }
-  // };
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
@@ -136,7 +125,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
           <Droppable droppableId={list._id} type="CARD">
             {(provided) => (
               <div
-                className="space-y-2"
+                className="flex flex-col gap-1 "
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >

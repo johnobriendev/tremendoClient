@@ -318,16 +318,7 @@ const handleDeleteCard = async (cardId) => {
         return card;
       });
 
-      //   // Update positions for all cards in the affected list(s)
-      // const affectedListIds = new Set([startListId, endListId]);
-      // newCards = newCards.map(card => {
-      //   if (affectedListIds.has(card.listId)) {
-      //     const listCards = newCards.filter(c => c.listId === card.listId);
-      //     const newPosition = listCards.indexOf(card) + 1;
-      //     return { ...card, position: newPosition };
-      //   }
-      //   return card;
-      // });
+  
 
       // Log the updated cards for debugging
       console.log('Updated cards:', newCards);
@@ -362,35 +353,24 @@ const handleDeleteCard = async (cardId) => {
   
   
   return (
-    <div className=" bg-gray-300 h-screen w-full overflow-x-auto">
+    <div className=" bg-gray-300 min-h-screen flex flex-col">
       <div className='p-6'>
         <Link to='/dashboard' className=' text-sky-500'>Home</Link>
         <h1 className="text-2xl font-bold mt-6 mb-6">{board?.name}</h1>
-        {/* <div className="flex gap-4 mb-6">
-          <input
-            type="text"
-            value={newListName}
-            onChange={(e) => setNewListName(e.target.value)}
-            placeholder="New List Name"
-            className="p-2 border rounded w-full"
-          />
-          <button
-            onClick={handleCreateList}
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          >
-            Create List
-          </button>
-        </div> */}
       </div>
       <DragDropContext onDragEnd={handleDragEnd}>
-        <div className='px-6 pb-6 overflow-x-auto'>
+        <div className='flex-grow overflow-x-auto '>
           <Droppable droppableId="all-lists" direction="horizontal">
             {(provided) => (
               <div
-                className="flex gap-4 items-start w-full"
+                className="flex items-start p-6 space-x-4"
+                style={{
+                  paddingRight: '1.5rem',
+                  minWidth: 'max-content',
+                  minHeight: 'calc(100vh - 200px)' //can be adjusted if more space is needed
+                }}
                 {...provided.droppableProps}
-                ref={provided.innerRef}
-                // style={{ width: '100%' }} 
+                ref={provided.innerRef} 
               >
                 {lists.map((list, index) => (
                   <List
@@ -414,7 +394,7 @@ const handleDeleteCard = async (cardId) => {
                   {!isAddingList ? (
                     <button
                       onClick={() => setIsAddingList(true)}
-                      className="w-full bg-gray-200 hover:bg-gray-100 text-gray-700 font-semibold py-2 px-4 rounded shadow-xl"
+                      className="w-full bg-gray-100 hover:bg-white text-gray-700 font-semibold py-2 px-4 rounded shadow-xl"
                     >
                       + Add a list
                     </button>

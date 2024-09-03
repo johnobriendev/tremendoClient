@@ -5,9 +5,6 @@ import LoginPage from './components/LoginPage';
 import DashboardPage from './components/DashboardPage';
 import BoardPage from './components/BoardPage';
 import ProtectedRoute from './components/ProtectedRoute';
-import { CardsProvider } from './contexts/CardsContext';
-
-
 
 
 const router = createBrowserRouter([
