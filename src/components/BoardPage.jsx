@@ -21,6 +21,13 @@ function BoardPage() {
   const [isAddingList, setIsAddingList] = useState(false);
   const newListInputRef = useRef(null);
 
+  // Trigger focus on the input when `isAddingList` changes to true
+  useEffect(() => {
+    if (isAddingList && newListInputRef.current) {
+      newListInputRef.current.focus();
+    }
+  }, [isAddingList]);
+
 
   const fetchBoardData = async () => {
     try {
@@ -399,7 +406,7 @@ const handleDeleteCard = async (cardId) => {
                       + Add a list
                     </button>
                   ) : (
-                    <div ref={newListInputRef} className="bg-white p-2 rounded">
+                    <div  className="bg-white p-2 rounded">
                       <input
                         type="text"
                         value={newListName}
@@ -407,6 +414,7 @@ const handleDeleteCard = async (cardId) => {
                         onKeyPress={handleKeyPress}
                         placeholder="Enter list title..."
                         className="w-full p-2 border rounded mb-2"
+                        ref={newListInputRef}
                       />
                       <div className="flex justify-between">
                         <button
