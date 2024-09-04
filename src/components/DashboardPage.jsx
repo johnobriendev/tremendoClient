@@ -233,6 +233,11 @@ const DashboardPage = () => {
                 className="border p-2 w-full"
                 value={newBoardName}
                 onChange={(e) => setNewBoardName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleCreateBoard();
+                  }
+                }}
               />
             </div>
             <div className="mb-4">
@@ -271,6 +276,11 @@ const DashboardPage = () => {
                 className="border p-2 w-full"
                 value={editBoardName}
                 onChange={(e) => setEditBoardName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleEditBoard();
+                  }
+                }}
               />
             </div>
             <button
