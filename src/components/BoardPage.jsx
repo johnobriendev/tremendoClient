@@ -21,13 +21,6 @@ function BoardPage() {
   const [isAddingList, setIsAddingList] = useState(false);
   const newListInputRef = useRef(null);
 
-  // Trigger focus on the input when `isAddingList` changes to true
-  useEffect(() => {
-    if (isAddingList && newListInputRef.current) {
-      newListInputRef.current.focus();
-    }
-  }, [isAddingList]);
-
 
   const fetchBoardData = async () => {
     try {
@@ -83,7 +76,7 @@ function BoardPage() {
   }, [boardId]);
 
 
-  //list input stuff
+  //list input stuff, focus input when add list is clicked
   useEffect(() => {
     if (isAddingList && newListInputRef.current) {
       newListInputRef.current.focus();

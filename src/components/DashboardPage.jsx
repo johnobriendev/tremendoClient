@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const DashboardPage = () => {
@@ -14,6 +14,30 @@ const DashboardPage = () => {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteBoardId, setDeleteBoardId] = useState('');
   const navigate = useNavigate();
+
+  const createBoardRef = useRef(null);
+  const editBoardRef = useRef(null);
+  const deleteBoardRef = useRef(null);
+
+
+  const handleClickOutside = (event) => {
+    if (isCreateModalOpen && createBoardRef.current && !createBoardRef.current.contains(event.target)) {
+      setIsCreateModalOpen(false);
+    }
+    if (isEditModalOpen && editBoardRef.current && !editBoardRef.current.contains(event.target)) {
+      setIsEditModalOpen(false);
+    }
+    if (isDeleteModalOpen && deleteBoardRef.current && !deleteBoardRef.current.contains(event.target)) {
+      setIsDeleteModalOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isCreateModalOpen, isEditModalOpen, isDeleteModalOpen]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -199,8 +223,8 @@ const DashboardPage = () => {
       )}
 
       {isCreateModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded shadow">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" >
+          <div className="bg-white p-6 rounded shadow" ref={createBoardRef}>
             <h2 className="text-xl font-bold mb-4">Create New Board</h2>
             <div className="mb-4">
               <label className="block text-gray-700 mb-2">Board Name</label>
@@ -238,7 +262,7 @@ const DashboardPage = () => {
 
       {isEditModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded shadow">
+          <div className="bg-white p-6 rounded shadow" ref={editBoardRef}>
             <h2 className="text-xl font-bold mb-4">Edit Board</h2>
             <div className="mb-4">
               <label className="block text-gray-700 mb-2">New Board Name</label>
@@ -267,7 +291,7 @@ const DashboardPage = () => {
 
       {isDeleteModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded shadow">
+          <div className="bg-white p-6 rounded shadow" ref={deleteBoardRef}>
             <h2 className="text-xl font-bold mb-4">Are you sure?</h2>
             <p className="mb-4">Do you really want to delete this board?</p>
             <button
