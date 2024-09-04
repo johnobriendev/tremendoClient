@@ -353,13 +353,13 @@ const handleDeleteCard = async (cardId) => {
   
   
   return (
-    <div className=" bg-gray-300 min-h-screen flex flex-col">
-      <div className='p-6'>
+    <div className=" bg-gray-300 h-screen overflow-x-auto flex flex-col p-2">
+      <div className=''>
         <Link to='/dashboard' className=' text-sky-500'>Home</Link>
-        <h1 className="text-2xl font-bold mt-6 mb-6">{board?.name}</h1>
+        <h1 className="text-2xl font-bold mt-6">{board?.name}</h1>
       </div>
       <DragDropContext onDragEnd={handleDragEnd}>
-        <div className='flex-grow overflow-x-auto '>
+        <div className='flex-grow  w-full'>
           <Droppable droppableId="all-lists" direction="horizontal">
             {(provided) => (
               <div
@@ -367,7 +367,7 @@ const handleDeleteCard = async (cardId) => {
                 style={{
                   paddingRight: '1.5rem',
                   minWidth: 'max-content',
-                  minHeight: 'calc(100vh - 200px)' //can be adjusted if more space is needed
+                  minHeight: 'calc(100vh - 100px)' //can be adjusted if more space is needed
                 }}
                 {...provided.droppableProps}
                 ref={provided.innerRef} 

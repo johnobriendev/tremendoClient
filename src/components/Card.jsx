@@ -97,7 +97,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="relative bg-gray-100 p-4  rounded mb-2 shadow hover:border hover:border-gray-400 group transition-transform duration-300 ease-in-out flex justify-between items-center"
+          className="relative bg-gray-100 p-4  rounded mb-2 shadow hover:border hover:border-gray-400 group transition-transform duration-300 ease-in-out flex justify-between items-center z-50"
           
         >
           <div className=" relative  w-full z-0">
