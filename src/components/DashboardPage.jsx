@@ -19,6 +19,9 @@ const DashboardPage = () => {
   const editBoardRef = useRef(null);
   const deleteBoardRef = useRef(null);
 
+  const createInputRef = useRef(null);
+  const editInputRef = useRef(null);
+
 
   const handleClickOutside = (event) => {
     if (isCreateModalOpen && createBoardRef.current && !createBoardRef.current.contains(event.target)) {
@@ -39,6 +42,26 @@ const DashboardPage = () => {
     };
   }, [isCreateModalOpen, isEditModalOpen, isDeleteModalOpen]);
 
+
+  // Automatically focus on the Create Board input when modal opens
+  useEffect(() => {
+    if (isCreateModalOpen) {
+      createInputRef.current.focus();
+    }
+  }, [isCreateModalOpen]);
+
+  // Automatically focus on the Edit Board input when modal opens
+  useEffect(() => {
+    if (isEditModalOpen) {
+      editInputRef.current.focus();
+    }
+  }, [isEditModalOpen]);
+
+
+
+
+
+  //get data from the DB
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -79,6 +102,8 @@ const DashboardPage = () => {
     fetchUserData();
     fetchBoardsData();
   }, []);
+
+  //board CRUD
 
   const handleCreateBoard = async () => {
     try {
@@ -229,6 +254,7 @@ const DashboardPage = () => {
             <div className="mb-4">
               <label className="block text-gray-700 mb-2">Board Name</label>
               <input
+              ref={createInputRef}
                 type="text"
                 className="border p-2 w-full"
                 value={newBoardName}
@@ -272,6 +298,7 @@ const DashboardPage = () => {
             <div className="mb-4">
               <label className="block text-gray-700 mb-2">New Board Name</label>
               <input
+              ref={editInputRef}
                 type="text"
                 className="border p-2 w-full"
                 value={editBoardName}
