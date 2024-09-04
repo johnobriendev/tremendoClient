@@ -354,7 +354,7 @@ const handleDeleteCard = async (cardId) => {
   
   return (
     <div className=" bg-gray-300 h-screen overflow-x-auto flex flex-col">
-      <div className=''>
+      <div className='pt-4 pl-6'>
         <Link to='/dashboard' className=' text-sky-500'>Home</Link>
         <h1 className="text-2xl font-bold">{board?.name}</h1>
       </div>
