@@ -89,15 +89,10 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
     <Draggable draggableId={card._id} index={index}>
       {(provided) => (
         <div
-          // ref={(el) => {
-          //   provided.innerRef(el);
-          //   cardRef.current = el;
-          // }}
-
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="relative bg-gray-100 p-4  rounded mb-2 shadow hover:border hover:border-gray-400 group transition-transform duration-300 ease-in-out flex justify-between items-center z-50"
+          className="relative bg-gray-100 p-4  rounded mb-2 shadow hover:border hover:border-gray-400 group transition-transform duration-300 ease-in-out flex justify-between items-center ${snapshot.isDragging ? 'z-[100]' : 'z-20'}"
           
         >
           <div className=" relative  w-full z-0">
@@ -115,7 +110,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
                   className="bg-transparent border-none focus:outline-none w-full resize-none p-0 z-10"
                 />
               ) : (
-                <span className="block pr-8 ">{card.name}</span>
+                <span className="block pr-8 z-20">{card.name}</span>
               )}
             <MdOutlineModeEdit
               onClick={handleEditClick}

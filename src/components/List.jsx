@@ -75,7 +75,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="relative bg-white shadow rounded-md p-4 w-64 max-h-[calc(100vh-10rem)] flex flex-col z-10"
+          className="relative bg-white shadow rounded-md p-4 w-64 max-h-[calc(100vh-10rem)] flex flex-col ${snapshot.isDragging ? 'z-50' : 'z-10'}"
         >
           <div className="flex items-center justify-between gap-2 mb-4 ">
             <input
@@ -96,7 +96,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                 <BsThreeDots />
               </button>
               {menuOpen && (
-                <div className="absolute right-0 mt-2 w-48 z-10 bg-white border rounded shadow-lg">
+                <div className="absolute right-0 mt-2 w-48 z-[35] bg-white border rounded shadow-lg">
                   <button
                     onClick={handleDeleteClick}
                     className="block px-4 py-2 text-red-500 hover:bg-gray-100 w-full text-left"
@@ -125,7 +125,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
           <Droppable droppableId={list._id} type="CARD">
             {(provided) => (
               <div
-                className="flex-grow overflow-y-auto mb-4 "
+                className="flex-grow overflow-y-auto mb-4 ${snapshot.isDraggingOver ? 'bg-gray-100' : ''}"
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >
