@@ -30,49 +30,64 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+    <div 
+    className="flex flex-col items-center justify-center min-h-screen relative"
+    style={{
+      backgroundImage: "url(/bsas2.jpg)",
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      width: '100vw',
+      height: '100vh',
+  }}
+    >
+      <div className='w-full max-w-sm bg-white p-6 rounded shadow-xl opacity-90'>
+        <Link to='/' className='text-4xl mt-12 bg-transparent p-2 rounded absolute top-4 left-10 hover:text-gray-700'>Cello</Link>
+        <h1 className="text-2xl mb-4">Register</h1>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
+        <form onSubmit={handleRegister} className="">
+          <div className="mb-4">
+            <label className="block text-gray-700 mb-2">Name</label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="border border-gray-300 px-3 py-2 w-full rounded"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 mb-2">Email</label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="border border-gray-300 px-3 py-2 w-full rounded"
+              required
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 mb-2">Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="border border-gray-300 px-3 py-2 w-full rounded"
+              required
+            />
+          </div>
+          <div className='w-full flex items-center justify-center mb-4'>
+            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
+              Register
+            </button>
+          </div>
+          <span className=''>Already have an account? <Link to='/login' className='text-blue-600 hover:text-sky-500'>Login</Link> </span>
+        
+        </form>
       
-      <h1 className="text-3xl font-bold mb-4">Register</h1>
-      {error && <p className="text-red-500 mb-4">{error}</p>}
-      <form onSubmit={handleRegister} className="w-full max-w-sm bg-white p-6 rounded shadow-md">
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-2">Name</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="border border-gray-300 px-3 py-2 w-full rounded"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-2">Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="border border-gray-300 px-3 py-2 w-full rounded"
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-2">Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="border border-gray-300 px-3 py-2 w-full rounded"
-            required
-          />
-        </div>
-        <div className='w-full flex items-center justify-center'>
-          <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
-            Register
-          </button>
-        </div>
+
+      </div>
       
-      </form>
-      <Link to='/' className='text-2xl mt-12'>Back to Homepage</Link>
     </div>
   );
 };

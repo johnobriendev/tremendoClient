@@ -2,8 +2,18 @@ import { Link } from 'react-router-dom';
 
 const LandingPage = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-4xl font-bold mb-4">Welcome to Cello</h1>
+    <div 
+    className="flex flex-col items-center  min-h-screen"
+    style={{
+        backgroundImage: "url(/bsas3.jpg)",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        width: '100vw',
+        height: '100vh',
+    }}
+    >
+      <h1 className="text-4xl font-semibold mb-4 mt-24">Cello</h1>
       <p className="mb-6">Your go-to solution for everything you need.</p>
       <div className="flex space-x-4">
         <Link to="/register">
