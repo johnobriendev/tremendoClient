@@ -20,6 +20,7 @@ function BoardPage() {
   //list input stuff
   const [isAddingList, setIsAddingList] = useState(false);
   const newListInputRef = useRef(null);
+  const newListButtonRef = useRef(null);
 
 
   const fetchBoardData = async () => {
@@ -116,7 +117,7 @@ function BoardPage() {
 
   //list input stuff
   const handleClickOutside = (event) => {
-    if (newListInputRef.current && !newListInputRef.current.contains(event.target)) {
+    if (newListInputRef.current && !newListInputRef.current.contains(event.target) && !newListButtonRef.current.contains(event.target)) {
       setIsAddingList(false);
       setNewListName('');
     }
@@ -413,6 +414,7 @@ const handleDeleteCard = async (cardId) => {
                         <button
                           onClick={handleCreateList}
                           className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                          ref={newListButtonRef}
                         >
                           Add List
                         </button>
