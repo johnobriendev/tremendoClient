@@ -92,7 +92,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="relative bg-gray-100 p-4  rounded mb-2 shadow hover:border hover:border-gray-400 group transition-transform duration-300 ease-in-out flex justify-between items-center ${snapshot.isDragging ? 'z-[100]' : 'z-20'}"
+          className="relative bg-gray-800 p-4  rounded mb-2 shadow hover:border hover:border-gray-500 group transition-transform duration-300 ease-in-out flex justify-between items-center ${snapshot.isDragging ? 'z-[100]' : 'z-20'}"
           
         >
           <div className=" relative  w-full z-0">
@@ -107,14 +107,14 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
                       handleSaveAndClose(); // Save and close when Enter is pressed
                     }
                   }}
-                  className="bg-transparent border-none focus:outline-none w-full resize-none p-0 z-10"
+                  className="bg-gray-700 text-white border-none focus:outline-none w-full resize-none p-0 z-10"
                 />
               ) : (
                 <span className="block pr-8 z-20">{card.name}</span>
               )}
             <MdOutlineModeEdit
               onClick={handleEditClick}
-              className="text-gray-500 absolute -top-2 -right-2  opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity duration-300 ease-in-out"
+              className="text-gray-400 absolute -top-2 -right-2  opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity duration-300 ease-in-out"
               size={20}
             />
           </div>
@@ -123,7 +123,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
           {showOptions && (
             <div 
             ref={optionsRef} 
-            className="absolute  top-0 right-0 bg-white shadow-lg rounded border border-gray-300 p-2 z-30 flex flex-col">
+            className="absolute  top-0 right-0 bg-gray-500 text-white shadow-lg rounded border border-gray-600 p-2 z-30 flex flex-col">
               <button
                 id='delete-button'
                 onClick={handleDeleteClick}
@@ -132,7 +132,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
                 Delete Card
               </button>
               {/* Add other options here */}
-              <button onClick={() => setShowOptions(false)} className="text-gray-600 hover:text-gray-900">
+              <button onClick={() => setShowOptions(false)} className="text-gray-200 hover:text-gray-900">
                 Close
               </button>
             </div>
@@ -140,8 +140,8 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
 
           {/* Delete Confirmation Modal */}
           {showDeleteModal && (
-            <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-20">
-              <div ref={deleteModalRef} className="bg-white p-6 rounded shadow-lg">
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-20">
+              <div ref={deleteModalRef} className="bg-gray-800 text-white p-6 rounded shadow-lg">
                 <p className="text-lg mb-4">Are you sure you want to delete this card?</p>
                 <div className="flex justify-end gap-4">
                   <button

@@ -75,7 +75,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="relative bg-white shadow rounded-md p-4 w-64 max-h-[calc(100vh-10rem)] flex flex-col ${snapshot.isDragging ? 'z-50' : 'z-10'}"
+          className="relative bg-gray-900 text-white shadow rounded-md p-4 w-64 max-h-[calc(100vh-10rem)] flex flex-col ${snapshot.isDragging ? 'z-50' : 'z-10'}"
         >
           <div className="flex items-center justify-between gap-2 mb-4 ">
             <input
@@ -85,26 +85,26 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
               onBlur={() => handleListNameChange(list._id, editListName[list._id])}
               onKeyPress={handleListNameKeyPress}
               placeholder="List Name"
-              className="p-2 border rounded w-full"
+              className="p-2 border rounded w-full bg-gray-800 text-white"
               style={{ backgroundColor: listColor }}
             />
             <div className="relative" ref={menuRef}>
               <button
                 onClick={() => setMenuOpen(!menuOpen)}
-                className="text-gray-500 hover:text-gray-600"
+                className="text-gray-400 hover:text-gray-300"
               >
                 <BsThreeDots />
               </button>
               {menuOpen && (
-                <div className="absolute right-0 mt-2 w-48 z-[35] bg-white border rounded shadow-lg">
+                <div className="absolute right-0 mt-2 w-48 z-[35] bg-gray-700 text-white border rounded shadow-lg">
                   <button
                     onClick={handleDeleteClick}
-                    className="block px-4 py-2 text-red-500 hover:bg-gray-100 w-full text-left"
+                    className="block px-4 py-2 text-red-500 hover:bg-gray-600 w-full text-left"
                   >
                     Delete List
                   </button>
-                  <div className="block px-4 py-2 hover:bg-gray-100 w-full text-left">
-                    <label className="block text-gray-700 mb-2">Background Color</label>
+                  <div className="block px-4 py-2 hover:bg-gray-600 w-full text-left">
+                    <label className="block text-gray-400 mb-2">Background Color</label>
                     <input
                       type="color"
                       className="w-16 h-8"
@@ -114,7 +114,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                   </div>
                   <button
                     onClick={() => setMenuOpen(false)}
-                    className="block px-4 py-2 hover:bg-gray-100 w-full text-left"
+                    className="block px-4 py-2 hover:bg-gray-600 w-full text-left"
                   >
                     Close
                   </button>
@@ -125,7 +125,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
           <Droppable droppableId={list._id} type="CARD">
             {(provided) => (
               <div
-                className="flex-grow overflow-y-auto mb-4 ${snapshot.isDraggingOver ? 'bg-gray-100' : ''}"
+                className="flex-grow overflow-y-auto mb-4 ${snapshot.isDraggingOver ? 'bg-gray-800' : ''}"
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >
@@ -154,11 +154,11 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                         onChange={(e) => setNewCardName({ ...newCardName, [list._id]: e.target.value })}
                         onKeyPress={handleAddCardKeyPress}
                         placeholder="New Card Name"
-                        className="p-2 border rounded w-full"
+                        className="p-2 border rounded w-full bg-gray-800 text-white"
                       />
                       <button
                         onClick={() => handleCreateCard(list._id)}
-                        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 mt-2"
+                        className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 mt-2"
                       >
                         Add Card
                       </button>
@@ -166,7 +166,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                   ) : (
                     <button
                       onClick={() => setShowCardInput(true)}
-                      className="bg-green-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                      className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
                     >
                       Add Card
                     </button>

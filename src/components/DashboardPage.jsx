@@ -194,11 +194,22 @@ const DashboardPage = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div 
+    className="p-4"
+    style={{
+      backgroundImage: "url(/bsas5.jpg)",
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      width: '100vw',
+      height: '100vh',
+      overflow: 'auto',
+  }}
+    >
       {error && <p className="text-red-500">{error}</p>}
       {user && (
         <>
-          <h1 className="text-2xl font-bold mb-4">Welcome, {user.name}!</h1>
+          <h1 className="text-2xl font-bold mb-4 text-white">Welcome, {user.name}!</h1>
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded mb-4 mr-4"
             onClick={() => setIsCreateModalOpen(true)}

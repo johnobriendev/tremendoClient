@@ -395,25 +395,25 @@ const handleDeleteCard = async (cardId) => {
                   {!isAddingList ? (
                     <button
                       onClick={() => setIsAddingList(true)}
-                      className="w-full bg-gray-100 hover:bg-white text-gray-700 font-semibold py-2 px-4 rounded shadow-xl"
+                      className="w-full bg-transparent opacity-35 text-white hover:opacity-85 font-semibold py-2 px-4 rounded shadow-xl"
                     >
                       + Add a list
                     </button>
                   ) : (
-                    <div  className="bg-white p-2 rounded">
+                    <div  className="bg-gray-800 text-white p-2 rounded">
                       <input
                         type="text"
                         value={newListName}
                         onChange={(e) => setNewListName(e.target.value)}
                         onKeyPress={handleKeyPress}
                         placeholder="Enter list title..."
-                        className="w-full p-2 border rounded mb-2"
+                        className="bg-gray-700 text-white w-full p-2 border rounded mb-2"
                         ref={newListInputRef}
                       />
                       <div className="flex justify-between">
                         <button
                           onClick={handleCreateList}
-                          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                          className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
                           ref={newListButtonRef}
                         >
                           Add List
