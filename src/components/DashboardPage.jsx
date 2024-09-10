@@ -195,15 +195,15 @@ const DashboardPage = () => {
 
   return (
     <div 
-    className="p-4"
+    className="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed overflow-auto p-4"
     style={{
       backgroundImage: "url(/bsas5.jpg)",
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
-      width: '100vw',
-      height: '100vh',
-      overflow: 'auto',
+      // backgroundSize: 'cover',
+      // backgroundPosition: 'center',
+      // backgroundRepeat: 'no-repeat',
+      // width: '100vw',
+      // height: '100vh',
+      // overflow: 'auto',
   }}
     >
       {error && <p className="text-red-500">{error}</p>}
