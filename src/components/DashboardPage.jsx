@@ -195,9 +195,9 @@ const DashboardPage = () => {
 
   return (
     <div 
-    className="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed overflow-auto p-4"
+    className="min-h-screen bg-cover bg-center bg-no-repeat bg-fixed overflow-auto p-6"
     style={{
-      backgroundImage: "url(/bsas7.webp)",
+      backgroundImage: "url(/bsas5.webp)",
   }}
     >
       {error && <p className="text-red-500">{error}</p>}
@@ -216,12 +216,12 @@ const DashboardPage = () => {
           >
             Log Out
           </button>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:mx-12 lg:mx-24 xl:mx-48 mt-24">
             {boards.map((board) => (
               <div
                 key={board._id}
-                className="border p-4 rounded shadow"
-                style={{ backgroundColor: board.backgroundColor }}
+                className="bg-gray-800 text-gray-300 p-4 rounded shadow max-w-[264px]"
+                // style={{ backgroundColor: board.backgroundColor }}
               >
                 <h2 className="text-xl font-bold">{board.name}</h2>
                 <button
@@ -254,14 +254,14 @@ const DashboardPage = () => {
 
       {isCreateModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" >
-          <div className="bg-white p-6 rounded shadow" ref={createBoardRef}>
+          <div className="bg-gray-700 text-gray-300 p-6 rounded shadow" ref={createBoardRef}>
             <h2 className="text-xl font-bold mb-4">Create New Board</h2>
             <div className="mb-4">
               <label className="block text-gray-700 mb-2">Board Name</label>
               <input
-              ref={createInputRef}
+                ref={createInputRef}
                 type="text"
-                className="border p-2 w-full"
+                className="border p-2 w-full bg-gray-600 text-gray-300"
                 value={newBoardName}
                 onChange={(e) => setNewBoardName(e.target.value)}
                 onKeyDown={(e) => {
@@ -271,7 +271,7 @@ const DashboardPage = () => {
                 }}
               />
             </div>
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <label className="block text-gray-700 mb-2">Background Color</label>
               <input
                 type="color"
@@ -279,7 +279,7 @@ const DashboardPage = () => {
                 value={newBoardColor}
                 onChange={(e) => setNewBoardColor(e.target.value)}
               />
-            </div>
+            </div> */}
             <button
               className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
               onClick={handleCreateBoard}
@@ -298,14 +298,14 @@ const DashboardPage = () => {
 
       {isEditModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded shadow" ref={editBoardRef}>
+          <div className="bg-gray-700 text-gray-300 p-6 rounded shadow" ref={editBoardRef}>
             <h2 className="text-xl font-bold mb-4">Edit Board</h2>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2">New Board Name</label>
+              <label className="block text-gray-300 mb-2">New Board Name</label>
               <input
-              ref={editInputRef}
+                ref={editInputRef}
                 type="text"
-                className="border p-2 w-full"
+                className="border p-2 w-full bg-gray-600 text-gray-300 rounded"
                 value={editBoardName}
                 onChange={(e) => setEditBoardName(e.target.value)}
                 onKeyDown={(e) => {
@@ -333,7 +333,7 @@ const DashboardPage = () => {
 
       {isDeleteModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded shadow" ref={deleteBoardRef}>
+          <div className="bg-gray-700 text-gray-300 p-6 rounded shadow" ref={deleteBoardRef}>
             <h2 className="text-xl font-bold mb-4">Are you sure?</h2>
             <p className="mb-4">Do you really want to delete this board?</p>
             <button
