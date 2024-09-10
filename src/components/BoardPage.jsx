@@ -354,7 +354,17 @@ const handleDeleteCard = async (cardId) => {
   
   
   return (
-    <div className=" bg-gray-300 h-screen overflow-x-auto flex flex-col">
+    <div 
+    className=" bg-gray-300 h-screen overflow-x-auto flex flex-col"
+    style={{
+      backgroundImage: "url(/bsas1.jpg)",
+      backgroundSize: 'cover',
+      backgroundPosition: 'center',
+      backgroundRepeat: 'no-repeat',
+      width: '100vw',
+      height: '100vh',
+    }}
+    >
       <div className='pt-4 pl-6'>
         <Link to='/dashboard' className=' text-sky-500'>Home</Link>
         <h1 className="text-2xl font-bold">{board?.name}</h1>
@@ -395,9 +405,9 @@ const handleDeleteCard = async (cardId) => {
                   {!isAddingList ? (
                     <button
                       onClick={() => setIsAddingList(true)}
-                      className="w-full bg-transparent opacity-35 text-white hover:opacity-85 font-semibold py-2 px-4 rounded shadow-xl"
+                      className="w-full bg-white bg-opacity-25 hover:bg-opacity-20 text-white font-semibold py-2 px-4 rounded shadow-xl"
                     >
-                      + Add a list
+                     + Add a list 
                     </button>
                   ) : (
                     <div  className="bg-gray-800 text-white p-2 rounded">
