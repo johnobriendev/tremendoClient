@@ -5,7 +5,7 @@ const LandingPage = () => {
     <div 
     className="flex flex-col items-center  min-h-screen"
     style={{
-        backgroundImage: "url(/bsas3.jpg)",
+        backgroundImage: "url(/bsas3.webp)",
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',

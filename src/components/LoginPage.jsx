@@ -33,7 +33,7 @@ const LoginPage = () => {
     <div 
     className="flex flex-col items-center justify-center min-h-screen"
     style={{
-      backgroundImage: "url(/bsas4.jpg)",
+      backgroundImage: "url(/bsas4.webp)",
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',

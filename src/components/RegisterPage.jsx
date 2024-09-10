@@ -33,7 +33,7 @@ const RegisterPage = () => {
     <div 
     className="flex flex-col items-center justify-center min-h-screen relative"
     style={{
-      backgroundImage: "url(/bsas2.jpg)",
+      backgroundImage: "url(/bsas2.webp)",
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',

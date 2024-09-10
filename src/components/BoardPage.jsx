@@ -357,7 +357,7 @@ const handleDeleteCard = async (cardId) => {
     <div 
     className=" bg-gray-300 h-screen overflow-x-auto flex flex-col"
     style={{
-      backgroundImage: "url(/bsas1.jpg)",
+      backgroundImage: "url(/bsas1.webp)",
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
