@@ -30,6 +30,12 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
     }
   };
 
+  useEffect(() => {
+    if (showCardInput && cardInputRef.current) {
+      cardInputRef.current.focus();
+    }
+  }, [showCardInput]);
+
 
   const handleClickOutside = (event) => {
     if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -147,7 +153,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
           </Droppable>
           <div className="mt-4">
                 {showCardInput ? (
-                    <div ref={cardInputRef}>
+                    <div >
                       <input
                         type="text"
                         value={newCardName[list._id] || ''}
@@ -155,6 +161,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                         onKeyPress={handleAddCardKeyPress}
                         placeholder="New Card Name"
                         className="p-2 border rounded w-full bg-gray-800 text-white"
+                        ref={cardInputRef}
                       />
                       <button
                         onClick={() => handleCreateCard(list._id)}
