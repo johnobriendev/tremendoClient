@@ -70,11 +70,15 @@ const DashboardPage = () => {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
-        const data = await response.json();
-        if (response.ok) {
-          setUser(data);
-        } else {
-          setError(data.message);
+        if (response.status === 401) {
+          handleLogout(); // Token expired or invalid
+        } else {  
+          const data = await response.json();
+          if (response.ok) {
+            setUser(data);
+          } else {
+            setError(data.message);
+          }
         }
       } catch (err) {
         setError('Failed to fetch user data');
@@ -88,11 +92,15 @@ const DashboardPage = () => {
             Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         });
-        const data = await response.json();
-        if (response.ok) {
-          setBoards(data);
+        if (response.status === 401) {
+          handleLogout(); // Token expired or invalid
         } else {
-          setError(data.message);
+          const data = await response.json();
+          if (response.ok) {
+            setBoards(data);
+          } else {
+            setError(data.message);
+          }
         }
       } catch (err) {
         setError('Failed to fetch boards');
