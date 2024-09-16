@@ -13,7 +13,7 @@ const LandingPage = () => {
         height: '100vh',
     }}
     >
-      <h1 className="text-4xl font-semibold mb-4 mt-24">Cello</h1>
+      <h1 className="text-4xl font-semibold mb-4 mt-24 xl:mt-12 2xl:mt-24">Tremendo</h1>
       <p className="mb-6">Your go-to solution for everything you need.</p>
       <div className="flex space-x-4">
         <Link to="/register">
