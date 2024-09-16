@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 
 const RegisterPage = () => {
@@ -8,6 +9,7 @@ const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [recaptchaToken, setRecaptchaToken] = useState(null);
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
@@ -76,6 +78,17 @@ const RegisterPage = () => {
               required
             />
           </div>
+
+          <div className='w-full flex items-center justify-center mb-4'>
+            {/* CAPTCHA */}
+            <ReCAPTCHA
+              sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY} // Add your reCAPTCHA site key here
+              onChange={(token) => setRecaptchaToken(token)}
+              onExpired={() => setRecaptchaToken(null)}
+            
+            />
+          </div>
+
           <div className='w-full flex items-center justify-center mb-4'>
             <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
               Register
