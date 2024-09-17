@@ -16,17 +16,25 @@ const RegisterPage = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setError('');
+    setMessage('');
     try {
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password}) //take out recaptcha token for now
       });
+      const data = await response.json();
       if (response.ok) {
-        navigate('/login');
+        // navigate('/login');
+        setMessage(data.message || 'Registration successful. Please check your email to verify your account.');
+        setIsRegistered(true);
+        // Clear the form
+        setName('');
+        setEmail('');
+        setPassword('');
       } else {
-        const data = await response.json();
-        setError(data.message);
+        setError(data.message || 'Registration failed');
       }
     } catch (err) {
       setError('Registration failed');
@@ -49,7 +57,10 @@ const RegisterPage = () => {
         <Link to='/' className='text-4xl mt-12 bg-transparent p-2 rounded absolute top-4 left-10 hover:text-gray-700'>Cello</Link>
         <h1 className="text-2xl mb-4">Register</h1>
         {error && <p className="text-red-500 mb-4">{error}</p>}
-        <form onSubmit={handleRegister} className="">
+        {message && <p className="text-green-500 mb-4">{message}</p>}
+        {!isRegistered ? (
+
+          <form onSubmit={handleRegister} className="">
           <div className="mb-4">
             <label className="block text-gray-700 mb-2">Name</label>
             <input
@@ -80,9 +91,9 @@ const RegisterPage = () => {
               required
             />
           </div>
-{/* 
+          {/* 
           <div className='w-full flex items-center justify-center mb-4'>
-          
+
             <ReCAPTCHA
               sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY} // Add your reCAPTCHA site key here
               onChange={(token) => setRecaptchaToken(token)}
@@ -96,10 +107,23 @@ const RegisterPage = () => {
               Register
             </button>
           </div>
-          <span className=''>Already have an account? <Link to='/login' className='text-blue-600 hover:text-sky-500'>Login</Link> </span>
+         
+
+          </form>
+
+
+         ) : ( 
+          <div>
+            <p className="mb-4">Registration successful! Please check your email to verify your account.</p>
+            <Link to="/login" className="text-blue-500 hover:text-blue-600">
+              Go to Login
+            </Link>
+          </div>
+
+
+         )}
         
-        </form>
-      
+        <span className=''>Already have an account? <Link to='/login' className='text-blue-600 hover:text-sky-500'>Login</Link> </span>
 
       </div>
       
