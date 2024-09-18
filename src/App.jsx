@@ -5,6 +5,7 @@ import LoginPage from './components/LoginPage';
 import DashboardPage from './components/DashboardPage';
 import BoardPage from './components/BoardPage';
 import ProtectedRoute from './components/ProtectedRoute';
+import VerifyEmail from './components/VerifyEmail';
 
 
 const router = createBrowserRouter([
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <LoginPage/>,
+  },
+  {
+    path: '/verify-email',
+    element: <VerifyEmail/>,
   },
   {
     path: '/dashboard',
