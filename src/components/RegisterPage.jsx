@@ -89,7 +89,7 @@ const RegisterPage = () => {
   }}
     >
       <div className='w-full max-w-sm bg-white p-6 rounded shadow-xl opacity-90'>
-        <Link to='/' className='text-4xl mt-12 bg-transparent p-2 rounded absolute top-4 left-10 hover:text-gray-700'>Cello</Link>
+        <Link to='/' className='text-4xl mt-12 bg-transparent p-2 rounded absolute top-4 left-10 hover:text-gray-700'>Tremendo</Link>
         <h1 className="text-2xl mb-4">Register</h1>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         {message && <p className="text-green-500 mb-4">{message}</p>}
