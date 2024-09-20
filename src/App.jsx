@@ -7,6 +7,8 @@ import BoardPage from './components/BoardPage';
 import ProtectedRoute from './components/ProtectedRoute';
 import VerifyEmail from './components/VerifyEmail';
 import ForgotPasswordPage from './components/ForgotPasswordPage';
+import ResetPasswordPage from './components/ResetPasswordPage';
+
 
 
 const router = createBrowserRouter([
@@ -29,6 +31,10 @@ const router = createBrowserRouter([
   {
     path: '/forgot-password',
     element: <ForgotPasswordPage/>,
+  },
+  {
+    path: '/reset-password',
+    element: <ResetPasswordPage/>
   },
   {
     path: '/dashboard',
