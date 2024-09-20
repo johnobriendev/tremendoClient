@@ -366,7 +366,7 @@ const handleDeleteCard = async (cardId) => {
     }}
     >
       <div className='pt-4 pl-6'>
-        <Link to='/dashboard' className=' text-white text-xl'>Cello</Link>
+        <Link to='/dashboard' className=' text-white text-xl'>Tremendo</Link>
         <h1 className="text-2xl text-white mt-4">{board?.name}</h1>
       </div>
       <DragDropContext onDragEnd={handleDragEnd}>

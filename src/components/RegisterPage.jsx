@@ -184,7 +184,7 @@ const RegisterPage = () => {
         
         <span className=''>Already have an account? <Link to='/login' className='text-blue-600 hover:text-sky-500'>Login</Link> </span>
         <p className="mt-2">
-          Didn't receive a verification email? 
+          Didn't receive a verification email?  &nbsp;
           <span 
             className="text-blue-500 cursor-pointer" 
             onClick={() => setShowResendForm(true)}
