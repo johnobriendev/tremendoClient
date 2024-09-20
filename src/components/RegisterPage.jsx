@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-// import ReCAPTCHA from 'react-google-recaptcha';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 
 const RegisterPage = () => {
@@ -17,7 +17,7 @@ const RegisterPage = () => {
   const [message, setMessage] = useState('');
   const [isRegistered, setIsRegistered] = useState(false);
   
-  // const [recaptchaToken, setRecaptchaToken] = useState(null);
+  const [recaptchaToken, setRecaptchaToken] = useState(null);
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
@@ -30,11 +30,16 @@ const RegisterPage = () => {
       return;
     }
 
+    if (!recaptchaToken) {
+      setError('Please complete the reCAPTCHA');
+      return;
+    }
+
     try {
       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password}) //take out recaptcha token for now
+        body: JSON.stringify({ name, email, password, recaptchaToken}) 
       });
       const data = await response.json();
       if (response.ok) {
@@ -148,7 +153,12 @@ const RegisterPage = () => {
                 Show Password
               </label>
             </div>
-      
+            <div className="mb-4">
+              <ReCAPTCHA
+                sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+                onChange={setRecaptchaToken}
+              />
+            </div>
             <div className='w-full flex items-center justify-center mb-4'>
               <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded">
                 Register
