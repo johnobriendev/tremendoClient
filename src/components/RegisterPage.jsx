@@ -83,7 +83,7 @@ const RegisterPage = () => {
 
   return (
     <div 
-    className="flex flex-col items-center justify-center min-h-screen relative"
+    className="flex flex-col items-center md:justify-center min-h-screen relative"
     style={{
       backgroundImage: "url(/bsas2.webp)",
       backgroundSize: 'cover',
