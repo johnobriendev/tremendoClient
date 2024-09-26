@@ -93,8 +93,9 @@ const RegisterPage = () => {
       height: '100vh',
   }}
     >
-      <div className='w-full max-w-sm bg-white p-6 rounded shadow-xl opacity-90'>
-        <Link to='/' className='text-4xl mt-12 bg-transparent p-2 rounded absolute top-4 left-10 hover:text-gray-700'>Tremendo</Link>
+       <Link to='/' className='text-4xl mt-12 bg-transparent p-2 rounded  hover:text-gray-700 md:absolute md:top-4 md:left-10'>Tremendo</Link>
+      <div className='flex flex-col w-full max-w-sm bg-white p-6 rounded shadow-xl opacity-90'>
+       
         <h1 className="text-2xl mb-4">Register</h1>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         {message && <p className="text-green-500 mb-4">{message}</p>}
