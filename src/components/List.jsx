@@ -74,6 +74,33 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
     }
   };
 
+
+  const handleColorChange = (listId, newColor) => {
+    setListColor(newColor);
+    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+    // Send the update request to the backend
+    fetch(`${apiBaseUrl}/lists/${listId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ color: newColor }),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log('List color updated:', data);
+    })
+    .catch((error) => {
+      console.error('Error updating list color:', error);
+    });
+  };
+
+  useEffect(() => {
+    if (list.color) {
+      setListColor(list.color);
+    }
+  }, [list.color]);
+
   return (
     <Draggable draggableId={list._id} index={list.position - 1}>
       {(provided) => (
@@ -115,7 +142,8 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                       type="color"
                       className="w-16 h-8"
                       value={listColor}
-                      onChange={(e) => setListColor(e.target.value)}
+                      onChange={(e) => handleColorChange(list._id, e.target.value)}
+                      // onChange={(e) => setListColor(e.target.value)}
                     />
                   </div>
                   <button

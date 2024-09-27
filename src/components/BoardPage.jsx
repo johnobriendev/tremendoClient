@@ -41,7 +41,7 @@ function BoardPage() {
       setBoard(boardData);
 
       // Fetch lists data
-      const listsResponse = await fetch(`${apiBaseUrl}/lists/${boardId}/lists`, {
+      const listsResponse = await fetch(`${apiBaseUrl}/lists/${boardId}`, {
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -89,7 +89,7 @@ function BoardPage() {
 
     try {
       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-      const response = await fetch(`${apiBaseUrl}/lists/${boardId}/lists`, {
+      const response = await fetch(`${apiBaseUrl}/lists/${boardId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -141,7 +141,7 @@ function BoardPage() {
   const handleListNameChange = async (listId, newName) => {
     try {
       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-      const response = await fetch(`${apiBaseUrl}/lists/lists/${listId}`, {
+      const response = await fetch(`${apiBaseUrl}/lists/${listId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -162,7 +162,7 @@ function BoardPage() {
   const handleDeleteList = async (listId) => {
     try {
       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-      const response = await fetch(`${apiBaseUrl}/lists/lists/${listId}`, {
+      const response = await fetch(`${apiBaseUrl}/lists/${listId}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
