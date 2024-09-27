@@ -12,7 +12,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
   
   const [menuOpen, setMenuOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [listColor, setListColor] = useState('bg-white');
+  const [listColor, setListColor] = useState(list.color || 'bg-white');
   const [showCardInput, setShowCardInput] = useState(false);
   
   
@@ -83,6 +83,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`,
       },
       body: JSON.stringify({ color: newColor }),
     })
@@ -97,7 +98,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
 
   useEffect(() => {
     if (list.color) {
-      setListColor(list.color);
+      setListColor(list.color || null);
     }
   }, [list.color]);
 
