@@ -40,8 +40,10 @@ const DashboardPage = () => {
 
   // List of background image URLs to choose from
   const backgroundImages = [
-    { url: "url('/bsas5.webp')" , label: 'Image 1' },
-    { url: "url('/bsas7.webp')" , label: 'Image 2' },
+    { url: "url('/bsas5.webp')" , label: 'street' },
+    { url: "url('/bsas7.webp')" , label: 'park' },
+    { url: "url('/bsas1.webp')" , label: 'city' },
+    { url: "url('/bsas4.webp')" , label: 'train' },
    
   ];
 
