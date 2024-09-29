@@ -12,7 +12,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
   
   const [menuOpen, setMenuOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [listColor, setListColor] = useState(list.color || 'bg-white');
+  const [listColor, setListColor] = useState(list.color || 'bg-gray-800');
   const [showCardInput, setShowCardInput] = useState(false);
   
   
@@ -76,7 +76,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
 
 
   const handleColorChange = (listId, newColor) => {
-    setListColor(newColor);
+    
     const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
     // Send the update request to the backend
     fetch(`${apiBaseUrl}/lists/${listId}`, {
@@ -89,6 +89,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
     })
     .then((response) => response.json())
     .then((data) => {
+      setListColor(newColor);
       console.log('List color updated:', data);
     })
     .catch((error) => {
@@ -136,6 +137,12 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                     className="block px-4 py-2 text-red-500 hover:bg-gray-600 w-full text-left"
                   >
                     Delete List
+                  </button>
+                  <button
+                    onClick={() => handleColorChange(list._id, '')}
+                    className="block px-4 py-2 text-blue-500 hover:bg-gray-600 w-full text-left"
+                  >
+                    Clear List Color
                   </button>
                   <div className="block px-4 py-2 hover:bg-gray-600 w-full text-left">
                     <label className="block text-gray-400 mb-2">Background Color</label>
