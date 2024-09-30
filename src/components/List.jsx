@@ -221,7 +221,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                       />
                       <button
                         onClick={() => handleCreateCard(list._id)}
-                        className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 mt-2"
+                        className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 mt-4"
                       >
                         Add Card
                       </button>

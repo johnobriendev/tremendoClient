@@ -79,22 +79,6 @@ function BoardPage() {
     color: isDark ? '#fff' : '#000',
   });
   
-  // Add this to your existing useEffect
-  // useEffect(() => {
-  //   document.addEventListener('mousedown', handleClickOutside);
-  //   return () => {
-  //     document.removeEventListener('mousedown', handleClickOutside);
-  //   };
-  // }, [isDropdownOpen, isPageSettingsModalOpen]);
-  
-  // const handleClickOutside = (event) => {
-  //   if (isDropdownOpen && settingsRef.current && !settingsRef.current.contains(event.target)) {
-  //     setIsDropdownOpen(false);
-  //   }
-  //   if (isPageSettingsModalOpen && pageSettingsModalRef.current && !pageSettingsModalRef.current.contains(event.target)) {
-  //     setIsPageSettingsModalOpen(false);
-  //   }
-  // };
 
 
   const fetchBoardData = async () => {
@@ -479,7 +463,7 @@ const handleDeleteCard = async (cardId) => {
           </div>
         </div>
       </nav>
-      <div className='pt-24'>
+      <div className='pt-16'>
         <DragDropContext onDragEnd={handleDragEnd}>
           <div className='flex-grow  w-full'>
             <Droppable droppableId="all-lists" direction="horizontal">
@@ -517,8 +501,10 @@ const handleDeleteCard = async (cardId) => {
                     {!isAddingList ? (
                       <button
                         onClick={() => setIsAddingList(true)}
-                        className="w-full font-semibold py-2 px-4 rounded shadow-xl"
-                        style={getAddListStyles(theme === 'dark')}
+                        className={`w-full font-semibold py-2 px-4 rounded shadow-xl ${
+                          theme === 'dark' ? 'bg-[#2f374d] hover:bg-opacity-70' :  'bg-[#d5dae6] hover:bg-opacity-70'
+                        }`}
+                        // style={getAddListStyles(theme === 'dark')}
                       >
                       + Add another list 
                       </button>
