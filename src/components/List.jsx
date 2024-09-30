@@ -34,6 +34,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
   const menuRef = useRef(null);
   const modalRef = useRef(null);
   const cardInputRef = useRef(null);
+  const addCardButtonRef = useRef(null);
 
   const handleListNameKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -56,7 +57,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
     if (showModal && modalRef.current && !modalRef.current.contains(event.target)) {
       setShowModal(false);
     }
-    if (cardInputRef.current && !cardInputRef.current.contains(event.target)) {
+    if (cardInputRef.current && !cardInputRef.current.contains(event.target) && !addCardButtonRef.current.contains(event.target)) {
       setShowCardInput(false);
     }
   };
@@ -222,6 +223,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                       <button
                         onClick={() => handleCreateCard(list._id)}
                         className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 mt-4"
+                        ref={addCardButtonRef}
                       >
                         Add Card
                       </button>
