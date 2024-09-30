@@ -237,7 +237,9 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
            </div>
           {showModal && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className="bg-gray-800 p-6 rounded-md shadow-lg" ref={modalRef}>
+              <div className={`${
+                          theme === 'dark' ? 'bg-gray-800' : 'bg-[#e4eef5]'
+                        } p-6 rounded-md shadow-lg`} ref={modalRef}>
                 <h2 className="text-lg mb-4">Are you sure you want to delete this list?</h2>
                 <button
                   onClick={confirmDelete}

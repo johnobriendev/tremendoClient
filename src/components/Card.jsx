@@ -155,7 +155,9 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
           {/* Delete Confirmation Modal */}
           {showDeleteModal && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-20">
-              <div ref={deleteModalRef} className="bg-gray-800 text-white p-6 rounded shadow-lg">
+              <div ref={deleteModalRef} className={`bg-gray-800  p-6 rounded shadow-lg ${
+                          theme === 'dark' ? 'bg-gray-800' : 'bg-[#e4eef5]'
+                        } `}>
                 <p className="text-lg mb-4">Are you sure you want to delete this card?</p>
                 <div className="flex justify-end gap-4">
                   <button
