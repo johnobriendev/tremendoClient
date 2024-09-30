@@ -8,13 +8,17 @@ import ProtectedRoute from './components/ProtectedRoute';
 import VerifyEmail from './components/VerifyEmail';
 import ForgotPasswordPage from './components/ForgotPasswordPage';
 import ResetPasswordPage from './components/ResetPasswordPage';
-
+import AboutPage from './components/AboutPage';
 
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <LandingPage />,
+  },
+  {
+    path: '/about',
+    element: <AboutPage />,
   },
   {
     path: '/register',
