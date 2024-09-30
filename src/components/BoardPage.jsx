@@ -523,20 +523,24 @@ const handleDeleteCard = async (cardId) => {
                       + Add another list 
                       </button>
                     ) : (
-                      <div  className="bg-gray-800 text-white p-2 rounded">
+                      <div  className={`${
+                        theme === 'dark' ? 'bg-gray-800' :  'bg-[#d5dae6]'
+                      }  p-2 rounded`}>
                         <input
                           type="text"
                           value={newListName}
                           onChange={(e) => setNewListName(e.target.value)}
                           onKeyPress={handleKeyPress}
                           placeholder="Enter list title..."
-                          className="bg-gray-700 text-white w-full p-2 border rounded mb-2"
+                          className={`${
+                            theme === 'dark' ? 'bg-gray-700 text-white' :  'bg-white text-black'
+                          } bg-gray-700  w-full p-2 border rounded mb-2`}
                           ref={newListInputRef}
                         />
                         <div className="flex justify-between">
                           <button
                             onClick={handleCreateList}
-                            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                            className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-600"
                             ref={newListButtonRef}
                           >
                             Add List
