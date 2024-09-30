@@ -296,9 +296,9 @@ const DashboardPage = () => {
         className="p-2 fixed top-0 left-0 right-0 z-10"
         style={getNavBarStyles(theme === 'dark')}
       >
-        <div className="container mx-auto flex justify-between items-center">
+        <div className="container mx-auto flex justify-between items-center ">
           {user && (
-            <h1 className="text-2xl font-semibold">Welcome, {user.name}!</h1>
+            <h1 className="text-2xl font-semibold ">Welcome, {user.name}!</h1>
           )}
           <div className="flex items-center space-x-4">
             <button
@@ -434,7 +434,8 @@ const DashboardPage = () => {
                           className={`border-2 rounded ${backgroundImage === image.url ? 'border-blue-500' : 'border-transparent'}`}
                           onClick={() => handleBackgroundImageSelect(image.url)}
                         >
-                          <div className="w-full h-20 bg-cover bg-center" style={{backgroundImage: image.url}}></div>
+                          {/* <div className="w-full h-20 bg-cover bg-center" style={{backgroundImage: image.url}}></div> */} 
+                          {/* need to find better way to load image preview */}
                           <p className="text-center mt-1">{image.label}</p>
                         </button>
                       ))}

@@ -605,7 +605,8 @@ const handleDeleteCard = async (cardId) => {
                     className={`border-2 rounded ${backgroundImage === image.url ? 'border-blue-500' : 'border-transparent'}`}
                     onClick={() => handleBackgroundImageSelect(image.url)}
                   >
-                    <div className="w-full h-20 bg-cover bg-center" style={{backgroundImage: image.url}}></div>
+                    {/* need better way to load small images */}
+                    {/* <div className="w-full h-20 bg-cover bg-center" style={{backgroundImage: image.url}}></div> */}
                     <p className="text-center mt-1">{image.label}</p>
                   </button>
                 ))}
