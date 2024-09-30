@@ -501,8 +501,8 @@ const handleDeleteCard = async (cardId) => {
                     {!isAddingList ? (
                       <button
                         onClick={() => setIsAddingList(true)}
-                        className={`w-full font-semibold py-2 px-4 rounded shadow-xl ${
-                          theme === 'dark' ? 'bg-[#2f374d] hover:bg-opacity-70' :  'bg-[#d5dae6] hover:bg-opacity-70'
+                        className={`w-full py-2 px-4 rounded shadow-xl ${
+                          theme === 'dark' ? 'bg-[#2f374d] hover:bg-opacity-70 text-white'  :  'bg-[#d5dae6] hover:bg-opacity-70'
                         }`}
                         // style={getAddListStyles(theme === 'dark')}
                       >
