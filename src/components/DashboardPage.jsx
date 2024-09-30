@@ -40,10 +40,10 @@ const DashboardPage = () => {
 
   // List of background image URLs to choose from
   const backgroundImages = [
-    { url: "url('/bsas5.webp')" , label: 'street' },
-    { url: "url('/bsas7.webp')" , label: 'park' },
-    { url: "url('/bsas1.webp')" , label: 'city' },
-    { url: "url('/bsas4.webp')" , label: 'train' },
+    { url: "url('/bsas5.webp')" , label: 'street' , thumbnail: "url('/bsas5thumb.webp')" },
+    { url: "url('/bsas7.webp')" , label: 'park' , thumbnail: "url('/bsas7thumb.webp')" },
+    { url: "url('/bsas1.webp')" , label: 'city', thumbnail: "url('/bsas1thumb.webp')" },
+    { url: "url('/bsas4.webp')" , label: 'train' , thumbnail: "url('/bsas4thumb.webp')" },
    
   ];
 
@@ -434,8 +434,8 @@ const DashboardPage = () => {
                           className={`border-2 rounded ${backgroundImage === image.url ? 'border-blue-500' : 'border-transparent'}`}
                           onClick={() => handleBackgroundImageSelect(image.url)}
                         >
-                          {/* <div className="w-full h-20 bg-cover bg-center" style={{backgroundImage: image.url}}></div> */} 
-                          {/* need to find better way to load image preview */}
+                          <div className="w-20 h-20 bg-cover bg-center" style={{backgroundImage: image.thumbnail}}></div> 
+                          
                           <p className="text-center mt-1">{image.label}</p>
                         </button>
                       ))}
