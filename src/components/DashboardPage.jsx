@@ -73,7 +73,7 @@ const DashboardPage = () => {
   };
 
   const getThemeStyles = (isDark) => ({
-    backgroundColor: isDark ? '#181d28' : '#f7fafc',
+    backgroundColor: isDark ? '#181d28' : '#a2c5dc ', //#a2c5dc #f7fafc
     color: isDark ? '#fff' : '#000',
   });
 

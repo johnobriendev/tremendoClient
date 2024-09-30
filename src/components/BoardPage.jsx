@@ -60,7 +60,7 @@ function BoardPage() {
   };
   
   const getThemeStyles = (isDark) => ({
-    backgroundColor: isDark ? '#181d28' : '#f7fafc',
+    backgroundColor: isDark ? '#181d28' : '#b1cee2',
     color: isDark ? '#fff' : '#000',
   });
   
