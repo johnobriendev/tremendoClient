@@ -168,7 +168,7 @@ const RegisterPage = () => {
           </form>
          ) : ( 
             <div>
-              <p className="mb-4">Registration successful! Please check your email to verify your account.</p>
+              {/* <p className="mb-4">Registration successful! Please check your email to verify your account.</p> */}
               <form onSubmit={handleResendVerification} className="mb-4">
                 <div className="mb-4">
                   <label className="block text-gray-700 mb-2">Email for Verification</label>
