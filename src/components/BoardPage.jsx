@@ -613,7 +613,7 @@ const handleDeleteCard = async (cardId) => {
               </div>
               <button
                 className={`w-full mt-2 px-4 py-2 rounded ${
-                  backgroundImage === null ? 'bg-blue-500 text-white' : (theme === 'dark' ? 'bg-gray-600 text-white' : 'bg-gray-200 text-black')
+                  backgroundImage === null ? 'bg-blue-500 text-white' : (theme === 'dark' ? 'bg-green-500 text-white' : 'bg-green-500 text-white')
                 }`}
                 onClick={handleRemoveBackgroundImage}
               >
