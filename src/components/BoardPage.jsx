@@ -60,7 +60,7 @@ function BoardPage() {
   };
   
   const getThemeStyles = (isDark) => ({
-    backgroundColor: isDark ? '#333' : '#f7fafc',
+    backgroundColor: isDark ? '#181d28' : '#f7fafc',
     color: isDark ? '#fff' : '#000',
   });
   
@@ -71,7 +71,7 @@ function BoardPage() {
   
   const getNavBarStyles = (isDark) => ({
     backgroundColor: isDark ? '#1a202c' : '#e4eef5',
-    color: isDark ? '#fff' : '#000',
+    color: isDark ? '#dee2eb' : '#000',
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
   });
   
@@ -505,6 +505,7 @@ const handleDeleteCard = async (cardId) => {
                       handleUpdateCard={handleUpdateCard} 
                       handleDeleteCard={handleDeleteCard} 
                       index={index}
+                      theme={theme}
                     />
                   ))}
                   {provided.placeholder}
@@ -512,9 +513,9 @@ const handleDeleteCard = async (cardId) => {
                     {!isAddingList ? (
                       <button
                         onClick={() => setIsAddingList(true)}
-                        className="w-full bg-white bg-opacity-25 hover:bg-opacity-20 text-white font-semibold py-2 px-4 rounded shadow-xl"
+                        className="w-full bg-slate-100 bg-opacity-25 hover:bg-opacity-30 text-white font-semibold py-2 px-4 rounded shadow-xl"
                       >
-                      + Add a list 
+                      + Add another list 
                       </button>
                     ) : (
                       <div  className="bg-gray-800 text-white p-2 rounded">

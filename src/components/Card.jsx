@@ -3,7 +3,7 @@ import { Draggable } from 'react-beautiful-dnd';
 import { MdOutlineModeEdit } from "react-icons/md";
 
 
-function Card({ card, index, onUpdateCard, onDeleteCard }) {
+function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
   const [showOptions, setShowOptions] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [editingName, setEditingName] = useState(false);
@@ -15,6 +15,17 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
   // const deleteButtonRef = useRef(null);
   const deleteModalRef = useRef(null);
   //const contentRef = useRef(null);
+
+
+  const getCardStyles = (isDark) => ({
+    backgroundColor: isDark ? '#212938' : '#bcc5d7',
+    color: isDark ? '#fff' : '#000',
+  });
+  
+  const getModalStyles = (isDark) => ({
+    backgroundColor: isDark ? '#4a5568' : '#fff',
+    color: isDark ? '#fff' : '#000',
+  });
 
 
   const handleSaveAndClose = async (e) => {
@@ -92,8 +103,11 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="relative bg-gray-800 p-2  rounded mb-2 shadow hover:border hover:border-gray-500 group transition-transform duration-300 ease-in-out flex justify-between items-center ${snapshot.isDragging ? 'z-[100]' : 'z-20'}"
-          
+          className="relative p-2  rounded mb-2 shadow hover:border hover:border-gray-500 group transition-transform duration-300 ease-in-out flex justify-between items-center ${snapshot.isDragging ? 'z-[100]' : 'z-20'}"
+          style={{
+            ...getCardStyles(theme === 'dark'),
+            ...provided.draggableProps.style // This line is crucial
+          }}
         >
           <div className=" relative  w-full z-0">
             {editingName ? (

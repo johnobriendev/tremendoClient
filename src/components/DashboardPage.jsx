@@ -73,7 +73,7 @@ const DashboardPage = () => {
   };
 
   const getThemeStyles = (isDark) => ({
-    backgroundColor: isDark ? '#333' : '#f7fafc',
+    backgroundColor: isDark ? '#181d28' : '#f7fafc',
     color: isDark ? '#fff' : '#000',
   });
 
@@ -83,7 +83,7 @@ const DashboardPage = () => {
   });
 
   const getBoardStyles = (isDark) => ({
-    backgroundColor: isDark ? '#1a202c' : '#bfd7e7',
+    backgroundColor: isDark ? '#2f374d' : '#bfd7e7',
     color: isDark ? '#e2e8f0' : '#2d3748',
   });
 

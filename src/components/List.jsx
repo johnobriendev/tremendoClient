@@ -8,14 +8,23 @@ import { BsThreeDots } from "react-icons/bs";
 
 
 
-function List({ list, cards, newCardName, editListName, setEditListName, setNewCardName, handleCreateCard, handleDeleteList, handleListNameChange, handleUpdateCard, handleDeleteCard }) {
+function List({ list, cards, newCardName, editListName, setEditListName, setNewCardName, handleCreateCard, handleDeleteList, handleListNameChange, handleUpdateCard, handleDeleteCard, theme }) {
   
   const [menuOpen, setMenuOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [listColor, setListColor] = useState(list.color || 'bg-gray-800');
   const [showCardInput, setShowCardInput] = useState(false);
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('theme') || 'light';
+  
+
+
+  const getListStyles = (isDark) => ({
+    backgroundColor: isDark ? '#2f374d' : '#d5dae6',
+    color: isDark ? '#fff' : '#000',
+  });
+  
+  const getModalStyles = (isDark) => ({
+    backgroundColor: isDark ? '#4a5568' : '#fff',
+    color: isDark ? '#fff' : '#000',
   });
   
   
@@ -113,7 +122,8 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="relative bg-gray-900 text-white shadow rounded-md p-4 w-64 max-h-[calc(100vh-10rem)] flex flex-col ${snapshot.isDragging ? 'z-50' : 'z-10'}"
+          className="relative shadow rounded-md p-4 w-64 max-h-[calc(100vh-10rem)] flex flex-col ${snapshot.isDragging ? 'z-50' : 'z-10'}"
+          style={getListStyles(theme === 'dark')}
         >
           <div className="flex items-center justify-between gap-2 mb-4 ">
             <input
@@ -123,7 +133,9 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
               onBlur={() => handleListNameChange(list._id, editListName[list._id])}
               onKeyPress={handleListNameKeyPress}
               placeholder="List Name"
-              className="p-2 border rounded w-full bg-gray-800 text-white"
+              className={`p-2 border rounded w-full ${
+                theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+              }`}
               style={{ backgroundColor: listColor }}
             />
             <div className="relative" ref={menuRef}>
@@ -182,6 +194,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                       index={cardIndex} 
                       onUpdateCard={handleUpdateCard}
                       onDeleteCard={handleDeleteCard}
+                      theme={theme}
                     />
                   ))}
                   {provided.placeholder}
@@ -199,7 +212,9 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                         onChange={(e) => setNewCardName({ ...newCardName, [list._id]: e.target.value })}
                         onKeyPress={handleAddCardKeyPress}
                         placeholder="New Card Name"
-                        className="p-2 border rounded w-full bg-gray-800 text-white"
+                        className={`p-2 border rounded w-full ${
+                          theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+                        }`}
                         ref={cardInputRef}
                       />
                       <button
