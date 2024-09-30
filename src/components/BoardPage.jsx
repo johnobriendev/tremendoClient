@@ -463,13 +463,13 @@ const handleDeleteCard = async (cardId) => {
           </div>
         </div>
       </nav>
-      <div className='pt-16'>
+      <div className='pt-16 overflow-x-auto'>
         <DragDropContext onDragEnd={handleDragEnd}>
           <div className='flex-grow  w-full'>
             <Droppable droppableId="all-lists" direction="horizontal">
               {(provided) => (
                 <div
-                  className="flex items-start p-6 space-x-4"
+                  className="flex items-start p-6 space-x-4 "
                   style={{
                     paddingRight: '1.5rem',
                     minWidth: 'max-content',
