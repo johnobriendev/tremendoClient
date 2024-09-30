@@ -22,6 +22,76 @@ function BoardPage() {
   const newListInputRef = useRef(null);
   const newListButtonRef = useRef(null);
 
+  // New state variables for page settings
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isPageSettingsModalOpen, setIsPageSettingsModalOpen] = useState(false);
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('theme') || 'light';
+  });
+  const [backgroundImage, setBackgroundImage] = useState(() => {
+    const savedBackground = localStorage.getItem('backgroundImage');
+    return savedBackground === 'null' ? null : (savedBackground || "url('/bsas1.webp')");
+  });
+
+  // New refs for handling click outside
+  const settingsRef = useRef(null);
+  const pageSettingsModalRef = useRef(null);
+
+  const backgroundImages = [
+    { url: "url('/bsas5.webp')" , label: 'street' },
+    { url: "url('/bsas7.webp')" , label: 'park' },
+    { url: "url('/bsas1.webp')" , label: 'city' },
+    { url: "url('/bsas4.webp')" , label: 'train' },
+  ];
+  
+  const handleThemeChange = (newTheme) => {
+    setTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+  };
+  
+  const handleBackgroundImageSelect = (url) => {
+    setBackgroundImage(url);
+    localStorage.setItem('backgroundImage', url);
+  };
+  
+  const handleRemoveBackgroundImage = () => {
+    setBackgroundImage(null);
+    localStorage.setItem('backgroundImage', null);
+  };
+  
+  const getThemeStyles = (isDark) => ({
+    backgroundColor: isDark ? '#333' : '#f7fafc',
+    color: isDark ? '#fff' : '#000',
+  });
+  
+  const getModalStyles = (isDark) => ({
+    backgroundColor: isDark ? '#4a5568' : '#fff',
+    color: isDark ? '#fff' : '#000',
+  });
+  
+  const getNavBarStyles = (isDark) => ({
+    backgroundColor: isDark ? '#1a202c' : '#e4eef5',
+    color: isDark ? '#fff' : '#000',
+    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+  });
+  
+  // Add this to your existing useEffect
+  // useEffect(() => {
+  //   document.addEventListener('mousedown', handleClickOutside);
+  //   return () => {
+  //     document.removeEventListener('mousedown', handleClickOutside);
+  //   };
+  // }, [isDropdownOpen, isPageSettingsModalOpen]);
+  
+  // const handleClickOutside = (event) => {
+  //   if (isDropdownOpen && settingsRef.current && !settingsRef.current.contains(event.target)) {
+  //     setIsDropdownOpen(false);
+  //   }
+  //   if (isPageSettingsModalOpen && pageSettingsModalRef.current && !pageSettingsModalRef.current.contains(event.target)) {
+  //     setIsPageSettingsModalOpen(false);
+  //   }
+  // };
+
 
   const fetchBoardData = async () => {
     try {
@@ -121,6 +191,12 @@ function BoardPage() {
       setIsAddingList(false);
       setNewListName('');
     }
+    if (isDropdownOpen && settingsRef.current && !settingsRef.current.contains(event.target)) {
+      setIsDropdownOpen(false);
+    }
+    if (isPageSettingsModalOpen && pageSettingsModalRef.current && !pageSettingsModalRef.current.contains(event.target)) {
+      setIsPageSettingsModalOpen(false);
+    }
   };
 
   useEffect(() => {
@@ -128,7 +204,7 @@ function BoardPage() {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [isDropdownOpen, isPageSettingsModalOpen]);
 
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
@@ -290,13 +366,7 @@ const handleDeleteCard = async (cardId) => {
       if (startListId !== endListId) {
         movedCard.listId = endListId;
       }
-  
-      // // Insert the card at its new position
-      // newCards.splice(
-      //   newCards.findIndex(card => card.listId === endListId) + destination.index,
-      //   0,
-      //   movedCard
-      // );
+
 
             // Find the correct insertion index
       const destinationCards = newCards.filter(card => card.listId === endListId);
@@ -355,100 +425,208 @@ const handleDeleteCard = async (cardId) => {
   
   return (
     <div 
-    className=" bg-gray-300 h-screen overflow-x-auto flex flex-col"
-    style={{
-      backgroundImage: "url(/bsas1.webp)",
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
-      width: '100vw',
-      height: '100vh',
-    }}
+      className={`min-h-screen flex flex-col ${
+        backgroundImage ? "bg-cover bg-center bg-no-repeat bg-fixed" : ""
+      }`}
+      style={{
+        ...(backgroundImage ? { backgroundImage } : getThemeStyles(theme === 'dark')),
+      }}
     >
-      <div className='pt-4 pl-6'>
-        <Link to='/dashboard' className=' text-white text-xl'>Tremendo</Link>
-        <h1 className="text-2xl text-white mt-4">{board?.name}</h1>
-      </div>
-      <DragDropContext onDragEnd={handleDragEnd}>
-        <div className='flex-grow  w-full'>
-          <Droppable droppableId="all-lists" direction="horizontal">
-            {(provided) => (
-              <div
-                className="flex items-start p-6 space-x-4"
-                style={{
-                  paddingRight: '1.5rem',
-                  minWidth: 'max-content',
-                  minHeight: 'calc(100vh - 100px)' //can be adjusted if more space is needed
-                }}
-                {...provided.droppableProps}
-                ref={provided.innerRef} 
+       <nav 
+        className="p-2 fixed top-0 left-0 right-0 z-10"
+        style={getNavBarStyles(theme === 'dark')}
+      >
+        <div className="container mx-auto flex justify-between items-center">
+          <Link to='/dashboard' className='text-2xl font-semibold'>Tremendo</Link>
+          <h1 className="text-2xl">{board?.name}</h1>
+          <div className="flex items-center space-x-4">
+            <div 
+              className="relative inline-block text-left"
+              ref={settingsRef}
+            >
+              <button
+                className={`px-4 py-2 text-sm rounded ${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-gray-300 text-black'}`}
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
               >
-                {lists.map((list, index) => (
-                  <List
-                    key={list._id}
-                    list={list}
-                    cards={cards}
-                    newCardName={newCardName}
-                    editListName={editListName}
-                    setEditListName={setEditListName}
-                    setNewCardName={setNewCardName}
-                    handleCreateCard={handleCreateCard}
-                    handleDeleteList={handleDeleteList}
-                    handleListNameChange={handleListNameChange}
-                    handleUpdateCard={handleUpdateCard} 
-                    handleDeleteCard={handleDeleteCard} 
-                    index={index}
-                  />
-                ))}
-                {provided.placeholder}
-                <div className="w-[264px] shrink-0 mr-6">
-                  {!isAddingList ? (
+                Settings
+              </button>
+              {isDropdownOpen && (
+                <div 
+                  className={`absolute right-0 mt-2 w-48 rounded-md shadow-lg ${
+                    theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+                  }`}
+                >
+                  <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                     <button
-                      onClick={() => setIsAddingList(true)}
-                      className="w-full bg-white bg-opacity-25 hover:bg-opacity-20 text-white font-semibold py-2 px-4 rounded shadow-xl"
+                      className={`block w-full text-left px-4 py-2 text-sm ${
+                        theme === 'dark' ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-100'
+                      }`}
+                      onClick={() => {
+                        setIsDropdownOpen(false);
+                        setIsPageSettingsModalOpen(true);
+                      }}
                     >
-                     + Add a list 
+                      Page Settings
                     </button>
-                  ) : (
-                    <div  className="bg-gray-800 text-white p-2 rounded">
-                      <input
-                        type="text"
-                        value={newListName}
-                        onChange={(e) => setNewListName(e.target.value)}
-                        onKeyPress={handleKeyPress}
-                        placeholder="Enter list title..."
-                        className="bg-gray-700 text-white w-full p-2 border rounded mb-2"
-                        ref={newListInputRef}
-                      />
-                      <div className="flex justify-between">
-                        <button
-                          onClick={handleCreateList}
-                          className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
-                          ref={newListButtonRef}
-                        >
-                          Add List
-                        </button>
-                        <button
-                          onClick={() => {
-                            setIsAddingList(false);
-                            setNewListName('');
-                          }}
-                          className="text-gray-500 hover:text-gray-700"
-                        >
-                          ✕
-                        </button>
-                      </div>
-                    </div>
-                  )}
+                  </div>
                 </div>
-              </div>
-            )}
-          </Droppable>
-
+              )}
+            </div>
+          </div>
         </div>
-        
-      </DragDropContext>
+      </nav>
+      <div className='pt-24'>
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <div className='flex-grow  w-full'>
+            <Droppable droppableId="all-lists" direction="horizontal">
+              {(provided) => (
+                <div
+                  className="flex items-start p-6 space-x-4"
+                  style={{
+                    paddingRight: '1.5rem',
+                    minWidth: 'max-content',
+                    minHeight: 'calc(100vh - 100px)' //can be adjusted if more space is needed
+                  }}
+                  {...provided.droppableProps}
+                  ref={provided.innerRef} 
+                >
+                  {lists.map((list, index) => (
+                    <List
+                      key={list._id}
+                      list={list}
+                      cards={cards}
+                      newCardName={newCardName}
+                      editListName={editListName}
+                      setEditListName={setEditListName}
+                      setNewCardName={setNewCardName}
+                      handleCreateCard={handleCreateCard}
+                      handleDeleteList={handleDeleteList}
+                      handleListNameChange={handleListNameChange}
+                      handleUpdateCard={handleUpdateCard} 
+                      handleDeleteCard={handleDeleteCard} 
+                      index={index}
+                    />
+                  ))}
+                  {provided.placeholder}
+                  <div className="w-[264px] shrink-0 mr-6">
+                    {!isAddingList ? (
+                      <button
+                        onClick={() => setIsAddingList(true)}
+                        className="w-full bg-white bg-opacity-25 hover:bg-opacity-20 text-white font-semibold py-2 px-4 rounded shadow-xl"
+                      >
+                      + Add a list 
+                      </button>
+                    ) : (
+                      <div  className="bg-gray-800 text-white p-2 rounded">
+                        <input
+                          type="text"
+                          value={newListName}
+                          onChange={(e) => setNewListName(e.target.value)}
+                          onKeyPress={handleKeyPress}
+                          placeholder="Enter list title..."
+                          className="bg-gray-700 text-white w-full p-2 border rounded mb-2"
+                          ref={newListInputRef}
+                        />
+                        <div className="flex justify-between">
+                          <button
+                            onClick={handleCreateList}
+                            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                            ref={newListButtonRef}
+                          >
+                            Add List
+                          </button>
+                          <button
+                            onClick={() => {
+                              setIsAddingList(false);
+                              setNewListName('');
+                            }}
+                            className="text-gray-500 hover:text-gray-700"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </Droppable>
+
+          </div>
+          
+        </DragDropContext>
+
+      </div>
+      
+      {isPageSettingsModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div
+            className="p-6 rounded shadow-lg"
+            style={getModalStyles(theme === 'dark')}
+            ref={pageSettingsModalRef}
+          >
+            <h2 className="text-xl font-bold mb-4">Page Settings</h2>
+            <p className="mb-4">Customize your board:</p>
+
+            {/* Theme Options */}
+            <div className="flex flex-col space-y-2 mb-4">
+              <p>Theme:</p>
+              <button
+                className={`px-4 py-2 rounded ${theme === 'light' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'}`}
+                onClick={() => handleThemeChange('light')}
+              >
+                Light Mode
+              </button>
+              <button
+                className={`px-4 py-2 rounded ${theme === 'dark' ? 'bg-blue-500 text-white' : 'bg-gray-600 text-white'}`}
+                onClick={() => handleThemeChange('dark')}
+              >
+                Dark Mode
+              </button>
+            </div>
+
+            {/* Background Image Options */}
+            <div className="mb-4">
+              <p>Background Image:</p>
+              <div className="grid grid-cols-3 gap-2 mb-2">
+                {backgroundImages.map((image) => (
+                  <button
+                    key={image.url}
+                    className={`border-2 rounded ${backgroundImage === image.url ? 'border-blue-500' : 'border-transparent'}`}
+                    onClick={() => handleBackgroundImageSelect(image.url)}
+                  >
+                    <div className="w-full h-20 bg-cover bg-center" style={{backgroundImage: image.url}}></div>
+                    <p className="text-center mt-1">{image.label}</p>
+                  </button>
+                ))}
+              </div>
+              <button
+                className={`w-full mt-2 px-4 py-2 rounded ${
+                  backgroundImage === null ? 'bg-blue-500 text-white' : (theme === 'dark' ? 'bg-gray-600 text-white' : 'bg-gray-200 text-black')
+                }`}
+                onClick={handleRemoveBackgroundImage}
+              >
+                No Background Image
+              </button>
+            </div>
+            <button
+              className="bg-red-500 text-white px-4 py-2 rounded"
+              onClick={() => setIsPageSettingsModalOpen(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+      
     </div>
+
+
+
+  
+     
+      
+    
   );
  
 }

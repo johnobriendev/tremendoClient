@@ -458,41 +458,6 @@ const DashboardPage = () => {
               </div>
             )}
 
-        {/* {isCreateModalOpen && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50" >
-            <div className="bg-gray-700 text-gray-300 p-6 rounded shadow" ref={createBoardRef}>
-              <h2 className="text-xl font-bold mb-4">Create New Board</h2>
-              <div className="mb-4">
-                <label className="block text-gray-700 mb-2">Board Name</label>
-                <input
-                  ref={createInputRef}
-                  type="text"
-                  className="border p-2 w-full bg-gray-600 text-gray-300"
-                  value={newBoardName}
-                  onChange={(e) => setNewBoardName(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      handleCreateBoard();
-                    }
-                  }}
-                />
-              </div>
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-                onClick={handleCreateBoard}
-              >
-                Create
-              </button>
-              <button
-                className="bg-gray-500 text-white px-4 py-2 rounded"
-                onClick={() => setIsCreateModalOpen(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        )} */}
-
         {isCreateModalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                   <div className="p-6 rounded shadow" ref={createBoardRef} style={getModalStyles(theme === 'dark')}>
@@ -593,61 +558,6 @@ const DashboardPage = () => {
           </div>
         )}
 
-        {/* {isEditModalOpen && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-gray-700 text-gray-300 p-6 rounded shadow" ref={editBoardRef}>
-              <h2 className="text-xl font-bold mb-4">Edit Board</h2>
-              <div className="mb-4">
-                <label className="block text-gray-300 mb-2">New Board Name</label>
-                <input
-                  ref={editInputRef}
-                  type="text"
-                  className="border p-2 w-full bg-gray-600 text-gray-300 rounded"
-                  value={editBoardName}
-                  onChange={(e) => setEditBoardName(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      handleEditBoard();
-                    }
-                  }}
-                />
-              </div>
-              <button
-                className="bg-green-500 text-white px-4 py-2 rounded mr-2"
-                onClick={handleEditBoard}
-              >
-                Save Changes
-              </button>
-              <button
-                className="bg-gray-500 text-white px-4 py-2 rounded"
-                onClick={() => setIsEditModalOpen(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        )}
-
-        {isDeleteModalOpen && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-gray-700 text-gray-300 p-6 rounded shadow" ref={deleteBoardRef}>
-              <h2 className="text-xl font-bold mb-4">Are you sure?</h2>
-              <p className="mb-4">Do you really want to delete this board?</p>
-              <button
-                className="bg-red-500 text-white px-4 py-2 rounded mr-2"
-                onClick={handleConfirmDeleteBoard}
-              >
-                Yes, Delete
-              </button>
-              <button
-                className="bg-gray-500 text-white px-4 py-2 rounded"
-                onClick={() => setIsDeleteModalOpen(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        )} */}
       </div>
 
 

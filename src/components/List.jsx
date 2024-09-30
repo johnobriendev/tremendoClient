@@ -14,6 +14,9 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
   const [showModal, setShowModal] = useState(false);
   const [listColor, setListColor] = useState(list.color || 'bg-gray-800');
   const [showCardInput, setShowCardInput] = useState(false);
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('theme') || 'light';
+  });
   
   
   const listCards = cards.filter(card => card.listId === list._id).sort((a, b) => a.position - b.position);

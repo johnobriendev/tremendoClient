@@ -92,7 +92,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard }) {
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="relative bg-gray-800 p-4  rounded mb-2 shadow hover:border hover:border-gray-500 group transition-transform duration-300 ease-in-out flex justify-between items-center ${snapshot.isDragging ? 'z-[100]' : 'z-20'}"
+          className="relative bg-gray-800 p-2  rounded mb-2 shadow hover:border hover:border-gray-500 group transition-transform duration-300 ease-in-out flex justify-between items-center ${snapshot.isDragging ? 'z-[100]' : 'z-20'}"
           
         >
           <div className=" relative  w-full z-0">
