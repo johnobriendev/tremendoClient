@@ -74,6 +74,10 @@ function BoardPage() {
     color: isDark ? '#dee2eb' : '#000',
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
   });
+  const getAddListStyles = (isDark) => ({
+    backgroundColor: isDark ? '#2f374d' : '#d5dae6',
+    color: isDark ? '#fff' : '#000',
+  });
   
   // Add this to your existing useEffect
   // useEffect(() => {
@@ -513,7 +517,8 @@ const handleDeleteCard = async (cardId) => {
                     {!isAddingList ? (
                       <button
                         onClick={() => setIsAddingList(true)}
-                        className="w-full bg-slate-100 bg-opacity-25 hover:bg-opacity-30 text-white font-semibold py-2 px-4 rounded shadow-xl"
+                        className="w-full font-semibold py-2 px-4 rounded shadow-xl"
+                        style={getAddListStyles(theme === 'dark')}
                       >
                       + Add another list 
                       </button>
