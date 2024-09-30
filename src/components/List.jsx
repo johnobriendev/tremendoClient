@@ -141,7 +141,9 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
             <div className="relative" ref={menuRef}>
               <button
                 onClick={() => setMenuOpen(!menuOpen)}
-                className="text-gray-400 hover:text-gray-300"
+                className={` ${
+                  theme === 'dark' ? 'text-gray-400 hover:text-gray-300' : 'text-gray-600 hover:text-gray-800'
+                }`}
               >
                 <BsThreeDots />
               </button>
