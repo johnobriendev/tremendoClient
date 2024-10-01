@@ -59,7 +59,19 @@ const AboutPage = () => {
           <li>Drag and Drop Cards between lists</li>
         </div>
       </ul>
-      <Carousel />
+
+      {/* Mobile View: Stacked Images */}
+      <div className="block md:hidden space-y-4">
+        <img className="w-full h-auto" src="screenshot3.png" alt="Screenshot 3" />
+        <img className="w-full h-auto" src="screenshot1.png" alt="Screenshot 1" />
+        <img className="w-full h-auto" src="screenshot2.png" alt="Screenshot 2" />
+      </div>
+      
+      {/* Medium and Larger Screens: Carousel */}
+      <div className="hidden md:block">
+        <Carousel />
+      </div>
+
       <div className="flex space-x-4 my-16 mx-auto">
         <Link to="/register">
           <button className="bg-blue-500 text-white px-4 py-2 rounded">Register</button>
