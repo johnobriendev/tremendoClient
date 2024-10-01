@@ -36,7 +36,8 @@ const AboutPage = () => {
     <div 
     className="flex flex-col min-h-screen text-white p-8 overflow-auto"
     style={{
-      backgroundImage: "url(/beach.jpg)",
+      // backgroundImage: "url(/beach.jpg)",
+      backgroundImage: "url(/mountain.jpg)",
       backgroundSize: 'cover',
       backgroundPosition: 'center',
       backgroundRepeat: 'no-repeat',
