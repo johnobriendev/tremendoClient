@@ -43,7 +43,7 @@ const LoginPage = () => {
     }}
     >
       <div className='w-full max-w-sm bg-white p-6 rounded shadow-xl flex flex-col opacity-90'>
-        <Link to='/' className='text-4xl mt-12 bg-transparent p-2 rounded absolute top-4 left-10 hover:text-gray-800'>Tremendo</Link>
+        <Link to='/' className='text-4xl mt-12 bg-transparent p-2 rounded absolute top-4 left-10 text-gray-200 hover:text-gray-400'>Tremendo</Link>
         <h1 className="text-2xl mb-4">Login</h1>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <form onSubmit={handleLogin} className="mb-4">
