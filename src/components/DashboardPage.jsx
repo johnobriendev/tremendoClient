@@ -78,7 +78,7 @@ const DashboardPage = () => {
   });
 
   const getModalStyles = (isDark) => ({
-    backgroundColor: isDark ? '#4a5568' : '#fff',
+    backgroundColor: isDark ? '#4a5568' : '#dadde2',
     color: isDark ? '#fff' : '#000',
   });
 

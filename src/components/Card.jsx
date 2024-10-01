@@ -18,8 +18,8 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
 
 
   const getCardStyles = (isDark) => ({
-    backgroundColor: isDark ? '#212938' : '#bcc5d7',
-    color: isDark ? '#fff' : '#000',
+    backgroundColor: isDark ? '#374151' : '#EDF2F7', //#212938 #bcc5d7
+    color: isDark ? '#CBD5E0' : '#1A202C',
   });
   
   const getModalStyles = (isDark) => ({

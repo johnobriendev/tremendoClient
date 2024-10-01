@@ -60,23 +60,23 @@ function BoardPage() {
   };
   
   const getThemeStyles = (isDark) => ({
-    backgroundColor: isDark ? '#181d28' : '#b1cee2',
-    color: isDark ? '#fff' : '#000',
+    backgroundColor: isDark ? '#1F2937' : '#F7FAFC' , //'#181d28' '#b1cee2'
+    color: isDark ? '#CBD5E0' : '#1A202C', //#fff #000
   });
   
   const getModalStyles = (isDark) => ({
-    backgroundColor: isDark ? '#4a5568' : '#fff',
-    color: isDark ? '#fff' : '#000',
+    backgroundColor: isDark ? '#4a5568' : '#dadde2',
+    color: isDark ? '#CBD5E0' : '#1A202C', //#fff #000
   });
   
   const getNavBarStyles = (isDark) => ({
-    backgroundColor: isDark ? '#1a202c' : '#e4eef5',
-    color: isDark ? '#dee2eb' : '#000',
+    backgroundColor: isDark ? '#1a202c' : '#E2E8F0', //#e4eef5
+    color: isDark ? '#CBD5E0' : '#1A202C',
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
   });
   const getAddListStyles = (isDark) => ({
-    backgroundColor: isDark ? '#2f374d' : '#d5dae6',
-    color: isDark ? '#fff' : '#000',
+    backgroundColor: isDark ? '#2B2F3A' : '#E5E7EB',
+    color: isDark ? '#CBD5E0' : '#1A202C',
   });
   
 
@@ -441,7 +441,7 @@ const handleDeleteCard = async (cardId) => {
               {isDropdownOpen && (
                 <div 
                   className={`absolute right-0 mt-2 w-48 rounded-md shadow-lg ${
-                    theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+                    theme === 'dark' ? 'bg-[#2B2F3A]' : 'bg-[#dadde2]'
                   }`}
                 >
                   <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
@@ -502,7 +502,7 @@ const handleDeleteCard = async (cardId) => {
                       <button
                         onClick={() => setIsAddingList(true)}
                         className={`w-full py-2 px-4 rounded shadow-xl ${
-                          theme === 'dark' ? 'bg-[#2f374d] hover:bg-opacity-70 text-white'  :  'bg-[#d5dae6] hover:bg-opacity-70'
+                          theme === 'dark' ? 'bg-[#2B2F3A] hover:bg-opacity-70 text-[#CBD5E0]'  :  'bg-[#dadde2] hover:bg-opacity-70'
                         }`}
                         // style={getAddListStyles(theme === 'dark')}
                       >
@@ -510,7 +510,7 @@ const handleDeleteCard = async (cardId) => {
                       </button>
                     ) : (
                       <div  className={`${
-                        theme === 'dark' ? 'bg-gray-800' :  'bg-[#d5dae6]'
+                        theme === 'dark' ? 'bg-[#2B2F3A]' :  'bg-[#dadde2]'
                       }  p-2 rounded`}>
                         <input
                           type="text"
@@ -520,13 +520,13 @@ const handleDeleteCard = async (cardId) => {
                           placeholder="Enter list title..."
                           className={`${
                             theme === 'dark' ? 'bg-gray-700 text-white' :  'bg-white text-black'
-                          } bg-gray-700  w-full p-2 border rounded mb-2`}
+                          } bg-gray-700  w-full p-2 rounded mb-2`}
                           ref={newListInputRef}
                         />
                         <div className="flex justify-between">
                           <button
                             onClick={handleCreateList}
-                            className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-600"
+                            className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
                             ref={newListButtonRef}
                           >
                             Add List

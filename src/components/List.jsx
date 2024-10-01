@@ -18,13 +18,13 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
 
 
   const getListStyles = (isDark) => ({
-    backgroundColor: isDark ? '#2f374d' : '#d5dae6',
+    backgroundColor: isDark ? '#2B2F3A' : '#dadde2 ', // #2f374d #d5dae6 #2B2F3A
     color: isDark ? '#fff' : '#000',
   });
   
   const getModalStyles = (isDark) => ({
     backgroundColor: isDark ? '#4a5568' : '#fff',
-    color: isDark ? '#fff' : '#000',
+    color: isDark ? '#CBD5E0' : '#1A202C',
   });
   
   
@@ -134,8 +134,8 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
               onBlur={() => handleListNameChange(list._id, editListName[list._id])}
               onKeyPress={handleListNameKeyPress}
               placeholder="List Name"
-              className={`p-2 border rounded w-full ${
-                theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+              className={`p-2 rounded w-full ${
+                theme === 'dark' ? 'bg-[#374151]' : 'bg-white'
               }`}
               style={{ backgroundColor: listColor }}
             />
