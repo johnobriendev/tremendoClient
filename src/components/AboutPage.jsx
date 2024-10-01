@@ -34,7 +34,7 @@ const Carousel = () => {
 const AboutPage = () => {
   return (
     <div 
-    className="flex flex-col min-h-screen text-white p-8 overflow-auto"
+    className="flex flex-col min-h-screen text-white p-8 overflow-auto relative"
     style={{
       // backgroundImage: "url(/beach.jpg)",
       backgroundImage: "url(/mountain.jpg)",
