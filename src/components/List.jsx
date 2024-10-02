@@ -135,7 +135,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
               onKeyPress={handleListNameKeyPress}
               placeholder="List Name"
               className={`p-2 rounded w-full ${
-                theme === 'dark' ? 'bg-[#374151]' : 'bg-white'
+                theme === 'dark' ? 'bg-[#374151]' : 'bg-[#EDF2F7]'
               }`}
               style={{ backgroundColor: listColor }}
             />

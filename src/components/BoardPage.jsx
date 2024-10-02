@@ -60,7 +60,7 @@ function BoardPage() {
   };
   
   const getThemeStyles = (isDark) => ({
-    backgroundColor: isDark ? '#1F2937' : '#F7FAFC' , //'#181d28' '#b1cee2'
+    backgroundColor: isDark ? '#1F2937' : '#dae8f1' , //'#181d28' '#b1cee2'
     color: isDark ? '#CBD5E0' : '#1A202C', //#fff #000
   });
   
@@ -519,7 +519,7 @@ const handleDeleteCard = async (cardId) => {
                           onKeyPress={handleKeyPress}
                           placeholder="Enter list title..."
                           className={`${
-                            theme === 'dark' ? 'bg-gray-700 text-white' :  'bg-white text-black'
+                            theme === 'dark' ? 'bg-gray-700 text-white' :  'bg-[#EDF2F7] text-black'
                           } bg-gray-700  w-full p-2 rounded mb-2`}
                           ref={newListInputRef}
                         />

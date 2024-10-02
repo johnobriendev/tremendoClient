@@ -73,7 +73,7 @@ const DashboardPage = () => {
   };
 
   const getThemeStyles = (isDark) => ({
-    backgroundColor: isDark ? '#181d28' : '#a2c5dc ', //#a2c5dc #f7fafc
+    backgroundColor: isDark ? '#181d28' : '#dae8f1', //#a2c5dc #f7fafc
     color: isDark ? '#fff' : '#000',
   });
 
@@ -298,7 +298,7 @@ const DashboardPage = () => {
       >
         <div className="container mx-auto flex justify-between items-center ">
           {user && (
-            <h1 className="text-2xl font-semibold ">Welcome, {user.name}!</h1>
+            <h1 className="text-2xl ">Welcome, {user.name}!</h1>
           )}
           <div className="flex items-center space-x-4">
             <button
