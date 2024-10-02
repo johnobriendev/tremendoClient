@@ -519,8 +519,8 @@ const handleDeleteCard = async (cardId) => {
                           onKeyPress={handleKeyPress}
                           placeholder="Enter list title..."
                           className={`${
-                            theme === 'dark' ? 'bg-gray-700 text-white' :  'bg-[#EDF2F7] text-black'
-                          } bg-gray-700  w-full p-2 rounded mb-2`}
+                            theme === 'dark' ? 'bg-gray-700 text-white' :  'bg-[#EDF2F7] placeholder:text-black text-black'
+                          }  w-full p-2 rounded mb-2`}
                           ref={newListInputRef}
                         />
                         <div className="flex justify-between">
