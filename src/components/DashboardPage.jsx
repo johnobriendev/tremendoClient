@@ -492,9 +492,10 @@ const DashboardPage = () => {
                         value={selectedTemplate}
                         onChange={(e) => setSelectedTemplate(e.target.value)}
                       >
+                        <option value="blank">Blank Board</option>
                         <option value="kanban">Kanban</option>
                         <option value="weekly">Weekly Planner</option>
-                        <option value="blank">Blank Board</option>
+                        
                       </select>
                     </div>
                     <button
