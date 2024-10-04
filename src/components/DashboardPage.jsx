@@ -11,6 +11,7 @@ const DashboardPage = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [newBoardName, setNewBoardName] = useState('');
+  const [selectedTemplate, setSelectedTemplate] = useState('kanban');
   const [editBoardName, setEditBoardName] = useState('');
   const [editBoardId, setEditBoardId] = useState('');
   const [newBoardColor, setNewBoardColor] = useState('#ffffff');
@@ -213,6 +214,7 @@ const DashboardPage = () => {
           description: '',
           isPrivate: true,
           backgroundColor: newBoardColor,
+          template: selectedTemplate,
         }),
       });
       if (response.ok) {
@@ -221,6 +223,7 @@ const DashboardPage = () => {
         setIsCreateModalOpen(false);
         setNewBoardName('');
         setNewBoardColor('#ffffff');
+        setSelectedTemplate('kanban');
       } else {
         const data = await response.json();
         setError(data.message);
@@ -479,6 +482,20 @@ const DashboardPage = () => {
                           }
                         }}
                       />
+                    </div>
+                    <div className="mb-4">
+                      <label className="block mb-2">Board Template</label>
+                      <select
+                        className={`border p-2 w-full rounded ${
+                          theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-black'
+                        }`}
+                        value={selectedTemplate}
+                        onChange={(e) => setSelectedTemplate(e.target.value)}
+                      >
+                        <option value="kanban">Kanban</option>
+                        <option value="weekly">Weekly Planner</option>
+                        <option value="blank">Blank Board</option>
+                      </select>
                     </div>
                     <button
                       className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
