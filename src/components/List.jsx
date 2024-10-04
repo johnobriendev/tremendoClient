@@ -18,7 +18,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
 
 
   const getListStyles = (isDark) => ({
-    backgroundColor: isDark ? '#2B2F3A' : '#dadde2 ', // #2f374d #d5dae6 #2B2F3A
+    backgroundColor: isDark ? '#2B2F3A' : '#c4d5e5', 
     color: isDark ? '#fff' : '#000',
   });
   
@@ -163,7 +163,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                     Clear List Color
                   </button>
                   <div className="block px-4 py-2 hover:bg-gray-600 w-full text-left">
-                    <label className="block text-gray-400 mb-2">Background Color</label>
+                    <label className="block text-gray-400 mb-2">List Color</label>
                     <input
                       type="color"
                       className="w-16 h-8"

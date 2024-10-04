@@ -502,7 +502,7 @@ const handleDeleteCard = async (cardId) => {
                       <button
                         onClick={() => setIsAddingList(true)}
                         className={`w-full py-2 px-4 rounded shadow-xl ${
-                          theme === 'dark' ? 'bg-[#2B2F3A] hover:bg-opacity-70 text-[#CBD5E0]'  :  'bg-[#dadde2] hover:bg-opacity-70'
+                          theme === 'dark' ? 'bg-[#2B2F3A] hover:bg-opacity-70 text-[#CBD5E0]'  :  'bg-[#c4d5e5] hover:bg-opacity-70'
                         }`}
                         // style={getAddListStyles(theme === 'dark')}
                       >
@@ -510,7 +510,7 @@ const handleDeleteCard = async (cardId) => {
                       </button>
                     ) : (
                       <div  className={`${
-                        theme === 'dark' ? 'bg-[#2B2F3A]' :  'bg-[#dadde2]'
+                        theme === 'dark' ? 'bg-[#2B2F3A]' :  'bg-[#c4d5e5]'
                       }  p-2 rounded`}>
                         <input
                           type="text"
