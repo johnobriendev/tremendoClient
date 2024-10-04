@@ -505,7 +505,7 @@ const DashboardPage = () => {
                     </button>
                     <button
                       className={`px-4 py-2 rounded ${
-                        theme === 'dark' ? 'bg-gray-600 text-white' : 'bg-gray-200 text-black'
+                        theme === 'dark' ? 'bg-gray-600 text-white' : 'bg-white text-black'
                       }`}
                       onClick={() => setIsCreateModalOpen(false)}
                     >
