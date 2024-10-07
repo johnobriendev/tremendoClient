@@ -11,12 +11,14 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
   const [editingName, setEditingName] = useState(false);
   const [newName, setNewName] = useState(card.name);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
+  const [textareaHeight, setTextareaHeight] = useState('auto');
  
 
   const cardRef = useRef(null);
   const inputRef = useRef(null);
   const optionsRef = useRef(null);
   const deleteModalRef = useRef(null);
+  const contentRef = useRef(null);
 
 
 
@@ -32,6 +34,15 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
         top: rect.top,
         left: rect.right + 8, // 8px offset from the card
       });
+    }
+  };
+
+  const adjustTextareaHeight = () => {
+    if (inputRef.current) {
+      // Reset height to auto to get the correct scrollHeight
+      inputRef.current.style.height = 'auto';
+      // Set the height to match the scrollHeight
+      inputRef.current.style.height = `${inputRef.current.scrollHeight}px`;
     }
   };
 
@@ -67,24 +78,38 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
       }
     };
 
+    const handleScroll = () => {
+      if (showOptions) {
+        setShowOptions(false);
+      }
+    };
+
     document.addEventListener('mousedown', handleClickOutside);
+    window.addEventListener('scroll', handleScroll, true);
+
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
+      window.removeEventListener('scroll', handleScroll, true);
     };
   }, [showOptions, showDeleteModal]);
 
-    // Update menu position when options are shown
-    useEffect(() => {
-      if (showOptions) {
-        updateMenuPosition();
-        const scrollParent = cardRef.current.closest('.overflow-y-auto');
-        if (scrollParent) {
-          scrollParent.addEventListener('scroll', updateMenuPosition);
-          return () => scrollParent.removeEventListener('scroll', updateMenuPosition);
-        }
-      }
-    }, [showOptions]);
+  // Update menu position when options are shown
+  useEffect(() => {
+    if (showOptions) {
+      updateMenuPosition();
+      // const scrollParent = cardRef.current.closest('.overflow-y-auto');
+      // if (scrollParent) {
+      //   scrollParent.addEventListener('scroll', updateMenuPosition);
+      //   return () => scrollParent.removeEventListener('scroll', updateMenuPosition);
+      // }
+    }
+  }, [showOptions]);
 
+  useEffect(() => {
+    if (editingName) {
+      adjustTextareaHeight();
+    }
+  }, [editingName, newName]);
 
 
   // const handleEditClick = (e) => {
@@ -115,12 +140,6 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
     }
   };
 
-
-  
-
-
-
-
   const handleDeleteClick = () => {
   
     setShowDeleteModal(true);
@@ -136,9 +155,6 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
       console.error("Error deleting card:", error);
     }
   };
-
-  
-
 
   return (
     <Draggable draggableId={card._id} index={index}>
@@ -159,7 +175,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
             ...provided.draggableProps.style // This line is crucial
           }}
         >
-          <div className=" w-full relative ">
+          <div className=" w-full relative">
             {editingName ? (
                 <textarea
                   ref={inputRef}
@@ -173,10 +189,11 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
                   }}
                   className={` ${
                     theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-[#e4eef5] text-black'
-                  } border-none focus:outline-none w-full h-[100px] resize-none p-0 z-10`}
+                  } border-none focus:outline-none w-full resize-none p-0 z-10`}
+                  style={{ minHeight: textareaHeight }}
                 />
               ) : (
-                <div className=''>
+                <div ref={contentRef} className=''>
                   <span className="block pr-4">{card.name}</span>
                   <MdOutlineModeEdit
                     onClick={handleEditClick}
