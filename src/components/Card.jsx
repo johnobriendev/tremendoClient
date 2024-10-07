@@ -194,11 +194,11 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
                 />
               ) : (
                 <div ref={contentRef} className=''>
-                  <span className="block pr-4">{card.name}</span>
+                  <span className="block">{card.name}</span>
                   <MdOutlineModeEdit
                     onClick={handleEditClick}
-                    className="text-gray-400 absolute top-0 right-0  opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity duration-300 ease-in-out"
-                    size={20}
+                    className="text-gray-400 absolute top-0 right-0 p-1 opacity-0 group-hover:opacity-100 group-hover:bg-gray-600 hover:text-white group-hover:rounded-lg cursor-pointer transition-opacity duration-300 ease-in-out"
+                    size={25}
                   />
                 </div>
               )}
