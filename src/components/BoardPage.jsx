@@ -617,11 +617,6 @@ const handleDeleteCard = async (cardId) => {
       )}
       
     </div>
-
-
-
-  
-     
       
     
   );

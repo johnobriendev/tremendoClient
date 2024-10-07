@@ -3,29 +3,38 @@ import { Draggable } from 'react-beautiful-dnd';
 import { MdOutlineModeEdit } from "react-icons/md";
 
 
+
+
 function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
   const [showOptions, setShowOptions] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [editingName, setEditingName] = useState(false);
   const [newName, setNewName] = useState(card.name);
+  const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
+ 
 
   const cardRef = useRef(null);
   const inputRef = useRef(null);
   const optionsRef = useRef(null);
-  // const deleteButtonRef = useRef(null);
   const deleteModalRef = useRef(null);
-  //const contentRef = useRef(null);
+
 
 
   const getCardStyles = (isDark) => ({
     backgroundColor: isDark ? '#374151' : '#EDF2F7', //#212938 #bcc5d7
     color: isDark ? '#CBD5E0' : '#1A202C',
   });
-  
-  const getModalStyles = (isDark) => ({
-    backgroundColor: isDark ? '#4a5568' : '#fff',
-    color: isDark ? '#fff' : '#000',
-  });
+
+  const updateMenuPosition = () => {
+    if (cardRef.current) {
+      const rect = cardRef.current.getBoundingClientRect();
+      setMenuPosition({
+        top: rect.top,
+        left: rect.right + 8, // 8px offset from the card
+      });
+    }
+  };
+
 
 
   const handleSaveAndClose = async (e) => {
@@ -64,19 +73,54 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
     };
   }, [showOptions, showDeleteModal]);
 
+    // Update menu position when options are shown
+    useEffect(() => {
+      if (showOptions) {
+        updateMenuPosition();
+        const scrollParent = cardRef.current.closest('.overflow-y-auto');
+        if (scrollParent) {
+          scrollParent.addEventListener('scroll', updateMenuPosition);
+          return () => scrollParent.removeEventListener('scroll', updateMenuPosition);
+        }
+      }
+    }, [showOptions]);
 
 
-  const handleEditClick = () => {
-    setEditingName(true);
-    setShowOptions(true);
-    setTimeout(() => {
+
+  // const handleEditClick = (e) => {
+  //   e.stopPropagation();
+  //   setEditingName(true);
+  //   setShowOptions(true);
+
+  //   setTimeout(() => {
       
-        inputRef.current.focus();
-        inputRef.current.select();
+  //       inputRef.current.focus();
+  //       inputRef.current.select();
      
-    }, 0);
-    //deleting this fixed modal errors with onblur
+  //   }, 0);
+  //   //deleting this fixed modal errors with onblur
+  // };
+
+  const handleEditClick = (e) => {
+    e.stopPropagation();
+    setShowOptions(true); // Toggle options menu
+    if (!showOptions) {
+      setEditingName(true);
+      setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.focus();
+          inputRef.current.select();
+        }
+      }, 0);
+    }
   };
+
+
+  
+
+
+
+
   const handleDeleteClick = () => {
   
     setShowDeleteModal(true);
@@ -98,18 +142,24 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
 
   return (
     <Draggable draggableId={card._id} index={index}>
-      {(provided) => (
+      {(provided, snapshot) => (
         <div
-          ref={provided.innerRef}
+          // ref={provided.innerRef}
+          // ref={cardRef}
+          ref={(el) => {
+            cardRef.current = el;
+            provided.innerRef(el);
+          }}
+
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="relative p-2  rounded mb-2 shadow hover:border hover:border-gray-500 group transition-transform duration-300 ease-in-out flex justify-between items-center ${snapshot.isDragging ? 'z-[100]' : 'z-20'}"
+          className={`p-1  rounded mb-2 shadow hover:border hover:border-gray-500 group transition-transform duration-300 ease-in-out  ${snapshot.isDragging ? 'z-[90]' : 'z-20'}`}
           style={{
             ...getCardStyles(theme === 'dark'),
             ...provided.draggableProps.style // This line is crucial
           }}
         >
-          <div className=" relative  w-full z-0">
+          <div className=" w-full relative ">
             {editingName ? (
                 <textarea
                   ref={inputRef}
@@ -121,41 +171,64 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
                       handleSaveAndClose(); // Save and close when Enter is pressed
                     }
                   }}
-                  className="bg-gray-700 text-white border-none focus:outline-none w-full resize-none p-0 z-10"
+                  className={` ${
+                    theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-[#e4eef5] text-black'
+                  } border-none focus:outline-none w-full h-[100px] resize-none p-0 z-10`}
                 />
               ) : (
-                <span className="block pr-8 z-20">{card.name}</span>
+                <div className=''>
+                  <span className="block pr-4">{card.name}</span>
+                  <MdOutlineModeEdit
+                    onClick={handleEditClick}
+                    className="text-gray-400 absolute top-0 right-0  opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity duration-300 ease-in-out"
+                    size={20}
+                  />
+                </div>
               )}
-            <MdOutlineModeEdit
-              onClick={handleEditClick}
-              className="text-gray-400 absolute -top-2 -right-2  opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity duration-300 ease-in-out"
-              size={20}
-            />
+           
           </div>
+
+      
           
           {/* Options Menu */}
+
           {showOptions && (
-            <div 
-            ref={optionsRef} 
-            className="absolute  top-0 right-0 bg-gray-500 text-white shadow-lg rounded border border-gray-600 p-2 z-30 flex flex-col">
+            <div
+              ref={optionsRef}
+              style={{
+                position: 'fixed',
+                top: `${menuPosition.top}px`,
+                left: `${menuPosition.left}px`,
+                zIndex: 100,
+              }}          
+              className={`${
+                theme === 'dark' ? 'bg-[#345576] text-white' : 'bg-[#e4eef5] text-black'
+              }absolute top-0 -right-16 w-36 shadow-lg rounded border border-gray-200 p-1 z-[100]`}
+            >
               <button
-                id='delete-button'
+                id="delete-button"
                 onClick={handleDeleteClick}
-                className="text-red-600 hover:text-red-800"
+                className="text-red-600 hover:text-red-800 w-full "
               >
                 Delete Card
               </button>
-              {/* Add other options here */}
-              <button onClick={() => setShowOptions(false)} className="text-gray-200 hover:text-gray-900">
+              <button 
+                onClick={() => setShowOptions(false)} 
+                className={`${
+                  theme === 'dark' ? ' text-white' : ' text-black'
+                } hover:text-gray-900 w-full `} 
+              >
                 Close
               </button>
             </div>
           )}
 
+         
+
           {/* Delete Confirmation Modal */}
           {showDeleteModal && (
             <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-20">
-              <div ref={deleteModalRef} className={`bg-gray-800  p-6 rounded shadow-lg ${
+              <div ref={deleteModalRef} className={` p-6 rounded shadow-lg ${
                           theme === 'dark' ? 'bg-gray-800' : 'bg-[#e4eef5]'
                         } `}>
                 <p className="text-lg mb-4">Are you sure you want to delete this card?</p>
@@ -176,6 +249,8 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
               </div>
             </div>
           )}
+
+
         </div>
       )}
     </Draggable>
