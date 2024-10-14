@@ -103,6 +103,20 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
     };
   }, [showOptions, showDeleteModal]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showDetailModal && detailModalRef.current && !detailModalRef.current.contains(event.target)) {
+        setShowDetailModal(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showDetailModal]);
+
   // Update menu position when options are shown
   useEffect(() => {
     if (showOptions) {
