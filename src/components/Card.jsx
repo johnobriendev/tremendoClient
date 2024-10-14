@@ -2,6 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import { MdOutlineModeEdit } from "react-icons/md";
 
+import { IoMdClose } from "react-icons/io";
+import { FaTrash } from "react-icons/fa";
+
 
 
 
@@ -12,6 +15,10 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
   const [newName, setNewName] = useState(card.name);
   const [menuPosition, setMenuPosition] = useState({ top: 0, left: 0 });
   const [textareaHeight, setTextareaHeight] = useState('auto');
+  const [showDetailModal, setShowDetailModal] = useState(false);
+  const [description, setDescription] = useState(card.description || '');
+  const [newComment, setNewComment] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
  
 
   const cardRef = useRef(null);
@@ -19,6 +26,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
   const optionsRef = useRef(null);
   const deleteModalRef = useRef(null);
   const contentRef = useRef(null);
+  const detailModalRef = useRef(null);
 
 
 
@@ -97,11 +105,6 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
   useEffect(() => {
     if (showOptions) {
       updateMenuPosition();
-      // const scrollParent = cardRef.current.closest('.overflow-y-auto');
-      // if (scrollParent) {
-      //   scrollParent.addEventListener('scroll', updateMenuPosition);
-      //   return () => scrollParent.removeEventListener('scroll', updateMenuPosition);
-      // }
     }
   }, [showOptions]);
 
@@ -156,6 +159,77 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
     }
   };
 
+  const handleCardClick = (e) => {
+    // Don't open modal if clicking edit button or options menu
+    if (e.target.closest('.edit-button') || e.target.closest('.options-menu')) {
+      return;
+    }
+    setShowDetailModal(true);
+  };
+
+  const handleDescriptionSave = async () => {
+    setIsLoading(true);
+    try {
+      await onUpdateCard(card._id, { description });
+    } catch (error) {
+      console.error("Error updating description:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAddComment = async () => {
+    if (!newComment.trim()) return;
+    setIsLoading(true);
+    try {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+      const response = await fetch(`${apiBaseUrl}/cards/cards/${card._id}/comments`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({ text: newComment }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error adding comment: ${response.statusText}`);
+      }
+
+      const updatedCard = await response.json();
+      onUpdateCard(card._id, updatedCard); // Update local state with the returned card
+      setNewComment('');
+    } catch (error) {
+      console.error("Error adding comment:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    setIsLoading(true);
+    try {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+      const response = await fetch(`${apiBaseUrl}/cards/cards/${card._id}/comments/${commentId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Error deleting comment: ${response.statusText}`);
+      }
+
+      const updatedCard = await response.json();
+      onUpdateCard(card._id, updatedCard); // Update local state with the returned card
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Draggable draggableId={card._id} index={index}>
       {(provided, snapshot) => (
@@ -174,6 +248,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
             ...getCardStyles(theme === 'dark'),
             ...provided.draggableProps.style // This line is crucial
           }}
+          onClick={handleCardClick}
         >
           <div className=" w-full relative">
             {editingName ? (
@@ -204,6 +279,81 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
               )}
            
           </div>
+
+          {/* Detail Modal */}
+          {showDetailModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div 
+                ref={detailModalRef}
+                className={`w-11/12 max-w-2xl ${theme === 'dark' ? 'bg-gray-800 text-white' : 'bg-white text-black'} rounded-lg shadow-xl p-6`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="flex justify-between items-center mb-4">
+                  <h2 className="text-xl font-semibold">{card.name}</h2>
+                  <button 
+                    onClick={() => setShowDetailModal(false)}
+                    className="text-gray-500 hover:text-gray-700"
+                  >
+                    <IoMdClose size={24} />
+                  </button>
+                </div>
+
+                <div className="mb-6">
+                  <h3 className="text-lg font-medium mb-2">Description</h3>
+                  <textarea
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    onBlur={handleDescriptionSave}
+                    className={`w-full p-2 rounded ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'} ${isLoading ? 'opacity-50' : ''}`}
+                    rows={4}
+                    placeholder="Add a description..."
+                    disabled={isLoading}
+                  />
+                </div>
+
+                <div>
+                  <h3 className="text-lg font-medium mb-2">Comments</h3>
+                  <div className="space-y-4 mb-4">
+                    {card.comments && card.comments.map((comment) => (
+                      <div key={comment._id} className={`p-2 rounded ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'}`}>
+                        <div className="flex justify-between items-start">
+                          <p className="flex-grow">{comment.text}</p>
+                          <button
+                            onClick={() => handleDeleteComment(comment._id)}
+                            className={`text-red-500 hover:text-red-700 ml-2 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                            disabled={isLoading}
+                          >
+                            <FaTrash size={14} />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+
+                  <div className="mb-4">
+                    <textarea
+                      value={newComment}
+                      onChange={(e) => setNewComment(e.target.value)}
+                      className={`w-full p-2 rounded mb-2 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'} ${isLoading ? 'opacity-50' : ''}`}
+                      rows={2}
+                      placeholder="Write a comment..."
+                      disabled={isLoading}
+                    />
+                    <button
+                      onClick={handleAddComment}
+                      className={`bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      disabled={isLoading}
+                    >
+                      Add Comment
+                    </button>
+                  </div>
+
+               
+                </div>
+              </div>
+            </div>
+          )}
 
       
           
