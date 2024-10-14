@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
-import { MdOutlineModeEdit } from "react-icons/md";
+import { MdOutlineModeEdit, MdSave } from "react-icons/md";
 
 import { IoMdClose } from "react-icons/io";
 import { FaTrash } from "react-icons/fa";
@@ -19,6 +19,8 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
   const [description, setDescription] = useState(card.description || '');
   const [newComment, setNewComment] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isDescriptionChanged, setIsDescriptionChanged] = useState(false);
+
  
 
   const cardRef = useRef(null);
@@ -167,10 +169,18 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
     setShowDetailModal(true);
   };
 
+  const handleDescriptionChange = (e) => {
+    setDescription(e.target.value);
+    setIsDescriptionChanged(true);
+  };
+
   const handleDescriptionSave = async () => {
+    if (!isDescriptionChanged) return;
+
     setIsLoading(true);
     try {
       await onUpdateCard(card._id, { description });
+      setIsDescriptionChanged(false);
     } catch (error) {
       console.error("Error updating description:", error);
     } finally {
@@ -300,15 +310,24 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
 
                 <div className="mb-6">
                   <h3 className="text-lg font-medium mb-2">Description</h3>
-                  <textarea
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    onBlur={handleDescriptionSave}
-                    className={`w-full p-2 rounded ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'} ${isLoading ? 'opacity-50' : ''}`}
-                    rows={4}
-                    placeholder="Add a description..."
-                    disabled={isLoading}
-                  />
+                  <div className="flex flex-col">
+                    <textarea
+                      value={description}
+                      onChange={handleDescriptionChange}
+                      className={`w-full p-2 rounded mb-2 ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'} ${isLoading ? 'opacity-50' : ''}`}
+                      rows={4}
+                      placeholder="Add a description..."
+                      disabled={isLoading}
+                    />
+                    <button
+                      onClick={handleDescriptionSave}
+                      className={`flex items-center justify-center bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 ${isLoading || !isDescriptionChanged ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      disabled={isLoading || !isDescriptionChanged}
+                    >
+                      <MdSave className="mr-2" />
+                      Save Description
+                    </button>
+                  </div>
                 </div>
 
                 <div>
