@@ -117,13 +117,8 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
   }, [list.color]);
 
   return (
-    <Draggable draggableId={list._id} index={list.position - 1}>
-      {(provided, snapshot) => (
         <div
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-          className="relative shadow rounded-md p-4 w-[264px] max-h-[calc(100vh-10rem)] flex flex-col ${snapshot.isDragging ? 'z-50' : 'z-10'}"
+          className="relative shadow rounded-md p-4 w-[264px] max-h-[calc(100vh-10rem)] flex flex-col ${list.isDragging ? 'z-50' : 'z-10'}"
           style={getListStyles(theme === 'dark')}
         >
           <div className="flex items-center justify-between gap-2 mb-4 ">
@@ -182,8 +177,8 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
               )}
             </div>
           </div>
-          <Droppable droppableId={list._id} type="CARD">
-            {(provided) => (
+          <Droppable droppableId={`list-{list._id}`} type="CARD">
+            {(provided,snapshot) => (
               <div
                 className={`relative overflow-y-auto p-2 flex-grow mb-4 ${snapshot.isDraggingOver ? 'bg-gray-800' : ''}`}
                 ref={provided.innerRef}
@@ -259,8 +254,8 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
             </div>
           )}
         </div>
-      )}
-    </Draggable>
+     
+    
   );
 }
 

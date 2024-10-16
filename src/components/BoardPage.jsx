@@ -4,10 +4,6 @@ import { useParams } from 'react-router-dom';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import List from './List'; // Import List component
 
-
-
-
-
 function BoardPage() {
   const { boardId } = useParams();
   const [board, setBoard] = useState(null);
@@ -74,11 +70,6 @@ function BoardPage() {
     color: isDark ? '#CBD5E0' : '#1A202C',
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
   });
-  const getAddListStyles = (isDark) => ({
-    backgroundColor: isDark ? '#2B2F3A' : '#E5E7EB',
-    color: isDark ? '#CBD5E0' : '#1A202C',
-  });
-  
 
 
   const fetchBoardData = async () => {
@@ -109,7 +100,8 @@ function BoardPage() {
         throw new Error(`Error fetching lists: ${listsResponse.statusText}`);
       }
       const listsData = await listsResponse.json();
-      setLists(listsData);
+      // setLists(listsData);
+      setLists(listsData.sort((a, b) => a.position - b.position));
 
       // Fetch cards data
       const cardsResponse = await fetch(`${apiBaseUrl}/cards/${boardId}/cards`, {
@@ -127,8 +119,6 @@ function BoardPage() {
       console.error('Error fetching board data:', error);
     }
   };
-
-
 
   useEffect(() => {
     fetchBoardData();
@@ -172,7 +162,6 @@ function BoardPage() {
     }
   };
 
-
   //list input stuff
   const handleClickOutside = (event) => {
     if (newListInputRef.current && !newListInputRef.current.contains(event.target) && !newListButtonRef.current.contains(event.target)) {
@@ -199,7 +188,6 @@ function BoardPage() {
       handleCreateList();
     }
   };
-
 
 
   const handleListNameChange = async (listId, newName) => {
@@ -275,59 +263,58 @@ function BoardPage() {
     }
   };
 
-  // Add the functions here
-const handleUpdateCard = async (cardId, updates) => {
-  try {
-    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-    const response = await fetch(`${apiBaseUrl}/cards/cards/${cardId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-      body: JSON.stringify(updates),
-    });
-    if (!response.ok) {
-      throw new Error(`Error updating card: ${response.statusText}`);
+    // Add the functions here
+  const handleUpdateCard = async (cardId, updates) => {
+    try {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+      const response = await fetch(`${apiBaseUrl}/cards/cards/${cardId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify(updates),
+      });
+      if (!response.ok) {
+        throw new Error(`Error updating card: ${response.statusText}`);
+      }
+      const updatedCard = await response.json();
+      
+      // Update the card in the local state
+      setCards(cards.map(card => card._id === cardId ? updatedCard : card));
+    } catch (error) {
+      console.error('Error updating card:', error);
+      throw error;
     }
-    const updatedCard = await response.json();
-    
-    // Update the card in the local state
-    setCards(cards.map(card => card._id === cardId ? updatedCard : card));
-  } catch (error) {
-    console.error('Error updating card:', error);
-    throw error;
-  }
-};
+  };
 
-const handleDeleteCard = async (cardId) => {
-  try {
-    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-    const response = await fetch(`${apiBaseUrl}/cards/cards/${cardId}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    });
-    if (!response.ok) {
-      throw new Error(`Error deleting card: ${response.statusText}`);
+  const handleDeleteCard = async (cardId) => {
+    try {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+      const response = await fetch(`${apiBaseUrl}/cards/cards/${cardId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`Error deleting card: ${response.statusText}`);
+      }
+      // Remove the deleted card from the local state
+      setCards(cards.filter(card => card._id !== cardId));
+    } catch (error) {
+      console.error('Error deleting card:', error);
+      throw error;
     }
-    // Remove the deleted card from the local state
-    setCards(cards.filter(card => card._id !== cardId));
-  } catch (error) {
-    console.error('Error deleting card:', error);
-    throw error;
-  }
-};
+  };
+
 
   const handleDragEnd = async (result) => {
     const { destination, source, draggableId, type } = result;
   
-    // If there's no destination, the card was dropped outside a valid droppable area
     if (!destination) return;
   
-    // If the card was dropped back into its original position, do nothing
     if (
       destination.droppableId === source.droppableId &&
       destination.index === source.index
@@ -335,39 +322,71 @@ const handleDeleteCard = async (cardId) => {
       return;
     }
   
-    // If we're dealing with a card drag
-    if (type === 'CARD') {
+    if (type === 'LIST') {
+      const newLists = Array.from(lists);
+      const [reorderedList] = newLists.splice(source.index, 1);
+      newLists.splice(destination.index, 0, reorderedList);
+  
+      // const updatedLists = newLists.map((list, index) => ({
+      //   ...list,
+      //   position: index + 1,
+      // }));
+      const updatedLists = newLists.map((list, index) => ({
+        id: list._id,
+        position: index + 1,
+      }));
+  
+      setLists(updatedLists);
+      //setLists(updatedLists.sort((a, b) => a.position - b.position));
+
+   
+      
+      try {
+        const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+        const response = await fetch(`${apiBaseUrl}/lists/update-positions`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+          // body: JSON.stringify({ lists: updatedLists }),
+          //body: JSON.stringify({ lists: updatedLists }),
+          body: JSON.stringify({ lists: updatedLists.map(list => ({ id: list._id, position: list.position })) }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || 'Failed to update list positions');
+        }
+
+        // If successful, you might want to refresh the board data
+        // await fetchBoardData();
+      } catch (error) {
+        console.error('Error updating list positions:', error);
+        fetchBoardData();
+      }
+    } else if (type === 'CARD') {
       const startListId = source.droppableId;
       const endListId = destination.droppableId;
       const draggedCardId = draggableId;
   
-      // Create a new array of cards
       let newCards = [...cards];
-  
-      // Find the moved card
       const movedCard = newCards.find(card => card._id === draggedCardId);
-  
-      // Remove the card from its original position
       newCards = newCards.filter(card => card._id !== draggedCardId);
   
-      // Update the listId if the card moved to a different list
       if (startListId !== endListId) {
         movedCard.listId = endListId;
       }
-
-
-            // Find the correct insertion index
+  
       const destinationCards = newCards.filter(card => card.listId === endListId);
       const insertIndex = newCards.findIndex(card => card._id === destinationCards[destination.index]?._id);
-
-      // Insert the card at its new position
+  
       if (insertIndex !== -1) {
         newCards.splice(insertIndex, 0, movedCard);
       } else {
         newCards.push(movedCard);
       }
-
-      // Update positions for all cards in the affected list(s)
+  
       const affectedListIds = new Set([startListId, endListId]);
       newCards = newCards.map(card => {
         if (affectedListIds.has(card.listId)) {
@@ -376,20 +395,13 @@ const handleDeleteCard = async (cardId) => {
         }
         return card;
       });
-
   
-
-      // Log the updated cards for debugging
-      console.log('Updated cards:', newCards);
-  
-      // Optimistically update the state
       setCards(newCards);
-
-            // Update the backend
+  
       try {
         const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
         const updatedCards = newCards.filter(card => affectedListIds.has(card.listId));
-
+  
         await Promise.all(updatedCards.map(card =>
           fetch(`${apiBaseUrl}/cards/cards/${card._id}`, {
             method: 'PUT',
@@ -466,35 +478,55 @@ const handleDeleteCard = async (cardId) => {
       <div className='pt-16 overflow-x-auto'>
         <DragDropContext onDragEnd={handleDragEnd}>
           <div className='flex-grow  w-full'>
-            <Droppable droppableId="all-lists" direction="horizontal">
+            <Droppable droppableId="all-lists" direction="horizontal" type="LIST">
               {(provided) => (
                 <div
                   className="flex items-start p-6 space-x-4 "
                   style={{
                     paddingRight: '1.5rem',
                     minWidth: 'max-content',
-                    minHeight: 'calc(100vh - 100px)' //can be adjusted if more space is needed
+                    minHeight: 'calc(100vh - 100px)', //can be adjusted if more space is needed
+                    overflowX: 'auto',  // Add this line
+                    overflowY: 'hidden' // Add this line
                   }}
                   {...provided.droppableProps}
                   ref={provided.innerRef} 
                 >
                   {lists.map((list, index) => (
-                    <List
-                      key={list._id}
-                      list={list}
-                      cards={cards}
-                      newCardName={newCardName}
-                      editListName={editListName}
-                      setEditListName={setEditListName}
-                      setNewCardName={setNewCardName}
-                      handleCreateCard={handleCreateCard}
-                      handleDeleteList={handleDeleteList}
-                      handleListNameChange={handleListNameChange}
-                      handleUpdateCard={handleUpdateCard} 
-                      handleDeleteCard={handleDeleteCard} 
-                      index={index}
-                      theme={theme}
-                    />
+                    <Draggable 
+                    key={list._id} 
+                    draggableId={list._id} 
+                    // draggableId={list._id.toString()} // try converting to string
+                    index={index} 
+                    //type="LIST"
+                    >
+                      {(provided, snapshot) => (
+                        <div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                        >
+                          <List
+                            // list={list}
+                            list={{...list, isDragging: snapshot.isDragging}}
+                            cards={cards}
+                            newCardName={newCardName}
+                            editListName={editListName}
+                            setEditListName={setEditListName}
+                            setNewCardName={setNewCardName}
+                            handleCreateCard={handleCreateCard}
+                            handleDeleteList={handleDeleteList}
+                            handleListNameChange={handleListNameChange}
+                            handleUpdateCard={handleUpdateCard} 
+                            handleDeleteCard={handleDeleteCard} 
+                            index={index}
+                            theme={theme}
+                          />
+                    
+                        </div>
+                      )}
+                    </Draggable>
+                  
                   ))}
                   {provided.placeholder}
                   <div className="w-[264px] shrink-0 mr-6">
