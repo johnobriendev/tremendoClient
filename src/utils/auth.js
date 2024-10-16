@@ -51,12 +51,22 @@ api.interceptors.response.use(
 
 export const login = async (email, password) => {
   const response = await api.post('/users/login', { email, password });
+  localStorage.setItem('token', response.data.token);
   return response.data;
 };
 
+// export const logout = async () => {
+//   await api.post('/users/logout');
+//   localStorage.removeItem('token');
+// };
+
+
 export const logout = async () => {
-  await api.post('/users/logout');
-  localStorage.removeItem('token');
+  try {
+    await api.post('/users/logout');
+  } finally {
+    localStorage.removeItem('token');
+  }
 };
 
 export const refreshToken = async () => {
