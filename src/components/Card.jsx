@@ -272,7 +272,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
             ...getCardStyles(theme === 'dark'),
             ...provided.draggableProps.style // This line is crucial
           }}
-          onClick={handleCardClick}
+          //onClick={handleCardClick}
         >
           <div className=" w-full relative">
             {editingName ? (
@@ -292,7 +292,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
                   style={{ minHeight: textareaHeight }}
                 />
               ) : (
-                <div ref={contentRef} className=''>
+                <div ref={contentRef} className='' onClick={handleCardClick}>
                   <span className="block">{card.name}</span>
                   <MdOutlineModeEdit
                     onClick={handleEditClick}
