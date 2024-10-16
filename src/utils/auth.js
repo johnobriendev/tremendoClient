@@ -2,7 +2,10 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
-  withCredentials: true // Important for cookies
+  withCredentials: true, // Important for cookies
+  headers: {
+    'Content-Type': 'application/json'
+  }
 });
 
 // Intercept requests to add token
@@ -54,4 +57,10 @@ export const login = async (email, password) => {
 export const logout = async () => {
   await api.post('/users/logout');
   localStorage.removeItem('token');
+};
+
+export const refreshToken = async () => {
+  const response = await api.post('/users/refresh-token');
+  return response.data;
+ 
 };

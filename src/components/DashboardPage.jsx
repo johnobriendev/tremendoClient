@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { logout } from '../utils/auth.js';
 
 const DashboardPage = () => {
   const [user, setUser] = useState(null);
@@ -286,10 +287,19 @@ const DashboardPage = () => {
     }
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/login');
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/login');
+    } catch (err) {
+      setError('Failed to logout');
+    }
   };
+
+  // const handleLogout = () => {
+  //   localStorage.removeItem('token');
+  //   navigate('/login');
+  // };
   ///////////////////////////////////////
   ///BEGIN JSX////////////////////////////
   ////////////////////////////////////////

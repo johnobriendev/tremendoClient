@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import {login} from '../utils/auth.js';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -9,24 +10,35 @@ const LoginPage = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  // const handleLogin = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/login`, {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({ email, password })
+  //     });
+  //     if (response.ok) {
+  //       const data = await response.json();
+  //       localStorage.setItem('token', data.token);
+  //       navigate('/dashboard');
+  //     } else {
+  //       const data = await response.json();
+  //       setError(data.message);
+  //     }
+  //   } catch (err) {
+  //     setError('Login failed');
+  //   }
+  // };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-      if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem('token', data.token);
-        navigate('/dashboard');
-      } else {
-        const data = await response.json();
-        setError(data.message);
-      }
+      const data = await login(email, password);
+      localStorage.setItem('token', data.token);
+      navigate('/dashboard');
     } catch (err) {
-      setError('Login failed');
+      setError(err.response?.data?.message || 'Login failed');
     }
   };
 
