@@ -87,9 +87,9 @@ const LandingPage = () => {
           </a>
         </section>
 
-        <section id="about" className="min-h-screen flex flex-col items-center justify-center p-6 bg-cover bg-center" style={{backgroundImage: "url(/mountain.jpg)"}}>
+        <section id="about" className="min-h-screen flex flex-col items-center justify-center p-6 bg-cover bg-center overflow-auto relative" style={{backgroundImage: "url(/mountain.jpg)"}}>
           <div className="max-w-6xl mx-auto bg-white/80 backdrop-blur-md rounded-lg p-8 shadow-lg">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center">Welcome to Tremendo</h2>
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center mt-6">Welcome to Tremendo</h2>
             <p className="text-lg mb-6">
               Tremendo is the ultimate productivity tool designed to help you manage tasks effortlessly. Tremendo offers a
               clean and intuitive interface where you can create boards, organize lists, and keep track of your tasks all in
@@ -104,12 +104,49 @@ const LandingPage = () => {
               <li>Create, Edit, and Delete Cards</li>
               <li>Drag and Drop Cards between lists</li>
             </ul>
-            <div className="w-full mx-auto">
+            {/* <div className="w-full mx-auto">
               <Slider {...settings}>
                 {['screenshot3.png', 'screenshot1.png', 'screenshot2.png'].map((src, index) => (
                   <div key={index} className="focus:outline-none">
                     <img
                       className="w-full h-auto cursor-pointer"
+                      src={src}
+                      alt={`Screenshot ${index + 1}`}
+                      onClick={() => setEnlargedImage(src)}
+                    />
+                  </div>
+                ))}
+              </Slider>
+            </div> */}
+            {/* Mobile View: Stacked Images */}
+            <div className="block md:hidden space-y-4 md:mx-24 xl:mx-72">
+              <img
+                className="w-full h-auto rounded shadow-lg"
+                src="screenshot3.png"
+                alt="Screenshot 3"
+                onClick={() => setEnlargedImage("screenshot3.png")}
+              />
+              <img
+                className="w-full h-auto rounded shadow-lg"
+                src="screenshot1.png"
+                alt="Screenshot 1"
+                onClick={() => setEnlargedImage("screenshot1.png")}
+              />
+              <img
+                className="w-full h-auto rounded shadow-lg"
+                src="screenshot2.png"
+                alt="Screenshot 2"
+                onClick={() => setEnlargedImage("screenshot2.png")}
+              />
+            </div>
+
+            {/* Desktop View: Carousel */}
+            <div className="hidden md:block ">
+              <Slider {...settings}>
+                {['screenshot3.png', 'screenshot1.png', 'screenshot2.png'].map((src, index) => (
+                  <div key={index} className="focus:outline-none">
+                    <img
+                      className="w-full h-auto rounded shadow-lg cursor-pointer"
                       src={src}
                       alt={`Screenshot ${index + 1}`}
                       onClick={() => setEnlargedImage(src)}
