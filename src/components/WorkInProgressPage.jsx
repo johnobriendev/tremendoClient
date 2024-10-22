@@ -3,7 +3,7 @@ import { AlertCircle } from 'lucide-react'
 
 const WorkInProgress = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center bg-gray-300">
       <div className="max-w-md w-full space-y-8 p-8 bg-white shadow-lg rounded-lg">
         <div className="text-center">
           <AlertCircle className="mx-auto h-12 w-12 text-yellow-400" />
