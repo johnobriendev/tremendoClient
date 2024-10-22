@@ -9,6 +9,7 @@ import VerifyEmail from './components/VerifyEmail';
 import ForgotPasswordPage from './components/ForgotPasswordPage';
 import ResetPasswordPage from './components/ResetPasswordPage';
 import AboutPage from './components/AboutPage';
+import WorkInProgress from './components/WorkInProgressPage';
 
 
 const router = createBrowserRouter([
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   {
     path: '/about',
     element: <AboutPage />,
+  },
+  {
+    path: '/workinprogress',
+    element: <WorkInProgress />,
   },
   {
     path: '/register',

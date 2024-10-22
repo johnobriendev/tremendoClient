@@ -176,37 +176,37 @@ const LandingPage = () => {
 
       <footer className="bg-gray-100 py-12">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
-          <div>
-            <h3 className="font-semibold mb-4">Company</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-sm text-gray-600 hover:underline">About Us</a></li>
-              <li><a href="#" className="text-sm text-gray-600 hover:underline">Careers</a></li>
-              <li><a href="#" className="text-sm text-gray-600 hover:underline">Press</a></li>
-            </ul>
+          <div className='flex flex-col gap-2'>
+            <h3 className="font-semibold mb-2">Company</h3>
+            
+              <Link to='/workinprogress' className="text-sm text-gray-600 hover:underline">About Us</Link>
+              <Link to='/workinprogress' className="text-sm text-gray-600 hover:underline">Careers</Link>
+              <Link to='/workinprogress' className="text-sm text-gray-600 hover:underline">Press</Link>
+            
           </div>
-          <div>
-            <h3 className="font-semibold mb-4">Resources</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-sm text-gray-600 hover:underline">Blog</a></li>
-              <li><a href="#" className="text-sm text-gray-600 hover:underline">Help Center</a></li>
-              <li><a href="#" className="text-sm text-gray-600 hover:underline">FAQ</a></li>
-            </ul>
+          <div className='flex flex-col gap-2'>
+            <h3 className="font-semibold mb-2">Resources</h3>
+            
+              <Link to='/workinprogress' className="text-sm text-gray-600 hover:underline">Blog</Link>
+              <Link to='/workinprogress' className="text-sm text-gray-600 hover:underline">Help Center</Link>
+              <Link to='/workinprogress' className="text-sm text-gray-600 hover:underline">FAQ</Link>
+            
           </div>
-          <div>
-            <h3 className="font-semibold mb-4">Legal</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-sm text-gray-600 hover:underline">Terms of Service</a></li>
-              <li><a href="#" className="text-sm text-gray-600 hover:underline">Privacy Policy</a></li>
-              <li><a href="#" className="text-sm text-gray-600 hover:underline">Cookie Policy</a></li>
-            </ul>
+          <div className='flex flex-col gap-2'>
+            <h3 className="font-semibold mb-2">Legal</h3>
+            
+              <Link to='/workinprogress' className="text-sm text-gray-600 hover:underline">Terms of Service</Link>
+              <Link to='/workinprogress' className="text-sm text-gray-600 hover:underline">Privacy Policy</Link>
+              <Link to='/workinprogress' className="text-sm text-gray-600 hover:underline">Cookie Policy</Link>
+            
           </div>
-          <div>
-            <h3 className="font-semibold mb-4">Connect</h3>
-            <ul className="space-y-2">
-              <li><a href="#" className="text-sm text-gray-600 hover:underline">Twitter</a></li>
-              <li><a href="#" className="text-sm text-gray-600 hover:underline">Facebook</a></li>
-              <li><a href="#" className="text-sm text-gray-600 hover:underline">LinkedIn</a></li>
-            </ul>
+          <div className='flex flex-col gap-2'>
+            <h3 className="font-semibold mb-2">Connect</h3>
+            
+              <Link to='/workinprogress' className="text-sm text-gray-600 hover:underline">Twitter</Link>
+              <Link to='/workinprogress' className="text-sm text-gray-600 hover:underline">Facebook</Link>
+              <Link to='/workinprogress' className="text-sm text-gray-600 hover:underline">LinkedIn</Link>
+            
           </div>
         </div>
         <div className="mt-8 text-center text-sm text-gray-600">
