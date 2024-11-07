@@ -37,6 +37,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
     color: isDark ? '#CBD5E0' : '#1A202C',
   });
 
+  //calculates the position of the edit card menu
   const updateMenuPosition = () => {
     if (cardRef.current) {
       const rect = cardRef.current.getBoundingClientRect();
@@ -47,6 +48,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
     }
   };
 
+  //calculates the height of the text area when card is being edited
   const adjustTextareaHeight = () => {
     if (inputRef.current) {
       // Reset height to auto to get the correct scrollHeight
@@ -57,7 +59,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
   };
 
 
-
+  //saves the edited card onblur
   const handleSaveAndClose = async (e) => {
       // Check if the blur event is caused by the delete button being clicked
     if (e && e.relatedTarget && e.relatedTarget.id === 'delete-button') {
@@ -75,6 +77,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
     setShowOptions(false);
   };
 
+  //click outside and scroll events to close the card menu
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (cardRef.current && !cardRef.current.contains(event.target)) {
@@ -103,6 +106,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
     };
   }, [showOptions, showDeleteModal]);
 
+  //click event to close the card description modal
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (showDetailModal && detailModalRef.current && !detailModalRef.current.contains(event.target)) {
@@ -123,7 +127,8 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
       updateMenuPosition();
     }
   }, [showOptions]);
-
+  
+  //calls the adjust height function whenever a card is being edited
   useEffect(() => {
     if (editingName) {
       adjustTextareaHeight();
@@ -131,20 +136,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
   }, [editingName, newName]);
 
 
-  // const handleEditClick = (e) => {
-  //   e.stopPropagation();
-  //   setEditingName(true);
-  //   setShowOptions(true);
-
-  //   setTimeout(() => {
-      
-  //       inputRef.current.focus();
-  //       inputRef.current.select();
-     
-  //   }, 0);
-  //   //deleting this fixed modal errors with onblur
-  // };
-
+  //shows the card menu when edit button is clicked
   const handleEditClick = (e) => {
     e.stopPropagation();
     setShowOptions(true); // Toggle options menu
@@ -159,13 +151,15 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
     }
   };
 
+  //shows the delete modal
   const handleDeleteClick = () => {
-  
     setShowDeleteModal(true);
     setShowOptions(false); // Close options menu
     handleSaveAndClose();
   };
 
+
+  //actually deletes the card
   const handleDeleteConfirm = async () => {
     try {
       await onDeleteCard(card._id);
@@ -175,6 +169,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
     }
   };
 
+  //opens up the card description modal when the card is clicked 
   const handleCardClick = (e) => {
     // Don't open modal if clicking edit button or options menu
     if (e.target.closest('.edit-button') || e.target.closest('.options-menu')) {
@@ -183,11 +178,13 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
     setShowDetailModal(true);
   };
 
+  //calculates if the current description has changed
   const handleDescriptionChange = (e) => {
     setDescription(e.target.value);
     setIsDescriptionChanged(true);
   };
 
+  //saves the description only if it has changed
   const handleDescriptionSave = async () => {
     if (!isDescriptionChanged) return;
 
@@ -202,6 +199,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
     }
   };
 
+  //adds a comment to the card
   const handleAddComment = async () => {
     if (!newComment.trim()) return;
     setIsLoading(true);
@@ -230,6 +228,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
     }
   };
 
+  //deletes comment from the card
   const handleDeleteComment = async (commentId) => {
     setIsLoading(true);
     try {

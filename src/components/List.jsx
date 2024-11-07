@@ -22,11 +22,6 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
     color: isDark ? '#fff' : '#000',
   });
   
-  const getModalStyles = (isDark) => ({
-    backgroundColor: isDark ? '#4a5568' : '#fff',
-    color: isDark ? '#CBD5E0' : '#1A202C',
-  });
-  
   
   const listCards = cards.filter(card => card.listId === list._id).sort((a, b) => a.position - b.position);
 

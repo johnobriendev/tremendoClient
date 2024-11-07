@@ -104,21 +104,7 @@ const LandingPage = () => {
               <li>Create, Edit, and Delete Cards</li>
               <li>Drag and Drop Cards between lists</li>
             </ul>
-            {/* <div className="w-full mx-auto">
-              <Slider {...settings}>
-                {['screenshot3.png', 'screenshot1.png', 'screenshot2.png'].map((src, index) => (
-                  <div key={index} className="focus:outline-none">
-                    <img
-                      className="w-full h-auto cursor-pointer"
-                      src={src}
-                      alt={`Screenshot ${index + 1}`}
-                      onClick={() => setEnlargedImage(src)}
-                    />
-                  </div>
-                ))}
-              </Slider>
-            </div> */}
-            {/* Mobile View: Stacked Images */}
+        
             <div className="block md:hidden space-y-4 md:mx-24 xl:mx-72">
               <img
                 className="w-full h-auto rounded shadow-lg"

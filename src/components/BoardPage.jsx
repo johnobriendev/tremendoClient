@@ -74,12 +74,8 @@ function BoardPage() {
     color: isDark ? '#CBD5E0' : '#1A202C',
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
   });
-  const getAddListStyles = (isDark) => ({
-    backgroundColor: isDark ? '#2B2F3A' : '#E5E7EB',
-    color: isDark ? '#CBD5E0' : '#1A202C',
-  });
-  
 
+  
 
   const fetchBoardData = async () => {
     try {
@@ -142,6 +138,8 @@ function BoardPage() {
     }
   }, [isAddingList]);
 
+
+  //create list function
   const handleCreateList = async () => {
     if (newListName.trim() === '') return;
 
@@ -173,7 +171,7 @@ function BoardPage() {
   };
 
 
-  //list input stuff
+  //closes the new list input, drop down menu, or page setting modal when the user clicks outside of them
   const handleClickOutside = (event) => {
     if (newListInputRef.current && !newListInputRef.current.contains(event.target) && !newListButtonRef.current.contains(event.target)) {
       setIsAddingList(false);
@@ -187,6 +185,8 @@ function BoardPage() {
     }
   };
 
+
+  //adds the click event to the document when the drop down menu or page settings modal is opened
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
@@ -194,6 +194,8 @@ function BoardPage() {
     };
   }, [isDropdownOpen, isPageSettingsModalOpen]);
 
+
+  //allows the user to use the enter key to add a new list
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
       handleCreateList();
@@ -201,7 +203,7 @@ function BoardPage() {
   };
 
 
-
+  //updates the database with list name changes when the user changes the list name
   const handleListNameChange = async (listId, newName) => {
     try {
       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -223,6 +225,7 @@ function BoardPage() {
     }
   };
 
+  //deletes a list from the database
   const handleDeleteList = async (listId) => {
     try {
       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -243,7 +246,7 @@ function BoardPage() {
     }
   };
 
-
+  //creates a card in the database
   const handleCreateCard = async (listId) => {
     const cardName = newCardName[listId]?.trim(); // Get the card name and trim spaces
     if (!cardName) return; // Exit if card name is empty
@@ -275,52 +278,55 @@ function BoardPage() {
     }
   };
 
-  // Add the functions here
-const handleUpdateCard = async (cardId, updates) => {
-  try {
-    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-    const response = await fetch(`${apiBaseUrl}/cards/cards/${cardId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-      body: JSON.stringify(updates),
-    });
-    if (!response.ok) {
-      throw new Error(`Error updating card: ${response.statusText}`);
+  // updates a card in the database
+  const handleUpdateCard = async (cardId, updates) => {
+    try {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+      const response = await fetch(`${apiBaseUrl}/cards/cards/${cardId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify(updates),
+      });
+      if (!response.ok) {
+        throw new Error(`Error updating card: ${response.statusText}`);
+      }
+      const updatedCard = await response.json();
+      
+      // Update the card in the local state
+      setCards(cards.map(card => card._id === cardId ? updatedCard : card));
+    } catch (error) {
+      console.error('Error updating card:', error);
+      throw error;
     }
-    const updatedCard = await response.json();
-    
-    // Update the card in the local state
-    setCards(cards.map(card => card._id === cardId ? updatedCard : card));
-  } catch (error) {
-    console.error('Error updating card:', error);
-    throw error;
-  }
-};
+  };
 
-const handleDeleteCard = async (cardId) => {
-  try {
-    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-    const response = await fetch(`${apiBaseUrl}/cards/cards/${cardId}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
-      },
-    });
-    if (!response.ok) {
-      throw new Error(`Error deleting card: ${response.statusText}`);
+  //deletes a card from the database
+  const handleDeleteCard = async (cardId) => {
+    try {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+      const response = await fetch(`${apiBaseUrl}/cards/cards/${cardId}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`Error deleting card: ${response.statusText}`);
+      }
+      // Remove the deleted card from the local state
+      setCards(cards.filter(card => card._id !== cardId));
+    } catch (error) {
+      console.error('Error deleting card:', error);
+      throw error;
     }
-    // Remove the deleted card from the local state
-    setCards(cards.filter(card => card._id !== cardId));
-  } catch (error) {
-    console.error('Error deleting card:', error);
-    throw error;
-  }
-};
+  };
 
+
+  //this function is called when a card is dragged into another position. It needs to be fixed to update the positions of the other affected cards as well
   const handleDragEnd = async (result) => {
     const { destination, source, draggableId, type } = result;
   
@@ -376,8 +382,6 @@ const handleDeleteCard = async (cardId) => {
         }
         return card;
       });
-
-  
 
       // Log the updated cards for debugging
       console.log('Updated cards:', newCards);
