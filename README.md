@@ -1,7 +1,7 @@
 # Tremendo - Frontend
 
 ## Project Description
-Tremendo is a powerful Kanban-style project management application that helps teams stay organized and focused. The frontend of this application is built using React and Tailwind CSS.
+Tremendo is a powerful Kanban-style project management application that helps users stay organized and focused. The frontend of this application is built using React and Tailwind CSS.
 
 ## Installation
 
@@ -10,7 +10,7 @@ To run the Tremendo frontend locally, please follow these steps:
 1. Clone the repository: `git clone `
 2. Navigate to the project directory: `cd tremendoClient`
 3. Install dependencies: `npm install` or `yarn install`
-4. Start the development server: `npm start` or `yarn start`
+4. Start the development server: `npm run dev` or `yarn start`
 5. Open your browser and visit `http://localhost:5173`
 
 ## Usage
