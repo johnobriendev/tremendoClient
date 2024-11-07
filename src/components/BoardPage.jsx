@@ -4,10 +4,6 @@ import { useParams } from 'react-router-dom';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import List from './List'; // Import List component
 
-
-
-
-
 function BoardPage() {
   const { boardId } = useParams();
   const [board, setBoard] = useState(null);
