@@ -75,7 +75,7 @@ const LandingPage = () => {
         <section
           className="h-screen flex flex-col items-center justify-items-start p-6 bg-cover bg-center"
           style={{
-            backgroundImage: "url(/beach.jpg)",
+            backgroundImage: "url(/beach.webp)",
           }}
         >
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 mt-24 text-center">Tremendo</h1>
