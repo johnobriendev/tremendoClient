@@ -266,14 +266,14 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
 
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className={`p-1  rounded mb-2 shadow hover:border hover:border-gray-500 group transition-transform duration-300 ease-in-out  ${snapshot.isDragging ? 'z-[90]' : 'z-20'}`}
+          className={`p-2  rounded mb-2 shadow hover:border hover:border-gray-500 group transition-transform duration-300 ease-in-out  ${snapshot.isDragging ? 'z-[90]' : 'z-20'}`}
           style={{
             ...getCardStyles(theme === 'dark'),
             ...provided.draggableProps.style // This line is crucial
           }}
           //onClick={handleCardClick}
         >
-          <div className=" w-full relative">
+          <div className=" w-full relative text-sm">
             {editingName ? (
                 <textarea
                   ref={inputRef}
