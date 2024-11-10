@@ -65,6 +65,8 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
     };
   }, [showModal, showCardInput]);
 
+  
+
 
   const handleDeleteClick = () => {
     setShowModal(true);
@@ -201,19 +203,22 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
               </div>
             )}
           </Droppable>
-          <div className="mt-4">
+          {/* <div className="mt-4">
                 {showCardInput ? (
                     <div >
                       <input
                         type="text"
                         value={newCardName[list._id] || ''}
                         onChange={(e) => setNewCardName({ ...newCardName, [list._id]: e.target.value })}
+                        
                         onKeyPress={handleAddCardKeyPress}
                         placeholder="New Card Name"
                         className={`p-2 border rounded w-full ${
                           theme === 'dark' ? 'bg-gray-800' : 'bg-white'
                         }`}
                         ref={cardInputRef}
+                        // style={{ overflowY: 'hidden' }}
+
                       />
                       <button
                         onClick={() => handleCreateCard(list._id)}
@@ -231,7 +236,44 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                       Add Card
                     </button>
                   )}
-           </div>
+           </div> */}
+           <div className="mt-4">
+              {showCardInput ? (
+                <div>
+                  <textarea
+                    value={newCardName[list._id] || ''}
+                    onChange={(e) => {
+                      // Handle both the value change and resize
+                      setNewCardName({ ...newCardName, [list._id]: e.target.value });
+                      // Auto-adjust height
+                      e.target.style.height = 'auto';
+                      e.target.style.height = e.target.scrollHeight + 'px';
+                    }}
+                    onKeyPress={handleAddCardKeyPress}
+                    placeholder="New Card Name"
+                    className={`p-2 border rounded w-full resize-none overflow-hidden min-h-[40px] ${
+                      theme === 'dark' ? 'bg-gray-800' : 'bg-white'
+                    }`}
+                    ref={cardInputRef}
+                    rows={1}
+                  />
+                  <button
+                    onClick={() => handleCreateCard(list._id)}
+                    className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 mt-4"
+                    ref={addCardButtonRef}
+                  >
+                    Add Card
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setShowCardInput(true)}
+                  className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+                >
+                  Add Card
+                </button>
+              )}
+            </div>
           {showModal && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
               <div className={`${

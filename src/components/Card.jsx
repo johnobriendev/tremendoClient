@@ -278,6 +278,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
                 <textarea
                   ref={inputRef}
                   value={newName}
+                  
                   onChange={(e) => setNewName(e.target.value)}
                   onBlur={handleSaveAndClose}
                   onKeyDown={(e) => {
