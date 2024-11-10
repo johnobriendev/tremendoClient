@@ -180,7 +180,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
           <Droppable droppableId={list._id} type="CARD">
             {(provided) => (
               <div
-                className={`relative overflow-y-auto p-2 flex-grow mb-4 ${snapshot.isDraggingOver ? 'bg-gray-800' : ''}`}
+                className={`relative overflow-y-auto p-2 flex-grow mb-4 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-transparent hover:scrollbar-thumb-gray-500 ${snapshot.isDraggingOver ? 'bg-gray-800' : ''}`}
                 ref={provided.innerRef}
                 {...provided.droppableProps}
               >
