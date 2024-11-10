@@ -469,11 +469,11 @@ function BoardPage() {
             <Droppable droppableId="all-lists" direction="horizontal">
               {(provided) => (
                 <div
-                  className="flex items-start p-6 space-x-4 "
+                  className="flex items-start px-6 space-x-4 "
                   style={{
                     paddingRight: '1.5rem',
                     minWidth: 'max-content',
-                    minHeight: 'calc(100vh - 100px)' //can be adjusted if more space is needed
+                    minHeight: 'calc(100vh - 80px)' //can be adjusted if more space is needed
                   }}
                   {...provided.droppableProps}
                   ref={provided.innerRef} 

@@ -118,7 +118,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="relative shadow rounded-md p-4 w-[264px] max-h-[calc(100vh-10rem)] flex flex-col ${snapshot.isDragging ? 'z-50' : 'z-10'}"
+          className="relative shadow rounded-md p-2 w-[264px] max-h-[calc(100vh-6rem)] flex flex-col ${snapshot.isDragging ? 'z-50' : 'z-10'}"
           style={getListStyles(theme === 'dark')}
         >
           <div className="flex items-center justify-between gap-2 mb-4 ">
