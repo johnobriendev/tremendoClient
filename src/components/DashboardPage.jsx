@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { backgroundImages } from '../constants/backgroundImages';
+import PageSettingsModal from '../components/PageSettingsModal';
 
 import { 
   getThemeStyles, 
@@ -373,9 +375,21 @@ const DashboardPage = () => {
             </div>
           </>
         )}
+
+        <PageSettingsModal
+          isOpen={isPageSettingsModalOpen}
+          onClose={() => setIsPageSettingsModalOpen(false)}
+          theme={theme}
+          onThemeChange={setTheme}
+          backgroundImages={backgroundImages}
+          currentBackground={backgroundImage}
+          onBackgroundSelect={setBackgroundImage}
+          onRemoveBackground={() => setBackgroundImage(null)}
+          getModalStyles={getModalStyles}
+        />
         
-        {/* Modal for Page Settings */}
-        {isPageSettingsModalOpen && (
+        
+        {/* {isPageSettingsModalOpen && (
               <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                 <div
                   className="p-6 rounded shadow-lg"
@@ -385,7 +399,7 @@ const DashboardPage = () => {
                   <h2 className="text-xl font-bold mb-4">Page Settings</h2>
                   <p className="mb-4">Customize your dashboard:</p>
 
-                  {/* Theme Options */}
+                  
                   <div className="flex flex-col space-y-2 mb-4">
                     <p>Theme:</p>
                     <button
@@ -402,7 +416,7 @@ const DashboardPage = () => {
                     </button>
                   </div>
 
-                  {/* Background Image Options */}
+                  
                   <div className="mb-4">
                     <p>Background Image:</p>
                     <div className="grid grid-cols-3 gap-2 mb-2">
@@ -435,7 +449,7 @@ const DashboardPage = () => {
                   </button>
                 </div>
               </div>
-            )}
+            )} */}
 
         {isCreateModalOpen && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
