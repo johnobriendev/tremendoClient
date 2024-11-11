@@ -4,25 +4,13 @@ import { Draggable, Droppable } from 'react-beautiful-dnd';
 import Card from './Card';
 import { BsThreeDots } from "react-icons/bs";
 
-
-
-
-
 function List({ list, cards, newCardName, editListName, setEditListName, setNewCardName, handleCreateCard, handleDeleteList, handleListNameChange, handleUpdateCard, handleDeleteCard, theme }) {
   
   const [menuOpen, setMenuOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [listColor, setListColor] = useState(list.color || 'bg-gray-800');
   const [showCardInput, setShowCardInput] = useState(false);
-  
 
-
-  const getListStyles = (isDark) => ({
-    backgroundColor: isDark ? '#2B2F3A' : '#c4d5e5', 
-    color: isDark ? '#fff' : '#000',
-  });
-  
-  
   const listCards = cards.filter(card => card.listId === list._id).sort((a, b) => a.position - b.position);
 
 
@@ -30,6 +18,12 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
   const modalRef = useRef(null);
   const cardInputRef = useRef(null);
   const addCardButtonRef = useRef(null);
+  
+  const getListStyles = (isDark) => ({
+    backgroundColor: isDark ? '#2B2F3A' : '#c4d5e5', 
+    color: isDark ? '#fff' : '#000',
+  });
+  
 
   const handleListNameKeyPress = (e) => {
     if (e.key === 'Enter') {

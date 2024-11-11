@@ -23,10 +23,8 @@ const DashboardPage = () => {
   const createBoardRef = useRef(null);
   const editBoardRef = useRef(null);
   const deleteBoardRef = useRef(null);
-
   const createInputRef = useRef(null);
   const editInputRef = useRef(null);
-
   const settingsRef = useRef(null);
   const pageSettingsModalRef = useRef(null);
 

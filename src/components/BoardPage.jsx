@@ -123,7 +123,6 @@ function BoardPage() {
   };
 
 
-
   useEffect(() => {
     fetchBoardData();
   }, [boardId]);
@@ -359,7 +358,6 @@ function BoardPage() {
         movedCard.listId = endListId;
       }
 
-
             // Find the correct insertion index
       const destinationCards = newCards.filter(card => card.listId === endListId);
       const insertIndex = newCards.findIndex(card => card._id === destinationCards[destination.index]?._id);
@@ -416,7 +414,6 @@ function BoardPage() {
     localStorage.removeItem('token');
     navigate('/login');
   };
-  
   
   return (
     <div 
