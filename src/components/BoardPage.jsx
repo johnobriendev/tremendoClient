@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import List from './List'; // Import List component
 
@@ -12,6 +12,7 @@ function BoardPage() {
   const [newListName, setNewListName] = useState('');
   const [newCardName, setNewCardName] = useState('');
   const [editListName, setEditListName] = useState({});
+  const navigate = useNavigate();
 
   //list input stuff
   const [isAddingList, setIsAddingList] = useState(false);
@@ -85,7 +86,8 @@ function BoardPage() {
         },
       });
       if (!boardResponse.ok) {
-        throw new Error(`Error fetching board: ${boardResponse.statusText}`);
+        //throw new Error(`Error fetching board: ${boardResponse.statusText}`);
+        handleLogout(); //go to login page if token has expired
       }
       const boardData = await boardResponse.json();
       setBoard(boardData);
@@ -408,6 +410,11 @@ function BoardPage() {
         fetchBoardData();
       }
     }
+  };
+  
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    navigate('/login');
   };
   
   
