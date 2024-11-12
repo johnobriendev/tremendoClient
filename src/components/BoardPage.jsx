@@ -1,14 +1,18 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import { backgroundImages } from '../constants/backgroundImages';
 import { useParams, useNavigate } from 'react-router-dom';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import List from './List'; // Import List component
+import Navbar from './Navbar';
+import PageSettingsModal from './PageSettingsModal';
 
 function BoardPage() {
   const { boardId } = useParams();
   const [board, setBoard] = useState(null);
   const [lists, setLists] = useState([]);
   const [cards, setCards] = useState([]);
+  const [user, setUser] = useState(null);
   const [newListName, setNewListName] = useState('');
   const [newCardName, setNewCardName] = useState('');
   const [editListName, setEditListName] = useState({});
@@ -34,12 +38,6 @@ function BoardPage() {
   const settingsRef = useRef(null);
   const pageSettingsModalRef = useRef(null);
 
-  const backgroundImages = [
-    { url: "url('/bsas5.webp')" , label: 'street', thumbnail: "url('/bsas5thumb.webp')" },
-    { url: "url('/bsas7.webp')" , label: 'park', thumbnail: "url('/bsas7thumb.webp')" },
-    { url: "url('/bsas1.webp')" , label: 'city', thumbnail: "url('/bsas1thumb.webp')" },
-    { url: "url('/bsas4.webp')" , label: 'train', thumbnail: "url('/bsas4thumb.webp')" },
-  ];
   
   const handleThemeChange = (newTheme) => {
     setTheme(newTheme);
@@ -71,6 +69,31 @@ function BoardPage() {
     color: isDark ? '#CBD5E0' : '#1A202C',
     boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
   });
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        if (response.status === 401) {
+          handleLogout(); // Token expired or invalid
+        } else {  
+          const data = await response.json();
+          if (response.ok) {
+            setUser(data);
+          } else {
+            setError(data.message);
+          }
+        }
+      } catch (err) {
+        setError('Failed to fetch user data');
+      }
+    };
+    fetchUserData();
+  }, []);
 
   
 
@@ -121,7 +144,6 @@ function BoardPage() {
       console.error('Error fetching board data:', error);
     }
   };
-
 
   useEffect(() => {
     fetchBoardData();
@@ -424,49 +446,22 @@ function BoardPage() {
         ...(backgroundImage ? { backgroundImage } : getThemeStyles(theme === 'dark')),
       }}
     >
-       <nav 
-        className="p-2 fixed top-0 left-0 right-0 z-10"
-        style={getNavBarStyles(theme === 'dark')}
-      >
-        <div className="container mx-auto flex justify-between items-center">
-          <Link to='/dashboard' className='text-2xl font-semibold'>Tremendo</Link>
-          <h1 className="text-2xl">{board?.name}</h1>
-          <div className="flex items-center space-x-4">
-            <div 
-              className="relative inline-block text-left"
-              ref={settingsRef}
-            >
-              <button
-                className={`px-4 py-2 text-sm rounded ${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-gray-300 text-black'}`}
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              >
-                Settings
-              </button>
-              {isDropdownOpen && (
-                <div 
-                  className={`absolute right-0 mt-2 w-48 rounded-md shadow-lg ${
-                    theme === 'dark' ? 'bg-[#2B2F3A]' : 'bg-[#dadde2]'
-                  }`}
-                >
-                  <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                    <button
-                      className={`block w-full text-left px-4 py-2 text-sm ${
-                        theme === 'dark' ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-100'
-                      }`}
-                      onClick={() => {
-                        setIsDropdownOpen(false);
-                        setIsPageSettingsModalOpen(true);
-                      }}
-                    >
-                      Page Settings
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </nav>
+      <Navbar 
+        user={user}
+        onPageSettings={() => {
+          setIsPageSettingsModalOpen(true);
+          setIsDropdownOpen(false);
+        }}
+        onLogout={handleLogout}
+        theme={theme}
+        isDropdownOpen={isDropdownOpen}
+        setIsDropdownOpen={setIsDropdownOpen}
+        getNavBarStyles={getNavBarStyles}
+        settingsRef={settingsRef}
+        boardName={board?.name}
+        showCreateBoard={false}
+      />
+       
       <div className='pt-16 overflow-x-auto'>
         <DragDropContext onDragEnd={handleDragEnd}>
           <div className='flex-grow  w-full'>
@@ -551,82 +546,24 @@ function BoardPage() {
                 </div>
               )}
             </Droppable>
-
           </div>
-          
         </DragDropContext>
-
       </div>
-      
-      {isPageSettingsModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div
-            className="p-6 rounded shadow-lg"
-            style={getModalStyles(theme === 'dark')}
-            ref={pageSettingsModalRef}
-          >
-            <h2 className="text-xl font-bold mb-4">Page Settings</h2>
-            <p className="mb-4">Customize your board:</p>
-
-            {/* Theme Options */}
-            <div className="flex flex-col space-y-2 mb-4">
-              <p>Theme:</p>
-              <button
-                className={`px-4 py-2 rounded ${theme === 'light' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'}`}
-                onClick={() => handleThemeChange('light')}
-              >
-                Light Mode
-              </button>
-              <button
-                className={`px-4 py-2 rounded ${theme === 'dark' ? 'bg-blue-500 text-white' : 'bg-gray-600 text-white'}`}
-                onClick={() => handleThemeChange('dark')}
-              >
-                Dark Mode
-              </button>
-            </div>
-
-            {/* Background Image Options */}
-            <div className="mb-4">
-              <p>Background Image:</p>
-              <div className="grid grid-cols-3 gap-2 mb-2">
-                {backgroundImages.map((image) => (
-                  <button
-                    key={image.url}
-                    className={`border-2 rounded ${backgroundImage === image.url ? 'border-blue-500' : 'border-transparent'}`}
-                    onClick={() => handleBackgroundImageSelect(image.url)}
-                  >
-                    
-                    <div className="w-20 h-20 bg-cover bg-center" style={{backgroundImage: image.thumbnail}}></div>
-                    <p className="text-center mt-1">{image.label}</p>
-                  </button>
-                ))}
-              </div>
-              <button
-                className={`w-full mt-2 px-4 py-2 rounded ${
-                  backgroundImage === null ? 'bg-blue-500 text-white' : (theme === 'dark' ? 'bg-green-500 text-white' : 'bg-green-500 text-white')
-                }`}
-                onClick={handleRemoveBackgroundImage}
-              >
-                No Background Image
-              </button>
-            </div>
-            <button
-              className="bg-red-500 text-white px-4 py-2 rounded"
-              onClick={() => setIsPageSettingsModalOpen(false)}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
+      <PageSettingsModal
+          isOpen={isPageSettingsModalOpen}
+          onClose={() => setIsPageSettingsModalOpen(false)}
+          theme={theme}
+          onThemeChange={setTheme}
+          backgroundImages={backgroundImages}
+          currentBackground={backgroundImage}
+          onBackgroundSelect={setBackgroundImage}
+          onRemoveBackground={() => setBackgroundImage(null)}
+          getModalStyles={getModalStyles}
+        />
       
     </div>
-      
-    
   );
- 
 }
-
 export default BoardPage;
 
 

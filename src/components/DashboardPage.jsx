@@ -35,7 +35,6 @@ const DashboardPage = () => {
   
   const settingsRef = useRef(null);
 
-
   //get data from the DB
   useEffect(() => {
     const fetchUserData = async () => {
