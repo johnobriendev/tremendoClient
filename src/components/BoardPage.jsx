@@ -9,7 +9,7 @@ import PageSettingsModal from './PageSettingsModal';
 import { useTheme } from '../hooks/useTheme';
 import { useBackground } from '../hooks/useBackground';
 import { getThemeStyles, getModalStyles, getNavBarStyles } from '../utils/boardStyles';
-
+import * as api from '../utils/api';
 
 function BoardPage() {
   const [theme, setTheme] = useTheme();
@@ -39,75 +39,32 @@ function BoardPage() {
   const settingsRef = useRef(null);
   const pageSettingsModalRef = useRef(null);
 
+
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-        if (response.status === 401) {
-          handleLogout(); // Token expired or invalid
-        } else {  
-          const data = await response.json();
-          if (response.ok) {
-            setUser(data);
-          } else {
-            setError(data.message);
-          }
-        }
+        const token = localStorage.getItem('token');
+        const userData = await api.fetchUserData(token);
+        setUser(userData);
       } catch (err) {
-        setError('Failed to fetch user data');
+        if (err.message === 'Failed to fetch user data') {
+          handleLogout();
+        } else {
+          setError(err.message);
+        }
       }
     };
-    fetchUserData();
+    fetchData();
   }, []);
-
-  
 
   const fetchBoardData = async () => {
     try {
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-
-      // Fetch board data
-      const boardResponse = await fetch(`${apiBaseUrl}/boards/${boardId}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      if (!boardResponse.ok) {
-        //throw new Error(`Error fetching board: ${boardResponse.statusText}`);
-        handleLogout(); //go to login page if token has expired
-      }
-      const boardData = await boardResponse.json();
+      const token = localStorage.getItem('token');
+      const boardData = await api.fetchBoardData(token, boardId);
       setBoard(boardData);
-
-      // Fetch lists data
-      const listsResponse = await fetch(`${apiBaseUrl}/lists/${boardId}`, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      if (!listsResponse.ok) {
-        throw new Error(`Error fetching lists: ${listsResponse.statusText}`);
-      }
-      const listsData = await listsResponse.json();
+      const listsData = await api.fetchLists(token, boardId);
       setLists(listsData);
-
-      // Fetch cards data
-      const cardsResponse = await fetch(`${apiBaseUrl}/cards/${boardId}/cards`, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      if (!cardsResponse.ok) {
-        throw new Error(`Error fetching cards: ${cardsResponse.statusText}`);
-      }
-      const cardsData = await cardsResponse.json();
+      const cardsData = await api.fetchCards(token, boardId);
       setCards(cardsData);
     } catch (error) {
       console.error('Error fetching board data:', error);
@@ -118,58 +75,11 @@ function BoardPage() {
     fetchBoardData();
   }, [boardId]);
 
-
-  //list input stuff, focus input when add list is clicked
-  useEffect(() => {
-    if (isAddingList && newListInputRef.current) {
-      newListInputRef.current.focus();
-    }
-  }, [isAddingList]);
-
-
-  //create list function
-  const handleCreateList = async () => {
-    if (newListName.trim() === '') return;
-
-    try {
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-      const response = await fetch(`${apiBaseUrl}/lists/${boardId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({
-          name: newListName,
-          position: lists.length + 1, // Set position to the end
-        }),
-      });
-      if (!response.ok) {
-        throw new Error(`Error creating list: ${response.statusText}`);
-      }
-      const newList = await response.json();
-      setLists([...lists, newList]);
-      setNewListName('');
-      //list input stuff
-      setIsAddingList(false);
-
-    } catch (error) {
-      console.error('Error creating list:', error);
-    }
-  };
-
-
-  //closes the new list input, drop down menu, or page setting modal when the user clicks outside of them
-  const handleClickOutside = (event) => {
+   //closes the new list input, drop down menu, or page setting modal when the user clicks outside of them
+   const handleClickOutside = (event) => {
     if (newListInputRef.current && !newListInputRef.current.contains(event.target) && !newListButtonRef.current.contains(event.target)) {
       setIsAddingList(false);
       setNewListName('');
-    }
-    if (isDropdownOpen && settingsRef.current && !settingsRef.current.contains(event.target)) {
-      setIsDropdownOpen(false);
-    }
-    if (isPageSettingsModalOpen && pageSettingsModalRef.current && !pageSettingsModalRef.current.contains(event.target)) {
-      setIsPageSettingsModalOpen(false);
     }
   };
 
@@ -190,43 +100,37 @@ function BoardPage() {
     }
   };
 
+  const handleCreateList = async () => {
+    if (newListName.trim() === '') return;
 
-  //updates the database with list name changes when the user changes the list name
+    try {
+      const token = localStorage.getItem('token');
+      const newList = await api.createList(token, boardId, {
+        name: newListName,
+        position: lists.length + 1,
+      });
+      setLists([...lists, newList]);
+      setNewListName('');
+      setIsAddingList(false);
+    } catch (error) {
+      console.error('Error creating list:', error);
+    }
+  };
+
   const handleListNameChange = async (listId, newName) => {
     try {
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-      const response = await fetch(`${apiBaseUrl}/lists/${listId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({ name: newName }),
-      });
-      if (!response.ok) {
-        throw new Error(`Error updating list: ${response.statusText}`);
-      }
-      const updatedList = await response.json();
+      const token = localStorage.getItem('token');
+      const updatedList = await api.updateList(token, listId, { name: newName });
       setLists(lists.map(list => list._id === listId ? updatedList : list));
     } catch (error) {
       console.error('Error updating list:', error);
     }
   };
 
-  //deletes a list from the database
   const handleDeleteList = async (listId) => {
     try {
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-      const response = await fetch(`${apiBaseUrl}/lists/${listId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`Error deleting list: ${response.statusText}`);
-      }
+      const token = localStorage.getItem('token');
+      await api.deleteList(token, listId);
       setLists(lists.filter(list => list._id !== listId));
       setCards(cards.filter(card => card.listId !== listId));
     } catch (error) {
@@ -234,56 +138,28 @@ function BoardPage() {
     }
   };
 
-  //creates a card in the database
   const handleCreateCard = async (listId) => {
-    const cardName = newCardName[listId]?.trim(); // Get the card name and trim spaces
-    if (!cardName) return; // Exit if card name is empty
+    const cardName = newCardName[listId]?.trim();
+    if (!cardName) return;
   
     try {
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-      const response = await fetch(`${apiBaseUrl}/cards/${boardId}/cards`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({
-          listId,
-          name: cardName,
-          position: cards.filter(card => card.listId === listId).length + 1, // Position at the end of the list
-        }),
+      const token = localStorage.getItem('token');
+      const newCard = await api.createCard(token, boardId, {
+        listId,
+        name: cardName,
+        position: cards.filter(card => card.listId === listId).length + 1,
       });
-  
-      if (!response.ok) {
-        throw new Error(`Error creating card: ${response.statusText}`);
-      }
-  
-      const newCard = await response.json();
-      setCards([...cards, newCard]); // Add the new card to the state
-      setNewCardName({ ...newCardName, [listId]: '' }); // Clear the input field for the current list
+      setCards([...cards, newCard]);
+      setNewCardName({ ...newCardName, [listId]: '' });
     } catch (error) {
       console.error('Error creating card:', error);
     }
   };
 
-  // updates a card in the database
   const handleUpdateCard = async (cardId, updates) => {
     try {
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-      const response = await fetch(`${apiBaseUrl}/cards/cards/${cardId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify(updates),
-      });
-      if (!response.ok) {
-        throw new Error(`Error updating card: ${response.statusText}`);
-      }
-      const updatedCard = await response.json();
-      
-      // Update the card in the local state
+      const token = localStorage.getItem('token');
+      const updatedCard = await api.updateCard(token, cardId, updates);
       setCards(cards.map(card => card._id === cardId ? updatedCard : card));
     } catch (error) {
       console.error('Error updating card:', error);
@@ -291,28 +167,16 @@ function BoardPage() {
     }
   };
 
-  //deletes a card from the database
   const handleDeleteCard = async (cardId) => {
     try {
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-      const response = await fetch(`${apiBaseUrl}/cards/cards/${cardId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`Error deleting card: ${response.statusText}`);
-      }
-      // Remove the deleted card from the local state
+      const token = localStorage.getItem('token');
+      await api.deleteCard(token, cardId);
       setCards(cards.filter(card => card._id !== cardId));
     } catch (error) {
       console.error('Error deleting card:', error);
       throw error;
     }
   };
-
 
   //this function is called when a card is dragged into another position. It needs to be fixed to update the positions of the other affected cards as well
   const handleDragEnd = async (result) => {
