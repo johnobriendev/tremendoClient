@@ -6,8 +6,15 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import List from './List'; // Import List component
 import Navbar from './Navbar';
 import PageSettingsModal from './PageSettingsModal';
+import { useTheme } from '../hooks/useTheme';
+import { useBackground } from '../hooks/useBackground';
+import { getThemeStyles, getModalStyles, getNavBarStyles } from '../utils/boardStyles';
+
 
 function BoardPage() {
+  const [theme, setTheme] = useTheme();
+  const [backgroundImage, setBackgroundImage] = useBackground();
+
   const { boardId } = useParams();
   const [board, setBoard] = useState(null);
   const [lists, setLists] = useState([]);
@@ -26,49 +33,11 @@ function BoardPage() {
   // New state variables for page settings
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isPageSettingsModalOpen, setIsPageSettingsModalOpen] = useState(false);
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('theme') || 'light';
-  });
-  const [backgroundImage, setBackgroundImage] = useState(() => {
-    const savedBackground = localStorage.getItem('backgroundImage');
-    return savedBackground === 'null' ? null : (savedBackground || "url('/bsas1.webp')");
-  });
+
 
   // New refs for handling click outside
   const settingsRef = useRef(null);
   const pageSettingsModalRef = useRef(null);
-
-  
-  const handleThemeChange = (newTheme) => {
-    setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-  };
-  
-  const handleBackgroundImageSelect = (url) => {
-    setBackgroundImage(url);
-    localStorage.setItem('backgroundImage', url);
-  };
-  
-  const handleRemoveBackgroundImage = () => {
-    setBackgroundImage(null);
-    localStorage.setItem('backgroundImage', null);
-  };
-  
-  const getThemeStyles = (isDark) => ({
-    backgroundColor: isDark ? '#1F2937' : '#dae8f1' , //'#181d28' '#b1cee2'
-    color: isDark ? '#CBD5E0' : '#1A202C', //#fff #000
-  });
-  
-  const getModalStyles = (isDark) => ({
-    backgroundColor: isDark ? '#4a5568' : '#dadde2',
-    color: isDark ? '#CBD5E0' : '#1A202C', //#fff #000
-  });
-  
-  const getNavBarStyles = (isDark) => ({
-    backgroundColor: isDark ? '#1a202c' : '#E2E8F0', //#e4eef5
-    color: isDark ? '#CBD5E0' : '#1A202C',
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-  });
 
   useEffect(() => {
     const fetchUserData = async () => {

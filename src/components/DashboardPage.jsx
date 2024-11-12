@@ -8,8 +8,8 @@ import EditBoardModal from './EditBoardModal';
 import DeleteBoardModal from './DeleteBoardModal'
 import { useTheme } from '../hooks/useTheme';
 import { useBackground } from '../hooks/useBackground';
-
 import { getThemeStyles, getModalStyles, getBoardStyles, getButtonStyles, getNavBarStyles } from '../utils/styles';
+import * as api from '../utils/api';
 
 const DashboardPage = () => {
   const navigate = useNavigate();
@@ -35,114 +35,56 @@ const DashboardPage = () => {
   
   const settingsRef = useRef(null);
 
-  //get data from the DB
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-        if (response.status === 401) {
-          handleLogout(); // Token expired or invalid
-        } else {  
-          const data = await response.json();
-          if (response.ok) {
-            setUser(data);
-          } else {
-            setError(data.message);
-          }
-        }
+        const token = localStorage.getItem('token');
+        const userData = await api.fetchUserData(token);
+        setUser(userData);
+        const boardsData = await api.fetchBoards(token);
+        setBoards(boardsData);
       } catch (err) {
-        setError('Failed to fetch user data');
-      }
-    };
-
-    const fetchBoardsData = async () => {
-      try {
-        const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/boards`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        });
-        if (response.status === 401) {
-          handleLogout(); // Token expired or invalid
+        if (err.message === 'Failed to fetch user data') {
+          handleLogout();
         } else {
-          const data = await response.json();
-          if (response.ok) {
-            setBoards(data);
-          } else {
-            setError(data.message);
-          }
+          setError(err.message);
         }
-      } catch (err) {
-        setError('Failed to fetch boards');
       }
     };
 
-    fetchUserData();
-    fetchBoardsData();
+    fetchData();
   }, []);
-
-  //board CRUD
 
   const handleCreateBoard = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/boards`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({
-          name: newBoardName,
-          description: '',
-          isPrivate: true,
-          backgroundColor: newBoardColor,
-          template: selectedTemplate,
-        }),
+      const token = localStorage.getItem('token');
+      const newBoard = await api.createBoard(token, {
+        name: newBoardName,
+        description: '',
+        isPrivate: true,
+        backgroundColor: newBoardColor,
+        template: selectedTemplate,
       });
-      if (response.ok) {
-        const newBoard = await response.json();
-        setBoards([...boards, newBoard]);
-        setIsCreateModalOpen(false);
-        setNewBoardName('');
-        setNewBoardColor('#ffffff');
-        setSelectedTemplate('kanban');
-      } else {
-        const data = await response.json();
-        setError(data.message);
-      }
+      setBoards([...boards, newBoard]);
+      setIsCreateModalOpen(false);
+      setNewBoardName('');
+      setNewBoardColor('#ffffff');
+      setSelectedTemplate('kanban');
     } catch (err) {
-      setError('Failed to create a new board');
+      setError(err.message);
     }
   };
 
   const handleEditBoard = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/boards/${editBoardId}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({
-          name: editBoardName,
-        }),
-      });
-      if (response.ok) {
-        const updatedBoard = await response.json();
-        setBoards(boards.map(board => (board._id === editBoardId ? updatedBoard : board)));
-        setIsEditModalOpen(false);
-        setEditBoardName('');
-        setEditBoardId('');
-      } else {
-        const data = await response.json();
-        setError(data.message);
-      }
+      const token = localStorage.getItem('token');
+      const updatedBoard = await api.updateBoard(token, editBoardId, { name: editBoardName });
+      setBoards(boards.map(board => (board._id === editBoardId ? updatedBoard : board)));
+      setIsEditModalOpen(false);
+      setEditBoardName('');
+      setEditBoardId('');
     } catch (err) {
-      setError('Failed to edit the board');
+      setError(err.message);
     }
   };
 
@@ -153,22 +95,13 @@ const DashboardPage = () => {
 
   const handleConfirmDeleteBoard = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/boards/${deleteBoardId}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-      if (response.ok) {
-        setBoards(boards.filter(board => board._id !== deleteBoardId));
-        setIsDeleteModalOpen(false);
-        setDeleteBoardId('');
-      } else {
-        const data = await response.json();
-        setError(data.message);
-      }
+      const token = localStorage.getItem('token');
+      await api.deleteBoard(token, deleteBoardId);
+      setBoards(boards.filter(board => board._id !== deleteBoardId));
+      setIsDeleteModalOpen(false);
+      setDeleteBoardId('');
     } catch (err) {
-      setError('Failed to delete the board');
+      setError(err.message);
     }
   };
 
@@ -176,9 +109,7 @@ const DashboardPage = () => {
     localStorage.removeItem('token');
     navigate('/login');
   };
-  ///////////////////////////////////////
-  ///BEGIN JSX////////////////////////////
-  ////////////////////////////////////////
+
   return (
     <div className="min-h-screen flex flex-col">
        <Navbar 
@@ -267,7 +198,6 @@ const DashboardPage = () => {
           handleCreateBoard={handleCreateBoard}
           getModalStyles={getModalStyles}
         />
-
         <EditBoardModal
           isOpen={isEditModalOpen}
           onClose={() => setIsEditModalOpen(false)}
@@ -277,7 +207,6 @@ const DashboardPage = () => {
           handleEditBoard={handleEditBoard}
           getModalStyles={getModalStyles}
         />
-
         <DeleteBoardModal
           isOpen={isDeleteModalOpen}
           onClose={() => setIsDeleteModalOpen(false)}
