@@ -1,17 +1,21 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Navbar from '../components/Navbar';
 import { backgroundImages } from '../constants/backgroundImages';
 import PageSettingsModal from '../components/PageSettingsModal';
+import CreateBoardModal from './CreateBoardModal';
+import EditBoardModal from './EditBoardModal';
+import DeleteBoardModal from './DeleteBoardModal'
+import { useTheme } from '../hooks/useTheme';
+import { useBackground } from '../hooks/useBackground';
 
-import { 
-  getThemeStyles, 
-  getModalStyles, 
-  getBoardStyles, 
-  getButtonStyles,
-  getNavBarStyles 
-} from '../utils/styles';
+import { getThemeStyles, getModalStyles, getBoardStyles, getButtonStyles, getNavBarStyles } from '../utils/styles';
 
 const DashboardPage = () => {
+  const navigate = useNavigate();
+  const [theme, setTheme] = useTheme();
+  const [backgroundImage, setBackgroundImage] = useBackground();
+  
   const [user, setUser] = useState(null);
   const [boards, setBoards] = useState([]);
   const [error, setError] = useState('');
@@ -20,110 +24,16 @@ const DashboardPage = () => {
   
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
   const [newBoardName, setNewBoardName] = useState('');
   const [selectedTemplate, setSelectedTemplate] = useState('kanban');
   const [editBoardName, setEditBoardName] = useState('');
   const [editBoardId, setEditBoardId] = useState('');
   const [newBoardColor, setNewBoardColor] = useState('#ffffff');
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [deleteBoardId, setDeleteBoardId] = useState('');
-  const navigate = useNavigate();
-
-
-  const createBoardRef = useRef(null);
-  const editBoardRef = useRef(null);
-  const deleteBoardRef = useRef(null);
-  const createInputRef = useRef(null);
-  const editInputRef = useRef(null);
+  
   const settingsRef = useRef(null);
-  const pageSettingsModalRef = useRef(null);
-
-  const [backgroundImage, setBackgroundImage] = useState(() => {
-    const savedBackground = localStorage.getItem('backgroundImage');
-    return savedBackground === 'null' ? null : (savedBackground || "url('/bsas5.webp')");
-  });
-  const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('theme') || 'light';
-  });
-
-
-  // List of background image URLs to choose from
-  const backgroundImages = [
-    { url: "url('/bsas5.webp')" , label: 'street' , thumbnail: "url('/bsas5thumb.webp')" },
-    { url: "url('/bsas7.webp')" , label: 'park' , thumbnail: "url('/bsas7thumb.webp')" },
-    { url: "url('/bsas1.webp')" , label: 'city', thumbnail: "url('/bsas1thumb.webp')" },
-    { url: "url('/bsas4.webp')" , label: 'train' , thumbnail: "url('/bsas4thumb.webp')" },
-   
-  ];
-
-  useEffect(() => {
-    localStorage.setItem('backgroundImage', backgroundImage);
-  }, [backgroundImage]);
-
-  useEffect(() => {
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  const handlePageSettings = () => {
-    setIsDropdownOpen(false);
-    setIsPageSettingsModalOpen(true);
-  };
-
-  const handleThemeChange = (newTheme) => {
-    setTheme(newTheme);
-  };
-
-  const handleBackgroundImageSelect = (url) => {
-    setBackgroundImage(url);
-  };
-
-  const handleRemoveBackgroundImage = () => {
-    setBackgroundImage(null);
-  };
-
-
-  const handleClickOutside = (event) => {
-    if (isCreateModalOpen && createBoardRef.current && !createBoardRef.current.contains(event.target)) {
-      setIsCreateModalOpen(false);
-    }
-    if (isEditModalOpen && editBoardRef.current && !editBoardRef.current.contains(event.target)) {
-      setIsEditModalOpen(false);
-    }
-    if (isDeleteModalOpen && deleteBoardRef.current && !deleteBoardRef.current.contains(event.target)) {
-      setIsDeleteModalOpen(false);
-    }
-    if (isDropdownOpen && settingsRef.current && !settingsRef.current.contains(event.target)) {
-      setIsDropdownOpen(false);
-    }
-    if (isPageSettingsModalOpen && pageSettingsModalRef.current && !pageSettingsModalRef.current.contains(event.target)) {
-      setIsPageSettingsModalOpen(false);
-    }
-  };
-
-  useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [isCreateModalOpen, isEditModalOpen, isDeleteModalOpen, isDropdownOpen, isPageSettingsModalOpen]);
-
-
-  // Automatically focus on the Create Board input when modal opens
-  useEffect(() => {
-    if (isCreateModalOpen) {
-      createInputRef.current.focus();
-    }
-  }, [isCreateModalOpen]);
-
-  // Automatically focus on the Edit Board input when modal opens
-  useEffect(() => {
-    if (isEditModalOpen) {
-      editInputRef.current.focus();
-    }
-  }, [isEditModalOpen]);
-
-
-
 
 
   //get data from the DB
@@ -272,61 +182,21 @@ const DashboardPage = () => {
   ////////////////////////////////////////
   return (
     <div className="min-h-screen flex flex-col">
-      <nav 
-        className="p-2 fixed top-0 left-0 right-0 z-10"
-        style={getNavBarStyles(theme === 'dark')}
-      >
-        <div className="container mx-auto flex justify-between items-center ">
-          {user && (
-            <h1 className="text-2xl ">Welcome, {user.name}!</h1>
-          )}
-          <div className="flex items-center space-x-4">
-            <button
-              className={`px-4 py-2 text-sm rounded ${theme === 'dark' ? 'bg-blue-600 text-white' : 'bg-blue-500 text-white'}`}
-              onClick={() => setIsCreateModalOpen(true)}
-            >
-              Create New Board
-            </button>
-            <div 
-              className="relative inline-block text-left"
-              ref={settingsRef}
-            >
-              <button
-                className={`px-4 py-2 text-sm rounded ${theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-gray-300 text-black'}`}
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              >
-                Settings
-              </button>
-              {isDropdownOpen && (
-                <div 
-                  className={`absolute right-0 mt-2 w-48 rounded-md shadow-lg ${
-                    theme === 'dark' ? 'bg-gray-800' : 'bg-white'
-                  }`}
-                >
-                  <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
-                    <button
-                      className={`block w-full text-left px-4 py-2 text-sm ${
-                        theme === 'dark' ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-100'
-                      }`}
-                      onClick={handlePageSettings}
-                    >
-                      Page Settings
-                    </button>
-                    <button
-                      className={`block w-full text-left px-4 py-2 text-sm ${
-                        theme === 'dark' ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-100'
-                      }`}
-                      onClick={handleLogout}
-                    >
-                      Log Out
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </nav>
+       <Navbar 
+        user={user}
+        onCreateBoard={() => setIsCreateModalOpen(true)}
+        onPageSettings={() => {
+          setIsPageSettingsModalOpen(true);
+          setIsDropdownOpen(false);
+        }}
+        onLogout={handleLogout}
+        theme={theme}
+        isDropdownOpen={isDropdownOpen}
+        setIsDropdownOpen={setIsDropdownOpen}
+        getNavBarStyles={getNavBarStyles}
+        settingsRef={settingsRef}
+      />
+   
       <div 
         className={`flex-grow pt-20 ${
           backgroundImage ? "bg-cover bg-center bg-no-repeat bg-fixed" : ""
@@ -387,190 +257,37 @@ const DashboardPage = () => {
           onRemoveBackground={() => setBackgroundImage(null)}
           getModalStyles={getModalStyles}
         />
-        
-        
-        {/* {isPageSettingsModalOpen && (
-              <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                <div
-                  className="p-6 rounded shadow-lg"
-                  style={getModalStyles(theme === 'dark')}
-                  ref={pageSettingsModalRef}
-                >
-                  <h2 className="text-xl font-bold mb-4">Page Settings</h2>
-                  <p className="mb-4">Customize your dashboard:</p>
+        <CreateBoardModal
+          isOpen={isCreateModalOpen}
+          onClose={() => setIsCreateModalOpen(false)}
+          theme={theme}
+          newBoardName={newBoardName}
+          setNewBoardName={setNewBoardName}
+          selectedTemplate={selectedTemplate}
+          setSelectedTemplate={setSelectedTemplate}
+          handleCreateBoard={handleCreateBoard}
+          getModalStyles={getModalStyles}
+        />
 
-                  
-                  <div className="flex flex-col space-y-2 mb-4">
-                    <p>Theme:</p>
-                    <button
-                      className={`px-4 py-2 rounded ${theme === 'light' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'}`}
-                      onClick={() => handleThemeChange('light')}
-                    >
-                      Light Mode
-                    </button>
-                    <button
-                      className={`px-4 py-2 rounded ${theme === 'dark' ? 'bg-blue-500 text-white' : 'bg-gray-600 text-white'}`}
-                      onClick={() => handleThemeChange('dark')}
-                    >
-                      Dark Mode
-                    </button>
-                  </div>
+        <EditBoardModal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          theme={theme}
+          editBoardName={editBoardName}
+          setEditBoardName={setEditBoardName}
+          handleEditBoard={handleEditBoard}
+          getModalStyles={getModalStyles}
+        />
 
-                  
-                  <div className="mb-4">
-                    <p>Background Image:</p>
-                    <div className="grid grid-cols-3 gap-2 mb-2">
-                      {backgroundImages.map((image) => (
-                        <button
-                          key={image.url}
-                          className={`border-2 rounded ${backgroundImage === image.url ? 'border-blue-500' : 'border-transparent'}`}
-                          onClick={() => handleBackgroundImageSelect(image.url)}
-                        >
-                          <div className="w-20 h-20 bg-cover bg-center" style={{backgroundImage: image.thumbnail}}></div> 
-                          
-                          <p className="text-center mt-1">{image.label}</p>
-                        </button>
-                      ))}
-                    </div>
-                    <button
-                      className={`w-full mt-2 px-4 py-2 rounded ${
-                        backgroundImage === null ? 'bg-blue-500 text-white' : (theme === 'dark' ? 'bg-gray-600 text-white' : 'bg-gray-200 text-black')
-                      }`}
-                      onClick={handleRemoveBackgroundImage}
-                    >
-                      No Background Image
-                    </button>
-                  </div>
-                  <button
-                    className="bg-red-500 text-white px-4 py-2 rounded"
-                    onClick={() => setIsPageSettingsModalOpen(false)}
-                  >
-                    Close
-                  </button>
-                </div>
-              </div>
-            )} */}
-
-        {isCreateModalOpen && (
-                <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                  <div className="p-6 rounded shadow" ref={createBoardRef} style={getModalStyles(theme === 'dark')}>
-                    <h2 className="text-xl font-bold mb-4">Create New Board</h2>
-                    <div className="mb-4">
-                      <label className="block mb-2">Board Name</label>
-                      <input
-                        ref={createInputRef}
-                        type="text"
-                        className={`border p-2 w-full rounded ${
-                          theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-black'
-                        }`}
-                        value={newBoardName}
-                        onChange={(e) => setNewBoardName(e.target.value)}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            handleCreateBoard();
-                          }
-                        }}
-                      />
-                    </div>
-                    <div className="mb-4">
-                      <label className="block mb-2">Board Template</label>
-                      <select
-                        className={`border p-2 w-full rounded ${
-                          theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-black'
-                        }`}
-                        value={selectedTemplate}
-                        onChange={(e) => setSelectedTemplate(e.target.value)}
-                      >
-                        <option value="blank">Blank Board</option>
-                        <option value="kanban">Kanban</option>
-                        <option value="weekly">Weekly Planner</option>
-                        
-                      </select>
-                    </div>
-                    <button
-                      className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-                      onClick={handleCreateBoard}
-                    >
-                      Create
-                    </button>
-                    <button
-                      className={`px-4 py-2 rounded ${
-                        theme === 'dark' ? 'bg-gray-600 text-white' : 'bg-white text-black'
-                      }`}
-                      onClick={() => setIsCreateModalOpen(false)}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              )}
-          {isEditModalOpen && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="p-6 rounded shadow" ref={editBoardRef} style={getModalStyles(theme === 'dark')}>
-              <h2 className="text-xl font-bold mb-4">Edit Board</h2>
-              <div className="mb-4">
-                <label className="block mb-2">New Board Name</label>
-                <input
-                  ref={editInputRef}
-                  type="text"
-                  className={`border p-2 w-full rounded ${
-                    theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-black'
-                  }`}
-                  value={editBoardName}
-                  onChange={(e) => setEditBoardName(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      handleEditBoard();
-                    }
-                  }}
-                />
-              </div>
-              <button
-                className="bg-green-500 text-white px-4 py-2 rounded mr-2"
-                onClick={handleEditBoard}
-              >
-                Save Changes
-              </button>
-              <button
-                className={`px-4 py-2 rounded ${
-                  theme === 'dark' ? 'bg-gray-600 text-white' : 'bg-gray-200 text-black'
-                }`}
-                onClick={() => setIsEditModalOpen(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        )}
-
-        {isDeleteModalOpen && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="p-6 rounded shadow" ref={deleteBoardRef} style={getModalStyles(theme === 'dark')}>
-              <h2 className="text-xl font-bold mb-4">Are you sure?</h2>
-              <p className="mb-4">Do you really want to delete this board?</p>
-              <button
-                className="bg-red-500 text-white px-4 py-2 rounded mr-2"
-                onClick={handleConfirmDeleteBoard}
-              >
-                Yes, Delete
-              </button>
-              <button
-                className={`px-4 py-2 rounded ${
-                  theme === 'dark' ? 'bg-gray-600 text-white' : 'bg-gray-200 text-black'
-                }`}
-                onClick={() => setIsDeleteModalOpen(false)}
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        )}
-
+        <DeleteBoardModal
+          isOpen={isDeleteModalOpen}
+          onClose={() => setIsDeleteModalOpen(false)}
+          theme={theme}
+          handleConfirmDelete={handleConfirmDeleteBoard}
+          getModalStyles={getModalStyles}
+        />
       </div>
-
-
     </div>
-    
   );
 };
 
