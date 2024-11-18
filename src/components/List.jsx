@@ -13,7 +13,6 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
 
   const listCards = cards.filter(card => card.listId === list._id).sort((a, b) => a.position - b.position);
 
-
   const menuRef = useRef(null);
   const modalRef = useRef(null);
   const cardInputRef = useRef(null);
@@ -24,7 +23,6 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
     color: isDark ? '#fff' : '#000',
   });
   
-
   const handleListNameKeyPress = (e) => {
     if (e.key === 'Enter') {
       handleListNameChange(list._id, editListName[list._id]);
@@ -38,7 +36,6 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
     }
   }, [showCardInput]);
 
-
   const handleClickOutside = (event) => {
     if (menuRef.current && !menuRef.current.contains(event.target)) {
       setMenuOpen(false);
@@ -50,7 +47,6 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
       setShowCardInput(false);
     }
   };
-
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);

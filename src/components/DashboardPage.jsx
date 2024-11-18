@@ -25,6 +25,7 @@ const DashboardPage = () => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
 
   const [newBoardName, setNewBoardName] = useState('');
   const [selectedTemplate, setSelectedTemplate] = useState('kanban');
@@ -32,6 +33,7 @@ const DashboardPage = () => {
   const [editBoardId, setEditBoardId] = useState('');
   const [newBoardColor, setNewBoardColor] = useState('#ffffff');
   const [deleteBoardId, setDeleteBoardId] = useState('');
+  const [inviteBoardId, setInviteBoardId] = useState('');
   
   const settingsRef = useRef(null);
 
