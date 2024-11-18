@@ -246,7 +246,7 @@ function BoardPage() {
         const updatedCards = newCards.filter(card => affectedListIds.has(card.listId));
 
         await Promise.all(updatedCards.map(card =>
-          fetch(`${apiBaseUrl}/cards/cards/${card._id}`, {
+          fetch(`${apiBaseUrl}/cards/${card._id}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
