@@ -17,7 +17,10 @@ const DashboardPage = () => {
   const [backgroundImage, setBackgroundImage] = useBackground();
   
   const [user, setUser] = useState(null);
-  const [boards, setBoards] = useState([]);
+  const [ownedBoards, setOwnedBoards] = useState([]);
+  const [collaborativeBoards, setCollaborativeBoards] = useState([]);
+  const [invitations, setInvitations] = useState([]);
+  //const [boards, setBoards] = useState([]);
   const [error, setError] = useState('');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false); 
   const [isPageSettingsModalOpen, setIsPageSettingsModalOpen] = useState(false); 
@@ -26,6 +29,7 @@ const DashboardPage = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+  const [selectedBoardId, setSelectedBoardId] = useState(null);
 
   const [newBoardName, setNewBoardName] = useState('');
   const [selectedTemplate, setSelectedTemplate] = useState('kanban');
@@ -43,8 +47,12 @@ const DashboardPage = () => {
         const token = localStorage.getItem('token');
         const userData = await api.fetchUserData(token);
         setUser(userData);
-        const boardsData = await api.fetchBoards(token);
-        setBoards(boardsData);
+        const boardsData = await api.fetchAllBoards(token);
+        //setBoards(boardsData);
+        setOwnedBoards(boardsData.ownedBoards);
+        setCollaborativeBoards(boardsData.collaborativeBoards);
+        const invitationsData = await api.fetchInvitations(token);
+        setInvitations(invitationsData);
       } catch (err) {
         if (err.message === 'Failed to fetch user data') {
           handleLogout();
