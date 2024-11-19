@@ -75,7 +75,7 @@ const DashboardPage = () => {
         backgroundColor: newBoardColor,
         template: selectedTemplate,
       });
-      setBoards([...boards, newBoard]);
+      setOwnedBoards([...ownedBoards, newBoard]);
       setIsCreateModalOpen(false);
       setNewBoardName('');
       setNewBoardColor('#ffffff');
@@ -89,7 +89,7 @@ const DashboardPage = () => {
     try {
       const token = localStorage.getItem('token');
       const updatedBoard = await api.updateBoard(token, editBoardId, { name: editBoardName });
-      setBoards(boards.map(board => (board._id === editBoardId ? updatedBoard : board)));
+      setOwnedBoards(ownedBoards.map(board => (board._id === editBoardId ? updatedBoard : board)));
       setIsEditModalOpen(false);
       setEditBoardName('');
       setEditBoardId('');
@@ -107,9 +107,47 @@ const DashboardPage = () => {
     try {
       const token = localStorage.getItem('token');
       await api.deleteBoard(token, deleteBoardId);
-      setBoards(boards.filter(board => board._id !== deleteBoardId));
+      setOwnedBoards(ownedBoards.filter(board => board._id !== deleteBoardId));
       setIsDeleteModalOpen(false);
       setDeleteBoardId('');
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleOpenInviteModal = (boardId) => {
+    setInviteBoardId(boardId);
+    setIsInviteModalOpen(true);
+  };
+
+  const handleInviteUser = async (email) => {
+    try {
+      const token = localStorage.getItem('token');
+      await api.inviteUserToBoard(token, inviteBoardId, email);
+      setIsInviteModalOpen(false);
+      setInviteBoardId('');
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleAcceptInvitation = async (invitationId) => {
+    try {
+      const token = localStorage.getItem('token');
+      await api.respondToInvitation(token, invitationId, true);
+      setInvitations(invitations.filter(inv => inv._id !== invitationId));
+      const boardsData = await api.fetchAllBoards(token);
+      setCollaborativeBoards(boardsData.collaborativeBoards);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  const handleRejectInvitation = async (invitationId) => {
+    try {
+      const token = localStorage.getItem('token');
+      await api.respondToInvitation(token, invitationId, false);
+      setInvitations(invitations.filter(inv => inv._id !== invitationId));
     } catch (err) {
       setError(err.message);
     }
