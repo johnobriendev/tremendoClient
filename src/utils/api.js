@@ -164,7 +164,7 @@ export const createCard = async (token, boardId, cardData) => {
 };
 
 export const updateCard = async (token, cardId, cardData) => {
-  const response = await fetch(`${API_BASE_URL}/cards/cards/${cardId}`, {
+  const response = await fetch(`${API_BASE_URL}/cards/${cardId}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -179,7 +179,7 @@ export const updateCard = async (token, cardId, cardData) => {
 };
 
 export const deleteCard = async (token, cardId) => {
-  const response = await fetch(`${API_BASE_URL}/cards/cards/${cardId}`, {
+  const response = await fetch(`${API_BASE_URL}/cards/${cardId}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',

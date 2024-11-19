@@ -205,7 +205,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
     setIsLoading(true);
     try {
       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-      const response = await fetch(`${apiBaseUrl}/cards/cards/${card._id}/comments`, {
+      const response = await fetch(`${apiBaseUrl}/cards/${card._id}/comments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -233,7 +233,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
     setIsLoading(true);
     try {
       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-      const response = await fetch(`${apiBaseUrl}/cards/cards/${card._id}/comments/${commentId}`, {
+      const response = await fetch(`${apiBaseUrl}/cards/${card._id}/comments/${commentId}`, {
         method: 'DELETE',
         headers: {
           Authorization: `Bearer ${localStorage.getItem('token')}`,
