@@ -25,7 +25,7 @@ export const fetchBoards = async (token) => {
 };
 
 export const fetchAllBoards = async (token) => {
-  const response = await fetch(`${API_URL}/boards/all`, {
+  const response = await fetch(`${API_BASE_URL}/boards/all`, {
     headers: {
       'Authorization': `Bearer ${token}`,
     },
@@ -95,7 +95,7 @@ export const fetchBoardData = async (token, boardId) => {
 };
 
 export const inviteUserToBoard = async (token, boardId, email) => {
-  const response = await fetch(`${API_URL}/invitations/boards/${boardId}/invite`, {
+  const response = await fetch(`${API_BASE_URL}/invitations/boards/${boardId}/invite`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -113,7 +113,7 @@ export const inviteUserToBoard = async (token, boardId, email) => {
 };
 
 export const fetchInvitations = async (token) => {
-  const response = await fetch(`${API_URL}/invitations`, {
+  const response = await fetch(`${API_BASE_URL}/invitations`, {
     headers: {
       'Authorization': `Bearer ${token}`,
     },
@@ -128,7 +128,7 @@ export const fetchInvitations = async (token) => {
 };
 
 export const respondToInvitation = async (token, invitationId, accept) => {
-  const response = await fetch(`${API_URL}/invitations/${invitationId}/respond`, {
+  const response = await fetch(`${API_BASE_URL}/invitations/${invitationId}/respond`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
