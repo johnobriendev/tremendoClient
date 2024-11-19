@@ -94,6 +94,57 @@ export const fetchBoardData = async (token, boardId) => {
   return boardResponse.json();
 };
 
+export const inviteUserToBoard = async (token, boardId, email) => {
+  const response = await fetch(`${API_URL}/invitations/boards/${boardId}/invite`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ email }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Failed to invite user');
+  }
+
+  return response.json();
+};
+
+export const fetchInvitations = async (token) => {
+  const response = await fetch(`${API_URL}/invitations`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Failed to fetch invitations');
+  }
+
+  return response.json();
+};
+
+export const respondToInvitation = async (token, invitationId, accept) => {
+  const response = await fetch(`${API_URL}/invitations/${invitationId}/respond`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+    body: JSON.stringify({ accept }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Failed to respond to invitation');
+  }
+
+  return response.json();
+};
+
 export const fetchLists = async (token, boardId) => {
   const response = await fetch(`${API_BASE_URL}/lists/${boardId}`, {
     headers: {
