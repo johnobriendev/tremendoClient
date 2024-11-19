@@ -119,7 +119,7 @@ const DashboardPage = () => {
   };
 
   const handleOpenInviteModal = (boardId) => {
-    setInviteBoardId(boardId);
+    setSelectedBoardId(boardId);
     setIsInviteModalOpen(true);
   };
 
