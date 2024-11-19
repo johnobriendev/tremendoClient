@@ -24,6 +24,21 @@ export const fetchBoards = async (token) => {
   return response.json();
 };
 
+export const fetchAllBoards = async (token) => {
+  const response = await fetch(`${API_URL}/boards/all`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Failed to fetch boards');
+  }
+
+  return response.json();
+};
+
 export const createBoard = async (token, boardData) => {
   const response = await fetch(`${API_BASE_URL}/boards`, {
     method: 'POST',
