@@ -128,7 +128,9 @@ const DashboardPage = () => {
       const token = localStorage.getItem('token');
       await api.inviteUserToBoard(token, inviteBoardId, email);
       setIsInviteModalOpen(false);
-      setInviteBoardId('');
+      //setInviteBoardId('');
+      setSelectedBoardId(null);
+
     } catch (err) {
       setError(err.message);
     }
@@ -211,12 +213,14 @@ const DashboardPage = () => {
               }}
               onDeleteClick={handleOpenDeleteModal}
               onInviteClick={handleOpenInviteModal}
+              isOwned={true}
             />
             
             <h2 className="text-2xl font-bold mt-8 mb-4">Collaborative Boards</h2>
             <BoardList
               boards={collaborativeBoards}
               onBoardClick={(id) => navigate(`/boards/${id}`)}
+              isOwned={false}
             />
           </>
         )}
@@ -268,7 +272,16 @@ const DashboardPage = () => {
     </div>
   );
 
-  // return (
+  
+};
+
+export default DashboardPage;
+
+
+
+
+
+// return (
   //   <div className="min-h-screen flex flex-col">
   //      <Navbar 
   //       user={user}
@@ -375,11 +388,3 @@ const DashboardPage = () => {
   //     </div>
   //   </div>
   // );
-};
-
-export default DashboardPage;
-
-
-
-
-
