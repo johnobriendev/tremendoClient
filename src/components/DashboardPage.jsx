@@ -40,7 +40,7 @@ const DashboardPage = () => {
   const [editBoardId, setEditBoardId] = useState('');
   const [newBoardColor, setNewBoardColor] = useState('#ffffff');
   const [deleteBoardId, setDeleteBoardId] = useState('');
-  const [inviteBoardId, setInviteBoardId] = useState('');
+  //const [inviteBoardId, setInviteBoardId] = useState('');
   
   const settingsRef = useRef(null);
 
@@ -126,7 +126,7 @@ const DashboardPage = () => {
   const handleInviteUser = async (email) => {
     try {
       const token = localStorage.getItem('token');
-      await api.inviteUserToBoard(token, inviteBoardId, email);
+      await api.inviteUserToBoard(token, selectedBoardId, email);
       setIsInviteModalOpen(false);
       //setInviteBoardId('');
       setSelectedBoardId(null);
@@ -265,7 +265,10 @@ const DashboardPage = () => {
         />
         <InviteUserModal
           isOpen={isInviteModalOpen}
-          onClose={() => setIsInviteModalOpen(false)}
+          onClose={() => {
+            setIsInviteModalOpen(false);
+            setSelectedBoardId(null);
+          }}
           onInviteUser={handleInviteUser}
         />
       </div>

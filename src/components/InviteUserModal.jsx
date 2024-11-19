@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export default function InviteUserModal({ onClose, onInviteUser }) {
+export default function InviteUserModal({ isOpen, onClose, onInviteUser }) {
   const [email, setEmail] = useState('');
 
   const handleSubmit = (e) => {
@@ -8,6 +8,8 @@ export default function InviteUserModal({ onClose, onInviteUser }) {
     onInviteUser(email);
     setEmail('');
   };
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
