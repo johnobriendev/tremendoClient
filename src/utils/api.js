@@ -94,6 +94,21 @@ export const fetchBoardData = async (token, boardId) => {
   return boardResponse.json();
 };
 
+export const fetchBoardDetails = async (token, boardId) => {
+  const response = await fetch(`${API_URL}/boards/${boardId}/details`, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Failed to fetch board details');
+  }
+
+  return response.json();
+};
+
 export const inviteUserToBoard = async (token, boardId, email) => {
   const response = await fetch(`${API_BASE_URL}/invitations/boards/${boardId}/invite`, {
     method: 'POST',
