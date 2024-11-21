@@ -46,6 +46,7 @@ function BoardPage() {
         const token = localStorage.getItem('token');
         const userData = await api.fetchUserData(token);
         setUser(userData);
+        //await fetchBoardData()
       } catch (err) {
         if (err.message === 'Failed to fetch user data') {
           handleLogout();
@@ -56,6 +57,7 @@ function BoardPage() {
     };
     fetchData();
   }, []);
+
 
   const fetchBoardData = async () => {
     try {

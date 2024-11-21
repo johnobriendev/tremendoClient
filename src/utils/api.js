@@ -95,7 +95,7 @@ export const fetchBoardData = async (token, boardId) => {
 };
 
 export const fetchBoardDetails = async (token, boardId) => {
-  const response = await fetch(`${API_URL}/boards/${boardId}/details`, {
+  const response = await fetch(`${API_BASE_URL}/boards/${boardId}/details`, {
     headers: {
       'Authorization': `Bearer ${token}`,
     },
