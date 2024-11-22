@@ -1,7 +1,11 @@
 # Tremendo - Frontend
 
-## Project Description
-Tremendo is a powerful Kanban-style project management application that helps users stay organized and focused. The frontend of this application is built using React and Tailwind CSS.
+## Description
+Tremendo is a project management and team collaboration app built with simplicity and ease of use in mind.
+
+## Quick Start
+
+If you want to take Tremendo for a spin, head on over to [tremendo.pro](https://tremendo.pro), register an account (you'll have to confirm your email), and log in! It's that easy.
 
 ## Installation
 
@@ -16,10 +20,13 @@ To run the Tremendo frontend locally, please follow these steps:
 ## Usage
 Tremendo offers the following key features:
 
-- Create and manage Kanban boards and Todo Lists
-- Drag and drop cards between Lists
-- Edit List and Card names
-- Add descriptions and comments to Cards
+- Create Projects and invite other users to collaborate on them.
+- Choose between Kanban Boards, Weekly Planners, or blank templates to start your project.
+- Add lists to your project and choose the color of your list for easy organization.
+- Add cards to each list and drag and drop cards between lists for project organization.
+- Add descriptions to each card to add further details about a task.
+- Add comments to each card to allow communication between team members.
+- Customizable interface including light and dark modes, and a variety of background images.
 
 
 ## Technologies Used
