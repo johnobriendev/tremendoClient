@@ -5,7 +5,7 @@ Tremendo is a project management and team collaboration app built with simplicit
 
 ## Quick Start
 
-If you want to take Tremendo for a spin, head on over to [tremendo.pro](https://tremendo.pro), register an account (you'll have to confirm your email), and log in! It's that easy.
+If you want to take Tremendo for a spin, head on over to [tremendo.pro](https://tremendo.pro), register an account (you'll have to confirm your email), and log in! It's that easy. If you want to check out the repository for the server, head to [this repository](https://github.com/johnobriendev/tremendoServer).
 
 ## Installation
 
