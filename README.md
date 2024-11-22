@@ -1,4 +1,4 @@
-# Tremendo - Frontend
+# Tremendo
 
 ## Description
 Tremendo is a project management and team collaboration app built with simplicity and ease of use in mind.
