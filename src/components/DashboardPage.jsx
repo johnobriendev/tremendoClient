@@ -181,11 +181,16 @@ const DashboardPage = () => {
       />
    
       <div 
-        className={`flex-grow pt-28 sm:pt-24 ${
-          backgroundImage ? "bg-cover bg-center bg-no-repeat bg-fixed" : ""
-        } p-6 overflow-auto`}
+        className={`flex-grow pt-28 sm:pt-24 p-6 overflow-auto`}
         style={{
-          ...(backgroundImage ? { backgroundImage } : getThemeStyles(theme === 'dark')),
+          ...(backgroundImage ? {
+            backgroundImage,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            // The key change: using 'scroll' instead of 'fixed'
+            backgroundAttachment: 'scroll',
+          } : getThemeStyles(theme === 'dark')),
         }}
       >
         {error && <p className="text-red-500">{error}</p>}
