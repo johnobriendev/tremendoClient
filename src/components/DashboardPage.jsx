@@ -276,6 +276,10 @@ const DashboardPage = () => {
   );
 
   
+
+  
+
+  
 };
 
 export default DashboardPage;
@@ -389,5 +393,120 @@ export default DashboardPage;
   //         getModalStyles={getModalStyles}
   //       />
   //     </div>
+  //   </div>
+  // );
+
+  //pre wrapper render
+
+  
+
+  // return (
+  //   <div className="min-h-screen flex flex-col">
+  //     <Navbar 
+  //       user={user}
+  //       onCreateBoard={() => setIsCreateModalOpen(true)}
+  //       onPageSettings={() => {
+  //         setIsPageSettingsModalOpen(true);
+  //         setIsDropdownOpen(false);
+  //       }}
+  //       onLogout={handleLogout}
+  //       theme={theme}
+  //       isDropdownOpen={isDropdownOpen}
+  //       setIsDropdownOpen={setIsDropdownOpen}
+  //       getNavBarStyles={getNavBarStyles}
+  //       settingsRef={settingsRef}
+  //     />
+
+  //     <BackgroundWrapper 
+  //       backgroundImage={backgroundImage} 
+  //       theme={theme}
+  //       getThemeStyles={getThemeStyles}
+  //     >
+  //       <div className="pt-24 sm:pt-20 p-6 overflow-auto">
+  //         {error && <p className="text-red-500">{error}</p>}
+  //         {user && (
+  //           <>
+  //             {invitations.length > 0 && (
+  //               <div className="mb-8">
+  //                 <h2 className="text-2xl font-bold mb-4">Pending Invitations</h2>
+  //                 <InvitationList
+  //                   invitations={invitations}
+  //                   onAccept={handleAcceptInvitation}
+  //                   onReject={handleRejectInvitation}
+  //                 />
+  //               </div>
+  //             )}
+
+  //             <h2 className="text-2xl font-bold mb-4">Your Boards</h2>
+  //             <BoardList
+  //               boards={ownedBoards}
+  //               onBoardClick={(id) => navigate(`/boards/${id}`)}
+  //               onEditClick={(board) => {
+  //                 setEditBoardName(board.name);
+  //                 setEditBoardId(board._id);
+  //                 setIsEditModalOpen(true);
+  //               }}
+  //               onDeleteClick={handleOpenDeleteModal}
+  //               onInviteClick={handleOpenInviteModal}
+  //               isOwned={true}
+  //             />
+              
+  //             <h2 className="text-2xl font-bold mt-8 mb-4">Collaborative Boards</h2>
+  //             <BoardList
+  //               boards={collaborativeBoards}
+  //               onBoardClick={(id) => navigate(`/boards/${id}`)}
+  //               isOwned={false}
+  //             />
+  //           </>
+  //         )}
+  //       </div>
+  //     </BackgroundWrapper>
+
+  //     <PageSettingsModal
+  //       isOpen={isPageSettingsModalOpen}
+  //       onClose={() => setIsPageSettingsModalOpen(false)}
+  //       theme={theme}
+  //       onThemeChange={setTheme}
+  //       backgroundImages={backgroundImages}
+  //       currentBackground={backgroundImage}
+  //       onBackgroundSelect={setBackgroundImage}
+  //       onRemoveBackground={() => setBackgroundImage(null)}
+  //       getModalStyles={getModalStyles}
+  //     />
+  //     <CreateBoardModal
+  //       isOpen={isCreateModalOpen}
+  //       onClose={() => setIsCreateModalOpen(false)}
+  //       theme={theme}
+  //       newBoardName={newBoardName}
+  //       setNewBoardName={setNewBoardName}
+  //       selectedTemplate={selectedTemplate}
+  //       setSelectedTemplate={setSelectedTemplate}
+  //       handleCreateBoard={handleCreateBoard}
+  //       getModalStyles={getModalStyles}
+  //     />
+  //     <EditBoardModal
+  //       isOpen={isEditModalOpen}
+  //       onClose={() => setIsEditModalOpen(false)}
+  //       theme={theme}
+  //       editBoardName={editBoardName}
+  //       setEditBoardName={setEditBoardName}
+  //       handleEditBoard={handleEditBoard}
+  //       getModalStyles={getModalStyles}
+  //     />
+  //     <DeleteBoardModal
+  //       isOpen={isDeleteModalOpen}
+  //       onClose={() => setIsDeleteModalOpen(false)}
+  //       theme={theme}
+  //       handleConfirmDelete={handleConfirmDeleteBoard}
+  //       getModalStyles={getModalStyles}
+  //     />
+  //     <InviteUserModal
+  //       isOpen={isInviteModalOpen}
+  //       onClose={() => {
+  //         setIsInviteModalOpen(false);
+  //         setSelectedBoardId(null);
+  //       }}
+  //       onInviteUser={handleInviteUser}
+  //     />
   //   </div>
   // );

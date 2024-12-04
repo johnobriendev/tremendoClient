@@ -3,4 +3,18 @@
 @tailwind utilities;
 
 
+/* html, body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+  position: relative;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+} */
+
 

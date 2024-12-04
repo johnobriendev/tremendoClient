@@ -295,7 +295,7 @@ function BoardPage() {
         showCreateBoard={false}
       />
        
-      <div className='pt-16 overflow-x-auto'>
+      <div className='pt-24 sm:pt-16 overflow-x-auto'>
         <DragDropContext onDragEnd={handleDragEnd}>
           <div className='flex-grow  w-full'>
             <Droppable droppableId="all-lists" direction="horizontal">
