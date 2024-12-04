@@ -180,92 +180,90 @@ function BoardPage() {
     }
   };
 
-  //this function is called when a card is dragged into another position. It needs to be fixed to update the positions of the other affected cards as well
   const handleDragEnd = async (result) => {
     const { destination, source, draggableId, type } = result;
-  
-    // If there's no destination, the card was dropped outside a valid droppable area
+    
     if (!destination) return;
-  
-    // If the card was dropped back into its original position, do nothing
-    if (
-      destination.droppableId === source.droppableId &&
-      destination.index === source.index
-    ) {
-      return;
-    }
-  
-    // If we're dealing with a card drag
+    if (destination.droppableId === source.droppableId && destination.index === source.index) return;
+    
     if (type === 'CARD') {
       const startListId = source.droppableId;
       const endListId = destination.droppableId;
-      const draggedCardId = draggableId;
+      
+      const sourceListCards = cards
+        .filter(card => card.listId === startListId)
+        .sort((a, b) => a.position - b.position);
+      
+      const destinationListCards = startListId === endListId 
+        ? sourceListCards 
+        : cards
+            .filter(card => card.listId === endListId)
+            .sort((a, b) => a.position - b.position);
   
-      // Create a new array of cards
-      let newCards = [...cards];
+      const draggedCard = cards.find(card => card._id === draggableId);
+      const updatedCards = [];
   
-      // Find the moved card
-      const movedCard = newCards.find(card => card._id === draggedCardId);
-  
-      // Remove the card from its original position
-      newCards = newCards.filter(card => card._id !== draggedCardId);
-  
-      // Update the listId if the card moved to a different list
-      if (startListId !== endListId) {
-        movedCard.listId = endListId;
-      }
-
-            // Find the correct insertion index
-      const destinationCards = newCards.filter(card => card.listId === endListId);
-      const insertIndex = newCards.findIndex(card => card._id === destinationCards[destination.index]?._id);
-
-      // Insert the card at its new position
-      if (insertIndex !== -1) {
-        newCards.splice(insertIndex, 0, movedCard);
+      if (startListId === endListId) {
+        const newCards = sourceListCards.filter(card => card._id !== draggableId);
+        newCards.splice(destination.index, 0, draggedCard);
+        
+        newCards.forEach((card, index) => {
+          updatedCards.push({
+            _id: card._id,
+            position: index + 1,
+            listId: startListId
+          });
+        });
       } else {
-        newCards.push(movedCard);
-      }
-
-      // Update positions for all cards in the affected list(s)
-      const affectedListIds = new Set([startListId, endListId]);
-      newCards = newCards.map(card => {
-        if (affectedListIds.has(card.listId)) {
-          const listCards = newCards.filter(c => c.listId === card.listId);
-          return { ...card, position: listCards.indexOf(card) + 1 };
-        }
-        return card;
-      });
-
-      // Log the updated cards for debugging
-      console.log('Updated cards:', newCards);
+        const newSourceCards = sourceListCards.filter(card => card._id !== draggableId);
+        newSourceCards.forEach((card, index) => {
+          updatedCards.push({
+            _id: card._id,
+            position: index + 1,
+            listId: startListId
+          });
+        });
   
-      // Optimistically update the state
-      setCards(newCards);
-
-            // Update the backend
+        const newDestCards = [...destinationListCards];
+        newDestCards.splice(destination.index, 0, draggedCard);
+        newDestCards.forEach((card, index) => {
+          updatedCards.push({
+            _id: card._id,
+            position: index + 1,
+            listId: endListId
+          });
+        });
+      }
+  
+      setCards(cards.map(card => {
+        const updatedCard = updatedCards.find(uc => uc._id === card._id);
+        return updatedCard ? { ...card, ...updatedCard } : card;
+      }));
+  
       try {
-        const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-        const updatedCards = newCards.filter(card => affectedListIds.has(card.listId));
-
-        await Promise.all(updatedCards.map(card =>
-          fetch(`${apiBaseUrl}/cards/${card._id}`, {
+        const token = localStorage.getItem('token');
+        await Promise.all(updatedCards.map(card => 
+          fetch(`${import.meta.env.VITE_API_BASE_URL}/cards/${card._id}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
-              Authorization: `Bearer ${localStorage.getItem('token')}`,
+              Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({ 
+            body: JSON.stringify({
               position: card.position,
               listId: card.listId
             }),
           })
         ));
       } catch (error) {
-        console.error('Error updating card positions:', error);
+        console.error('Error updating positions:', error);
         fetchBoardData();
       }
     }
   };
+
+  
+ 
   
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -404,4 +402,178 @@ export default BoardPage;
 
 
 
+   // //this function is called when a card is dragged into another position. It needs to be fixed to update the positions of the other affected cards as well
+  // const handleDragEnd = async (result) => {
+  //   const { destination, source, draggableId, type } = result;
   
+  //   // If there's no destination, the card was dropped outside a valid droppable area
+  //   if (!destination) return;
+  
+  //   // If the card was dropped back into its original position, do nothing
+  //   if (
+  //     destination.droppableId === source.droppableId &&
+  //     destination.index === source.index
+  //   ) {
+  //     return;
+  //   }
+  
+  //   // If we're dealing with a card drag
+  //   if (type === 'CARD') {
+  //     const startListId = source.droppableId;
+  //     const endListId = destination.droppableId;
+  //     const draggedCardId = draggableId;
+  
+  //     // Create a new array of cards
+  //     let newCards = [...cards];
+  
+  //     // Find the moved card
+  //     const movedCard = newCards.find(card => card._id === draggedCardId);
+  
+  //     // Remove the card from its original position
+  //     newCards = newCards.filter(card => card._id !== draggedCardId);
+  
+  //     // Update the listId if the card moved to a different list
+  //     if (startListId !== endListId) {
+  //       movedCard.listId = endListId;
+  //     }
+
+  //           // Find the correct insertion index
+  //     const destinationCards = newCards.filter(card => card.listId === endListId);
+  //     const insertIndex = newCards.findIndex(card => card._id === destinationCards[destination.index]?._id);
+
+  //     // Insert the card at its new position
+  //     if (insertIndex !== -1) {
+  //       newCards.splice(insertIndex, 0, movedCard);
+  //     } else {
+  //       newCards.push(movedCard);
+  //     }
+
+  //     // Update positions for all cards in the affected list(s)
+  //     const affectedListIds = new Set([startListId, endListId]);
+  //     newCards = newCards.map(card => {
+  //       if (affectedListIds.has(card.listId)) {
+  //         const listCards = newCards.filter(c => c.listId === card.listId);
+  //         return { ...card, position: listCards.indexOf(card) + 1 };
+  //       }
+  //       return card;
+  //     });
+
+  //     // Log the updated cards for debugging
+  //     console.log('Updated cards:', newCards);
+  
+  //     // Optimistically update the state
+  //     setCards(newCards);
+
+  //           // Update the backend
+  //     try {
+  //       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+  //       const updatedCards = newCards.filter(card => affectedListIds.has(card.listId));
+
+  //       await Promise.all(updatedCards.map(card =>
+  //         fetch(`${apiBaseUrl}/cards/${card._id}`, {
+  //           method: 'PUT',
+  //           headers: {
+  //             'Content-Type': 'application/json',
+  //             Authorization: `Bearer ${localStorage.getItem('token')}`,
+  //           },
+  //           body: JSON.stringify({ 
+  //             position: card.position,
+  //             listId: card.listId
+  //           }),
+  //         })
+  //       ));
+  //     } catch (error) {
+  //       console.error('Error updating card positions:', error);
+  //       fetchBoardData();
+  //     }
+  //   }
+  // };
+
+
+  //possible dragEnd function that uses the bulk update.
+  // const handleDragEnd = async (result) => {
+  //   const { destination, source, draggableId, type } = result;
+    
+  //   if (!destination) return;
+  //   if (destination.droppableId === source.droppableId && 
+  //       destination.index === source.index) return;
+    
+  //   if (type === 'CARD') {
+  //     const startListId = source.droppableId;
+  //     const endListId = destination.droppableId;
+      
+  //     const sourceListCards = cards
+  //       .filter(card => card.listId === startListId)
+  //       .sort((a, b) => a.position - b.position);
+      
+  //     const destinationListCards = startListId === endListId 
+  //       ? sourceListCards 
+  //       : cards
+  //           .filter(card => card.listId === endListId)
+  //           .sort((a, b) => a.position - b.position);
+  
+  //     const draggedCard = cards.find(card => card._id === draggableId);
+  //     const updatedCards = [];
+  
+  //     if (startListId === endListId) {
+  //       // Same list movement
+  //       const newCards = sourceListCards.filter(card => card._id !== draggableId);
+  //       newCards.splice(destination.index, 0, draggedCard);
+        
+  //       newCards.forEach((card, index) => {
+  //         updatedCards.push({
+  //           _id: card._id,
+  //           position: index + 1,
+  //           listId: startListId
+  //         });
+  //       });
+  //     } else {
+  //       // Cross-list movement
+  //       const newSourceCards = sourceListCards.filter(card => card._id !== draggableId);
+  //       newSourceCards.forEach((card, index) => {
+  //         updatedCards.push({
+  //           _id: card._id,
+  //           position: index + 1,
+  //           listId: startListId
+  //         });
+  //       });
+  
+  //       const newDestCards = [...destinationListCards];
+  //       newDestCards.splice(destination.index, 0, draggedCard);
+  //       newDestCards.forEach((card, index) => {
+  //         updatedCards.push({
+  //           _id: card._id,
+  //           position: index + 1,
+  //           listId: endListId
+  //         });
+  //       });
+  //     }
+  
+  //     // Optimistic UI update
+  //     setCards(cards.map(card => {
+  //       const updatedCard = updatedCards.find(uc => uc._id === card._id);
+  //       return updatedCard ? { ...card, ...updatedCard } : card;
+  //     }));
+  
+  //     try {
+  //       const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/cards/batch-update`, {
+  //         method: 'PUT',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           Authorization: `Bearer ${localStorage.getItem('token')}`,
+  //         },
+  //         body: JSON.stringify({
+  //           cards: updatedCards,
+  //           boardId: board._id // Add the board ID for authorization
+  //         }),
+  //       });
+  
+  //       if (!response.ok) {
+  //         throw new Error('Failed to update cards');
+  //       }
+  //     } catch (error) {
+  //       console.error('Error updating positions:', error);
+  //       fetchBoardData(); // Revert to server state if update fails
+  //     }
+  //   }
+  // };
