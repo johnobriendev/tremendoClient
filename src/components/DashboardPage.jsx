@@ -181,7 +181,7 @@ const DashboardPage = () => {
       />
    
       <div 
-        className={`flex-grow pt-20 ${
+        className={`flex-grow pt-24 sm:pt-20 ${
           backgroundImage ? "bg-cover bg-center bg-no-repeat bg-fixed" : ""
         } p-6 overflow-auto`}
         style={{
