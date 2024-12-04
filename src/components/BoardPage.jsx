@@ -269,16 +269,9 @@ function BoardPage() {
     localStorage.removeItem('token');
     navigate('/login');
   };
-  
+
   return (
-    <div 
-      className={`min-h-screen flex flex-col ${
-        backgroundImage ? "bg-cover bg-center bg-no-repeat bg-fixed" : ""
-      }`}
-      style={{
-        ...(backgroundImage ? { backgroundImage } : getThemeStyles(theme === 'dark')),
-      }}
-    >
+    <div className="min-h-screen flex flex-col">
       <Navbar 
         user={user}
         onPageSettings={() => {
@@ -294,18 +287,31 @@ function BoardPage() {
         boardName={board?.name}
         showCreateBoard={false}
       />
-       
-      <div className='pt-24 sm:pt-16 overflow-x-auto'>
+      
+      {/* Main content area with improved background handling */}
+      <div 
+        className="flex-grow pt-24 sm:pt-20 overflow-x-auto relative"
+        style={{
+          ...(backgroundImage ? {
+            backgroundImage,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            backgroundAttachment: 'scroll', // This prevents mobile resize issues
+          } : getThemeStyles(theme === 'dark')),
+        }}
+      >
         <DragDropContext onDragEnd={handleDragEnd}>
-          <div className='flex-grow  w-full'>
+          <div className="flex-grow w-full">
             <Droppable droppableId="all-lists" direction="horizontal">
               {(provided) => (
                 <div
-                  className="flex items-start px-6 space-x-4 "
+                  className="flex items-start px-6 space-x-4"
                   style={{
                     paddingRight: '1.5rem',
                     minWidth: 'max-content',
-                    minHeight: 'calc(100vh - 80px)' //can be adjusted if more space is needed
+                    // Adjusted height calculation to work with new padding
+                    minHeight: 'calc(100vh - 96px)'
                   }}
                   {...provided.droppableProps}
                   ref={provided.innerRef} 
@@ -329,21 +335,22 @@ function BoardPage() {
                     />
                   ))}
                   {provided.placeholder}
+                  
+                  {/* Add list button section */}
                   <div className="w-[264px] shrink-0 mr-6">
                     {!isAddingList ? (
                       <button
                         onClick={() => setIsAddingList(true)}
                         className={`w-full py-2 px-4 rounded shadow-xl ${
-                          theme === 'dark' ? 'bg-[#2B2F3A] hover:bg-opacity-70 text-[#CBD5E0]'  :  'bg-[#c4d5e5] hover:bg-opacity-70'
+                          theme === 'dark' ? 'bg-[#2B2F3A] hover:bg-opacity-70 text-[#CBD5E0]' : 'bg-[#c4d5e5] hover:bg-opacity-70'
                         }`}
-                        // style={getAddListStyles(theme === 'dark')}
                       >
-                      + Add another list 
+                        + Add another list 
                       </button>
                     ) : (
-                      <div  className={`${
-                        theme === 'dark' ? 'bg-[#2B2F3A]' :  'bg-[#c4d5e5]'
-                      }  p-2 rounded`}>
+                      <div className={`${
+                        theme === 'dark' ? 'bg-[#2B2F3A]' : 'bg-[#c4d5e5]'
+                      } p-2 rounded`}>
                         <input
                           type="text"
                           value={newListName}
@@ -351,8 +358,8 @@ function BoardPage() {
                           onKeyPress={handleKeyPress}
                           placeholder="Enter list title..."
                           className={`${
-                            theme === 'dark' ? 'bg-gray-700 text-white' :  'bg-[#EDF2F7] placeholder:text-black text-black'
-                          }  w-full p-2 rounded mb-2`}
+                            theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-[#EDF2F7] placeholder:text-black text-black'
+                          } w-full p-2 rounded mb-2`}
                           ref={newListInputRef}
                         />
                         <div className="flex justify-between">
@@ -382,22 +389,153 @@ function BoardPage() {
           </div>
         </DragDropContext>
       </div>
+
       <PageSettingsModal
-          isOpen={isPageSettingsModalOpen}
-          onClose={() => setIsPageSettingsModalOpen(false)}
-          theme={theme}
-          onThemeChange={setTheme}
-          backgroundImages={backgroundImages}
-          currentBackground={backgroundImage}
-          onBackgroundSelect={setBackgroundImage}
-          onRemoveBackground={() => setBackgroundImage(null)}
-          getModalStyles={getModalStyles}
-        />
-      
+        isOpen={isPageSettingsModalOpen}
+        onClose={() => setIsPageSettingsModalOpen(false)}
+        theme={theme}
+        onThemeChange={setTheme}
+        backgroundImages={backgroundImages}
+        currentBackground={backgroundImage}
+        onBackgroundSelect={setBackgroundImage}
+        onRemoveBackground={() => setBackgroundImage(null)}
+        getModalStyles={getModalStyles}
+      />
     </div>
   );
+  
+  
 }
 export default BoardPage;
+
+
+
+// return (
+//   <div 
+//     className={`min-h-screen flex flex-col ${
+//       backgroundImage ? "bg-cover bg-center bg-no-repeat bg-fixed" : ""
+//     }`}
+//     style={{
+//       ...(backgroundImage ? { backgroundImage } : getThemeStyles(theme === 'dark')),
+//     }}
+//   >
+//     <Navbar 
+//       user={user}
+//       onPageSettings={() => {
+//         setIsPageSettingsModalOpen(true);
+//         setIsDropdownOpen(false);
+//       }}
+//       onLogout={handleLogout}
+//       theme={theme}
+//       isDropdownOpen={isDropdownOpen}
+//       setIsDropdownOpen={setIsDropdownOpen}
+//       getNavBarStyles={getNavBarStyles}
+//       settingsRef={settingsRef}
+//       boardName={board?.name}
+//       showCreateBoard={false}
+//     />
+     
+//     <div className='pt-24 sm:pt-16 overflow-x-auto'>
+//       <DragDropContext onDragEnd={handleDragEnd}>
+//         <div className='flex-grow  w-full'>
+//           <Droppable droppableId="all-lists" direction="horizontal">
+//             {(provided) => (
+//               <div
+//                 className="flex items-start px-6 space-x-4 "
+//                 style={{
+//                   paddingRight: '1.5rem',
+//                   minWidth: 'max-content',
+//                   minHeight: 'calc(100vh - 80px)' //can be adjusted if more space is needed
+//                 }}
+//                 {...provided.droppableProps}
+//                 ref={provided.innerRef} 
+//               >
+//                 {lists.map((list, index) => (
+//                   <List
+//                     key={list._id}
+//                     list={list}
+//                     cards={cards}
+//                     newCardName={newCardName}
+//                     editListName={editListName}
+//                     setEditListName={setEditListName}
+//                     setNewCardName={setNewCardName}
+//                     handleCreateCard={handleCreateCard}
+//                     handleDeleteList={handleDeleteList}
+//                     handleListNameChange={handleListNameChange}
+//                     handleUpdateCard={handleUpdateCard} 
+//                     handleDeleteCard={handleDeleteCard} 
+//                     index={index}
+//                     theme={theme}
+//                   />
+//                 ))}
+//                 {provided.placeholder}
+//                 <div className="w-[264px] shrink-0 mr-6">
+//                   {!isAddingList ? (
+//                     <button
+//                       onClick={() => setIsAddingList(true)}
+//                       className={`w-full py-2 px-4 rounded shadow-xl ${
+//                         theme === 'dark' ? 'bg-[#2B2F3A] hover:bg-opacity-70 text-[#CBD5E0]'  :  'bg-[#c4d5e5] hover:bg-opacity-70'
+//                       }`}
+//                       // style={getAddListStyles(theme === 'dark')}
+//                     >
+//                     + Add another list 
+//                     </button>
+//                   ) : (
+//                     <div  className={`${
+//                       theme === 'dark' ? 'bg-[#2B2F3A]' :  'bg-[#c4d5e5]'
+//                     }  p-2 rounded`}>
+//                       <input
+//                         type="text"
+//                         value={newListName}
+//                         onChange={(e) => setNewListName(e.target.value)}
+//                         onKeyPress={handleKeyPress}
+//                         placeholder="Enter list title..."
+//                         className={`${
+//                           theme === 'dark' ? 'bg-gray-700 text-white' :  'bg-[#EDF2F7] placeholder:text-black text-black'
+//                         }  w-full p-2 rounded mb-2`}
+//                         ref={newListInputRef}
+//                       />
+//                       <div className="flex justify-between">
+//                         <button
+//                           onClick={handleCreateList}
+//                           className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+//                           ref={newListButtonRef}
+//                         >
+//                           Add List
+//                         </button>
+//                         <button
+//                           onClick={() => {
+//                             setIsAddingList(false);
+//                             setNewListName('');
+//                           }}
+//                           className="text-gray-500 hover:text-gray-700"
+//                         >
+//                           ✕
+//                         </button>
+//                       </div>
+//                     </div>
+//                   )}
+//                 </div>
+//               </div>
+//             )}
+//           </Droppable>
+//         </div>
+//       </DragDropContext>
+//     </div>
+//     <PageSettingsModal
+//         isOpen={isPageSettingsModalOpen}
+//         onClose={() => setIsPageSettingsModalOpen(false)}
+//         theme={theme}
+//         onThemeChange={setTheme}
+//         backgroundImages={backgroundImages}
+//         currentBackground={backgroundImage}
+//         onBackgroundSelect={setBackgroundImage}
+//         onRemoveBackground={() => setBackgroundImage(null)}
+//         getModalStyles={getModalStyles}
+//       />
+    
+//   </div>
+// );
 
 
 
