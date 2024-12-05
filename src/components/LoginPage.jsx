@@ -9,6 +9,32 @@ const LoginPage = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  const validateForm = () => {
+    // Clear any existing errors when starting validation
+    setError('');
+
+    // Check if email is empty
+    if (!email.trim()) {
+      setError('Please enter your email address');
+      return false;
+    }
+
+    // Check email format using regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError('Please enter a valid email address');
+      return false;
+    }
+
+    // Check if password is empty
+    if (!password.trim()) {
+      setError('Please enter your password');
+      return false;
+    }
+
+    return true;
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -23,7 +49,16 @@ const LoginPage = () => {
         navigate('/dashboard');
       } else {
         const data = await response.json();
-        setError(data.message);
+        switch (data.message) {
+          case 'Please verify your email before logging in':
+            setError('Please verify your email address to login. Check your inbox for the verification email.');
+            break;
+          case 'Invalid email or password':
+            setError('Incorrect email or password. Please try again.');
+            break;
+          default:
+            setError(data.message || 'Unable to log in. Please try again. Contact johnobrien.dev@gmail.com if you continue having issues.');
+        }
       }
     } catch (err) {
       setError('Login failed');
@@ -52,7 +87,10 @@ const LoginPage = () => {
             <input
               type="email"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setError(''); 
+              }}
               className="border border-gray-300 px-3 py-2 w-full rounded"
               required
             />
@@ -62,7 +100,10 @@ const LoginPage = () => {
             <input
               type={showPassword ? "text" : "password"}
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setError(''); 
+              }}
               className="border border-gray-300 px-3 py-2 w-full rounded"
               required
             />
