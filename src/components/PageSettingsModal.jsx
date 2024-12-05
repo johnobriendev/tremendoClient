@@ -38,74 +38,84 @@ const PageSettingsModal = ({
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="min-h-screen px-4 text-center">
-        {/* This element is to trick the browser into centering the modal contents. */}
-        <span
-          className="inline-block h-screen align-middle"
-          aria-hidden="true"
-        >
+        <span className="inline-block h-screen align-middle" aria-hidden="true">
           &#8203;
         </span>
         
-        {/* Dark overlay */}
         <div className="fixed inset-0 bg-black bg-opacity-50 transition-opacity" />
         
-        {/* Modal panel */}
         <div
           ref={modalRef}
           className="inline-block w-full max-w-md p-6 my-8 text-left align-middle transition-all transform rounded-lg shadow-xl relative"
           style={{
             ...getModalStyles(theme === 'dark'),
-            maxHeight: '90vh',
+            maxHeight: '85vh',
             overflowY: 'auto'
           }}
         >
           <h2 className="text-xl font-bold mb-4">Page Settings</h2>
-          <p className="mb-4">Customize your dashboard:</p>
 
-          <div className="flex flex-col space-y-2 mb-4">
-            <p>Theme:</p>
-            <button
-              className={`px-4 py-2 rounded ${theme === 'light' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'}`}
-              onClick={() => onThemeChange('light')}
-            >
-              Light Mode
-            </button>
-            <button
-              className={`px-4 py-2 rounded ${theme === 'dark' ? 'bg-blue-500 text-white' : 'bg-gray-600 text-white'}`}
-              onClick={() => onThemeChange('dark')}
-            >
-              Dark Mode
-            </button>
+          {/* Theme Section */}
+          <div className="mb-6">
+            <p className="font-medium mb-2">Theme</p>
+            <div className="flex gap-2">
+              <button
+                className={`flex-1 px-4 py-2 rounded transition-colors ${
+                  theme === 'light' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'
+                }`}
+                onClick={() => onThemeChange('light')}
+              >
+                Light Mode
+              </button>
+              <button
+                className={`flex-1 px-4 py-2 rounded transition-colors ${
+                  theme === 'dark' ? 'bg-blue-500 text-white' : 'bg-gray-600 text-white'
+                }`}
+                onClick={() => onThemeChange('dark')}
+              >
+                Dark Mode
+              </button>
+            </div>
           </div>
 
-          <div className="mb-4">
-            <p>Background Image:</p>
-            <div className="grid grid-cols-3 gap-2 mb-2">
+          {/* Background Section */}
+          <div className="mb-6">
+            <p className="font-medium mb-2">Background</p>
+            <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mb-3">
+              {/* No Background Option */}
+              <button
+                className={`border-2 rounded p-1 aspect-square ${
+                  currentBackground === null ? 'border-blue-500' : 'border-transparent'
+                }`}
+                onClick={onRemoveBackground}
+              >
+                <div className={`w-full h-full rounded ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'}`}>
+                  <p className="text-center text-xs mt-1">None</p>
+                </div>
+              </button>
+              
+              {/* Background Images */}
               {backgroundImages.map((image) => (
                 <button
                   key={image.url}
-                  className={`border-2 rounded ${currentBackground === image.url ? 'border-blue-500' : 'border-transparent'}`}
+                  className={`border-2 rounded p-1 aspect-square ${
+                    currentBackground === image.url ? 'border-blue-500' : 'border-transparent'
+                  }`}
                   onClick={() => onBackgroundSelect(image.url)}
                 >
                   <div 
-                    className="w-20 h-20 bg-cover bg-center" 
+                    className="w-full h-full bg-cover bg-center rounded" 
                     style={{backgroundImage: image.thumbnail}}
                   />
-                  <p className="text-center mt-1 text-sm">{image.label}</p>
+                  <p className="text-center text-xs mt-1">{image.label}</p>
                 </button>
               ))}
             </div>
-            <button
-              className={`w-full mt-2 px-4 py-2 rounded ${
-                currentBackground === null ? 'bg-blue-500 text-white' : (theme === 'dark' ? 'bg-gray-600 text-white' : 'bg-gray-200 text-black')
-              }`}
-              onClick={onRemoveBackground}
-            >
-              No Background Image
-            </button>
           </div>
+
+          {/* Close Button */}
           <button
-            className="bg-red-500 text-white px-4 py-2 rounded w-full"
+            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded w-full transition-colors"
             onClick={onClose}
           >
             Close
@@ -115,10 +125,92 @@ const PageSettingsModal = ({
     </div>
   );
 
-  
 };
 
 export default PageSettingsModal;
+
+  // return (
+  //   <div className="fixed inset-0 z-50 overflow-y-auto">
+  //     <div className="min-h-screen px-4 text-center">
+  //       {/* This element is to trick the browser into centering the modal contents. */}
+  //       <span
+  //         className="inline-block h-screen align-middle"
+  //         aria-hidden="true"
+  //       >
+  //         &#8203;
+  //       </span>
+        
+  //       {/* Dark overlay */}
+  //       <div className="fixed inset-0 bg-black bg-opacity-50 transition-opacity" />
+        
+  //       {/* Modal panel */}
+  //       <div
+  //         ref={modalRef}
+  //         className="inline-block w-full max-w-md p-6 my-8 text-left align-middle transition-all transform rounded-lg shadow-xl relative"
+  //         style={{
+  //           ...getModalStyles(theme === 'dark'),
+  //           maxHeight: '90vh',
+  //           overflowY: 'auto'
+  //         }}
+  //       >
+  //         <h2 className="text-xl font-bold mb-4">Page Settings</h2>
+  //         <p className="mb-4">Customize your dashboard:</p>
+
+  //         <div className="flex flex-col space-y-2 mb-4">
+  //           <p>Theme:</p>
+  //           <button
+  //             className={`px-4 py-2 rounded ${theme === 'light' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'}`}
+  //             onClick={() => onThemeChange('light')}
+  //           >
+  //             Light Mode
+  //           </button>
+  //           <button
+  //             className={`px-4 py-2 rounded ${theme === 'dark' ? 'bg-blue-500 text-white' : 'bg-gray-600 text-white'}`}
+  //             onClick={() => onThemeChange('dark')}
+  //           >
+  //             Dark Mode
+  //           </button>
+  //         </div>
+
+  //         <div className="mb-4">
+  //           <p>Background Image:</p>
+  //           <div className="grid grid-cols-3 gap-2 mb-2">
+  //             {backgroundImages.map((image) => (
+  //               <button
+  //                 key={image.url}
+  //                 className={`border-2 rounded ${currentBackground === image.url ? 'border-blue-500' : 'border-transparent'}`}
+  //                 onClick={() => onBackgroundSelect(image.url)}
+  //               >
+  //                 <div 
+  //                   className="w-20 h-20 bg-cover bg-center" 
+  //                   style={{backgroundImage: image.thumbnail}}
+  //                 />
+  //                 <p className="text-center mt-1 text-sm">{image.label}</p>
+  //               </button>
+  //             ))}
+  //           </div>
+  //           <button
+  //             className={`w-full mt-2 px-4 py-2 rounded ${
+  //               currentBackground === null ? 'bg-blue-500 text-white' : (theme === 'dark' ? 'bg-gray-600 text-white' : 'bg-gray-200 text-black')
+  //             }`}
+  //             onClick={onRemoveBackground}
+  //           >
+  //             No Background Image
+  //           </button>
+  //         </div>
+  //         <button
+  //           className="bg-red-500 text-white px-4 py-2 rounded w-full"
+  //           onClick={onClose}
+  //         >
+  //           Close
+  //         </button>
+  //       </div>
+  //     </div>
+  //   </div>
+  // );
+
+  
+
 
 // return (
 //   <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
