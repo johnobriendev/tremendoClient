@@ -275,6 +275,9 @@ const DashboardPage = () => {
             setSelectedBoardId(null);
           }}
           onInviteUser={handleInviteUser}
+          theme={theme}
+          getModalStyles={getModalStyles}
+
         />
       </div>
     </div>
