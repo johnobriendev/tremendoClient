@@ -124,16 +124,11 @@ const DashboardPage = () => {
   };
 
   const handleInviteUser = async (email) => {
-    try {
       const token = localStorage.getItem('token');
       await api.inviteUserToBoard(token, selectedBoardId, email);
       setIsInviteModalOpen(false);
       //setInviteBoardId('');
       setSelectedBoardId(null);
-
-    } catch (err) {
-      setError(err.message);
-    }
   };
 
   const handleAcceptInvitation = async (invitationId) => {

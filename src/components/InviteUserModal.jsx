@@ -10,6 +10,8 @@ export default function InviteUserModal({ isOpen, onClose, onInviteUser, theme, 
   useEffect(() => {
     if (isOpen) {
       emailInputRef.current?.focus();
+      setStatusMessage(null);
+      setStatusType('');
     }
   }, [isOpen]);
 
@@ -29,15 +31,22 @@ export default function InviteUserModal({ isOpen, onClose, onInviteUser, theme, 
     };
   }, [isOpen, onClose]);
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await onInviteUser(email); // Assume this returns the backend response
-      setStatusMessage(response.message);
+      await onInviteUser(email);
+      setStatusMessage('Invitation sent successfully');
       setStatusType('success');
       setEmail('');
     } catch (error) {
-      setStatusMessage(error.response?.data?.message || 'An error occurred');
+      // Handle different error response structures
+      const errorMessage = error.response?.data?.message || // Standard API error message
+                          error.response?.data?.errors?.[0]?.msg || // Express validator error
+                          error.message || // Direct error message
+                          'An error occurred'; // Fallback message
+      
+      setStatusMessage(errorMessage);
       setStatusType('error');
     }
   };
