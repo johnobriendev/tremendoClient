@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import { backgroundImages } from '../constants/backgroundImages';
 import { useParams, useNavigate } from 'react-router-dom';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import List from './List'; // Import List component
-import Navbar from './Navbar';
-import PageSettingsModal from './PageSettingsModal';
+import List from '../components/List'; 
+import Navbar from '../components/Navbar';
+import PageSettingsModal from '../components/PageSettingsModal';
 import { useTheme } from '../hooks/useTheme';
 import { useBackground } from '../hooks/useBackground';
 import { getThemeStyles, getModalStyles, getNavBarStyles } from '../utils/boardStyles';

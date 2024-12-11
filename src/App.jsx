@@ -1,15 +1,15 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import LandingPage from './components/LandingPage';
-import RegisterPage from './components/RegisterPage';
-import LoginPage from './components/LoginPage';
-import DashboardPage from './components/DashboardPage';
-import BoardPage from './components/BoardPage';
+import LandingPage from './pages/LandingPage';
+import RegisterPage from './pages/RegisterPage';
+import LoginPage from './pages/LoginPage';
+import DashboardPage from './pages/DashboardPage';
+import BoardPage from './pages/BoardPage';
 import ProtectedRoute from './components/ProtectedRoute';
-import VerifyEmail from './components/VerifyEmail';
-import ForgotPasswordPage from './components/ForgotPasswordPage';
-import ResetPasswordPage from './components/ResetPasswordPage';
-import AboutPage from './components/AboutPage';
-import WorkInProgress from './components/WorkInProgressPage';
+import VerifyEmail from './pages/VerifyEmail';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
+import AboutPage from './pages/AboutPage';
+import WorkInProgress from './pages/WorkInProgressPage';
 
 
 const router = createBrowserRouter([
