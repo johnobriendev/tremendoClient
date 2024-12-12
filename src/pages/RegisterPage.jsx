@@ -96,45 +96,6 @@ const RegisterPage = () => {
     }
   };
 
-  // const handleRegister = async (e) => {
-  //   e.preventDefault();
-  //   setError('');
-  //   setMessage('');
-
-  //   if (password !== confirmPassword) {
-  //     setPasswordMismatch(true);
-  //     return;
-  //   }
-
-  //   if (!recaptchaToken) {
-  //     setError('Please complete the reCAPTCHA');
-  //     return;
-  //   }
-
-  //   try {
-  //     const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/register`, {
-  //       method: 'POST',
-  //       headers: { 'Content-Type': 'application/json' },
-  //       body: JSON.stringify({ name, email, password, recaptchaToken}) 
-  //     });
-  //     const data = await response.json();
-  //     if (response.ok) {
-  //       // navigate('/login');
-  //       setMessage(data.message || 'Registration successful. Please check your email to verify your account.');
-  //       setIsRegistered(true);
-  //       setResendEmail(email);
-  //       // Clear the form
-  //       setName('');
-  //       setEmail('');
-  //       setPassword('');
-  //       setConfirmPassword('');
-  //     } else {
-  //       setError(data.message || 'Registration failed');
-  //     }
-  //   } catch (err) {
-  //     setError('Registration failed');
-  //   }
-  // };
 
   const handleResendVerification = async (e) => {
     e.preventDefault();
