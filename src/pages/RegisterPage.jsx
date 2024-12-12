@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import ReCAPTCHA from 'react-google-recaptcha';
+import { registerUser, resendVerification } from '../utils/api';
 
 
 const RegisterPage = () => {
@@ -60,63 +61,54 @@ const RegisterPage = () => {
     setError('');
     setMessage('');
 
-    // Validate form before making API call
     if (!validateForm()) {
       return;
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/register`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password, recaptchaToken })
+      // Use our API function instead of direct fetch
+      const data = await registerUser({ 
+        name, 
+        email, 
+        password, 
+        recaptchaToken 
       });
       
-      const data = await response.json();
+      // Handle successful registration
+      setMessage(data.message || 'Registration successful. Please check your email to verify your account.');
+      setIsRegistered(true);
+      setResendEmail(email);
       
-      if (response.ok) {
-        setMessage(data.message || 'Registration successful. Please check your email to verify your account. You may need to check your spam or junk folder. If you still don\'t see a verification email contact the developer at johnobrien.dev@gmail.com.');
-        setIsRegistered(true);
-        setResendEmail(email);
-        // Clear the form
-        setName('');
-        setEmail('');
-        setPassword('');
-        setConfirmPassword('');
+      // Clear the form
+      setName('');
+      setEmail('');
+      setPassword('');
+      setConfirmPassword('');
+      
+    } catch (error) {
+      // Handle specific error cases
+      if (error.message === 'User already exists') {
+        setError('An account with this email already exists');
       } else {
-        // Handle specific backend errors
-        if (data.message === 'User already exists') {
-          setError('An account with this email already exists');
-        } else {
-          setError(data.message || 'Registration failed');
-        }
+        setError(error.message || 'Registration failed');
       }
-    } catch (err) {
-      setError('Unable to connect to the server. Please try again later');
     }
   };
-
 
   const handleResendVerification = async (e) => {
     e.preventDefault();
     setError('');
     setMessage('');
+    
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/resend-verification`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: resendEmail })
-      });
-      const data = await response.json();
-      if (response.ok) {
-        setMessage(data.message || 'Verification email resent. Please check your inbox. You may need to check your spam or junk folder. If you still don\'t see a verification email contact the developer at johnobrien.dev@gmail.com.');
-      } else {
-        setError(data.message || 'Failed to resend verification email');
-      }
-    } catch (err) {
-      setError('Failed to resend verification email');
+      // Use our API function for resending verification
+      const data = await resendVerification(resendEmail);
+      setMessage(data.message || 'Verification email resent. Please check your inbox.');
+    } catch (error) {
+      setError(error.message || 'Failed to resend verification email');
     }
   };
+
 
   return (
     <div 
@@ -279,3 +271,67 @@ const RegisterPage = () => {
 };
 
 export default RegisterPage;
+
+
+// const handleRegister = async (e) => {
+//   e.preventDefault();
+//   setError('');
+//   setMessage('');
+
+//   // Validate form before making API call
+//   if (!validateForm()) {
+//     return;
+//   }
+
+//   try {
+//     const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/register`, {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify({ name, email, password, recaptchaToken })
+//     });
+    
+//     const data = await response.json();
+    
+//     if (response.ok) {
+//       setMessage(data.message || 'Registration successful. Please check your email to verify your account. You may need to check your spam or junk folder. If you still don\'t see a verification email contact the developer at johnobrien.dev@gmail.com.');
+//       setIsRegistered(true);
+//       setResendEmail(email);
+//       // Clear the form
+//       setName('');
+//       setEmail('');
+//       setPassword('');
+//       setConfirmPassword('');
+//     } else {
+//       // Handle specific backend errors
+//       if (data.message === 'User already exists') {
+//         setError('An account with this email already exists');
+//       } else {
+//         setError(data.message || 'Registration failed');
+//       }
+//     }
+//   } catch (err) {
+//     setError('Unable to connect to the server. Please try again later');
+//   }
+// };
+
+
+// const handleResendVerification = async (e) => {
+//   e.preventDefault();
+//   setError('');
+//   setMessage('');
+//   try {
+//     const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/resend-verification`, {
+//       method: 'POST',
+//       headers: { 'Content-Type': 'application/json' },
+//       body: JSON.stringify({ email: resendEmail })
+//     });
+//     const data = await response.json();
+//     if (response.ok) {
+//       setMessage(data.message || 'Verification email resent. Please check your inbox. You may need to check your spam or junk folder. If you still don\'t see a verification email contact the developer at johnobrien.dev@gmail.com.');
+//     } else {
+//       setError(data.message || 'Failed to resend verification email');
+//     }
+//   } catch (err) {
+//     setError('Failed to resend verification email');
+//   }
+// };
