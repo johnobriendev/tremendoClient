@@ -130,7 +130,7 @@ const RegisterPage = () => {
         {message && <p className="text-green-500 mb-4">{message}</p>}
         {!isRegistered ? (
 
-          <form onSubmit={handleRegister} className="">
+          <form onSubmit={handleRegister} noValidate>
             <div className="mb-4">
               <label htmlFor='name' className="block text-gray-700 mb-2">Name</label>
               <input
