@@ -85,9 +85,9 @@ const LoginPage = () => {
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <form onSubmit={handleLogin} noValidate className="mb-4">
           <div className="mb-4">
-            <label htmlFor='email' className="block text-gray-700 mb-2">Email</label>
+            <label htmlFor='login-email' className="block text-gray-700 mb-2">Email</label>
             <input
-              id='email'
+              id='login-email'
               type="email"
               value={email}
               onChange={(e) => {
@@ -99,9 +99,9 @@ const LoginPage = () => {
             />
           </div>
           <div className="mb-4">
-            <label htmlFor='password' className="block text-gray-700 mb-2">Password</label>
+            <label htmlFor='login-password' className="block text-gray-700 mb-2">Password</label>
             <input
-              id='pasword'
+              id='login-password'
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => {
