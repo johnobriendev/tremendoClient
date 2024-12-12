@@ -132,8 +132,9 @@ const RegisterPage = () => {
 
           <form onSubmit={handleRegister} className="">
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Name</label>
+              <label htmlFor='name' className="block text-gray-700 mb-2">Name</label>
               <input
+                id='name'
                 type="text"
                 value={name}
                 onChange={(e) => {
@@ -145,8 +146,9 @@ const RegisterPage = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Email</label>
+              <label htmlFor='email' className="block text-gray-700 mb-2">Email</label>
               <input
+                id='email'
                 type="email"
                 value={email}
                 onChange={(e) =>{
@@ -158,8 +160,9 @@ const RegisterPage = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Password</label>
+              <label htmlFor='password' className="block text-gray-700 mb-2">Password</label>
               <input
+                id='password'
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => { 
@@ -171,8 +174,9 @@ const RegisterPage = () => {
               />
             </div>
             <div className="mb-4">
-              <label className="block text-gray-700 mb-2">Confirm Password</label>
+              <label htmlFor='confirmPassword' className="block text-gray-700 mb-2">Confirm Password</label>
               <input
+                id='confirmPassword'
                 type={showPassword ? 'text' : 'password'}
                 value={confirmPassword}
                 onChange={(e) => {
