@@ -216,8 +216,9 @@ const RegisterPage = () => {
               {/* <p className="mb-4">Registration successful! Please check your email to verify your account.</p> */}
               <form onSubmit={handleResendVerification} className="mb-4">
                 <div className="mb-4">
-                  <label className="block text-gray-700 mb-2">Email for Verification</label>
+                  <label htmlFor='resendEmail' className="block text-gray-700 mb-2">Email for Verification</label>
                   <input
+                    id='resendEmail'
                     type="email"
                     value={resendEmail}
                     onChange={(e) => setResendEmail(e.target.value)}
