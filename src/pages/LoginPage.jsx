@@ -83,10 +83,11 @@ const LoginPage = () => {
         <Link to='/' className='text-4xl mt-12 bg-transparent p-2 rounded absolute top-4 left-10 text-gray-200 hover:text-gray-400'>Tremendo</Link>
         <h1 className="text-2xl mb-4">Login</h1>
         {error && <p className="text-red-500 mb-4">{error}</p>}
-        <form onSubmit={handleLogin} className="mb-4">
+        <form onSubmit={handleLogin} noValidate className="mb-4">
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Email</label>
+            <label htmlFor='email' className="block text-gray-700 mb-2">Email</label>
             <input
+              id='email'
               type="email"
               value={email}
               onChange={(e) => {
@@ -98,8 +99,9 @@ const LoginPage = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Password</label>
+            <label htmlFor='password' className="block text-gray-700 mb-2">Password</label>
             <input
+              id='pasword'
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => {
@@ -117,6 +119,7 @@ const LoginPage = () => {
                   checked={showPassword}
                   onChange={() => setShowPassword(!showPassword)}
                   className="mr-2"
+                  aria-label="Show password"
                 />
                 Show Password
               </label>
