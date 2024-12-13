@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { resetPassword } from '../utils/api';
 
 const ResetPasswordPage = () => {
   const [password, setPassword] = useState('');
@@ -19,22 +20,13 @@ const ResetPasswordPage = () => {
       return;
     }
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/reset-password?token=${token}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password, confirmPassword })
-      });
-      const data = await response.json();
-      if (response.ok) {
-        setMessage(data.message);
-        setError('');
-        setTimeout(() => navigate('/login'), 3000);
-      } else {
-        setError(data.message);
-        setMessage('');
-      }
+      const data = await resetPassword(token, { password, confirmPassword });
+      setMessage(data.message);
+      setError('');
+      setTimeout(() => navigate('/login'), 3000);
     } catch (err) {
-      setError('Failed to reset password');
+      setError(err.message || 'Failed to reset password');
+      setMessage('');
     }
   };
 
@@ -44,10 +36,11 @@ const ResetPasswordPage = () => {
         <h1 className="text-2xl mb-4">Reset Password</h1>
         {message && <p className="text-green-500 mb-4">{message}</p>}
         {error && <p className="text-red-500 mb-4">{error}</p>}
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} noValidate>
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2">New Password</label>
+            <label htmlFor='new-password' className="block text-gray-700 mb-2">New Password</label>
             <input
+              id='new-password'
               type={showPassword ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -56,8 +49,9 @@ const ResetPasswordPage = () => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Confirm New Password</label>
+            <label htmlFor='confirm-new-password' className="block text-gray-700 mb-2">Confirm New Password</label>
             <input
+              id='confirm-new-password'
               type={showPassword ? "text" : "password"}
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
@@ -72,6 +66,7 @@ const ResetPasswordPage = () => {
                   checked={showPassword}
                   onChange={() => setShowPassword(!showPassword)}
                   className="mr-2"
+                  aria-label="Show password"
                 />
                 Show Password
               </label>
