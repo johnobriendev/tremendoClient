@@ -16,15 +16,20 @@ const ResetPasswordPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
+      console.log('Component: Passwords do not match');
       setError('Passwords do not match');
       return;
     }
     try {
+      console.log('Component: Calling resetPassword API');
       const data = await resetPassword(token, { password, confirmPassword });
+      console.log('Component: API call successful:', data);
       setMessage(data.message);
       setError('');
       setTimeout(() => navigate('/login'), 3000);
     } catch (err) {
+      console.log('Component: API call failed:', err);
+
       setError(err.message || 'Failed to reset password');
       setMessage('');
     }
