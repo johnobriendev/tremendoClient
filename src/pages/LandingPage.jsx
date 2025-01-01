@@ -83,7 +83,7 @@ const LandingPage = () => {
 
       <header className={`w-full py-4 px-6 fixed top-0 z-10 transition-all duration-300 ${isScrolled ? 'bg-white/80 backdrop-blur-md' : 'bg-transparent'}`}>
         <nav className={`flex ${isScrolled ? 'justify-between' : 'justify-end'}  items-center max-w-7xl mx-auto`}>
-          <a href="#" onClick={scrollToTop} className={`text-2xl font-bold ${isScrolled ? 'text-black' : 'hidden'}`}>
+          <a href="#" onClick={scrollToTop} className={`text-4xl font-bold ${isScrolled ? 'text-black font-thin' : 'hidden'}`}>
             Tremendo
           </a>
           <div className="space-x-4">
@@ -108,11 +108,11 @@ const LandingPage = () => {
             backgroundImage: "url(/playa.webp)",
           }}
         >
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 mt-24 text-center">Tremendo</h1>
-          <h2 className="text-xl md:text-2xl text-white mb-8 text-center max-w-2xl">
+          <h1 className="text-4xl md:text-6xl font-thin  text-white mb-4 mt-24 text-center">Tremendo</h1>
+          {/* <h2 className="text-xl md:text-2xl text-white font-thin mb-8 text-center max-w-2xl">
             Your go-to solution for everything you need related to productivity and organization.
-          </h2>
-          <a href="#about" onClick={scrollToAbout} className="bg-white bg-opacity-80 hover:bg-opacity-100 text-blue-600 font-bold py-2 px-4 rounded">
+          </h2> */}
+          <a href="#about" onClick={scrollToAbout} className="bg-white bg-opacity-40 hover:bg-opacity-50 hover:border hover:border-white text-white font-thin py-2 px-4 rounded">
             Learn More
           </a>
         </section>
@@ -141,10 +141,10 @@ const LandingPage = () => {
           </a>
         </section> */}
 
-        <section id="about" className="min-h-screen flex flex-col items-center justify-center p-6 bg-cover bg-center overflow-auto relative" style={{backgroundImage: "url(/mountain.jpg)"}}>
+        <section id="about" className="min-h-screen flex flex-col items-center justify-center p-16 bg-cover bg-center overflow-auto relative" style={{backgroundImage: "url(/mountain.jpg)"}}>
           <div className="max-w-6xl mx-auto bg-white/80 backdrop-blur-md rounded-lg p-8 shadow-lg">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center mt-6">Welcome to Tremendo</h2>
-            <p className="text-lg mb-6">
+            {/* <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center mt-6">Welcome to Tremendo</h2> */}
+            {/* <p className="text-lg mb-6">
               Tremendo is the ultimate productivity tool designed to help you manage tasks effortlessly. Tremendo offers a
               clean and intuitive interface where you can create boards, organize lists, and keep track of your tasks all in
               one place. Whether you're managing personal to-dos or working on team projects, its flexible drag-and-drop
@@ -157,7 +157,32 @@ const LandingPage = () => {
               <li>Create, Edit, and Delete Lists</li>
               <li>Create, Edit, and Delete Cards</li>
               <li>Drag and Drop Cards between lists</li>
-            </ul>
+            </ul> */}
+           <div className="space-y-6">
+              <p className="text-lg">
+                Tremendo brings clarity to task management through beautifully simple design. Our clean, intuitive interface helps you organize work without the clutter, letting you focus on what matters most.
+              </p>
+              
+              <p className="text-lg">
+                Whether you're planning personal projects or coordinating with a team, Tremendo adapts to your needs. Create boards that reflect your workflow, organize tasks into lists, and track progress with a quick glance. With smooth drag-and-drop functionality, managing tasks feels natural and effortless.
+              </p>
+
+              <h3 className="text-xl font-semibold">Core Features:</h3>
+              <ul className="list-disc pl-6 space-y-3">
+                <li className="text-lg">
+                  <span className="font-medium">Simple Board Creation:</span> Set up dedicated spaces for different projects or areas of focus
+                </li>
+                <li className="text-lg">
+                  <span className="font-medium">Flexible Task Organization:</span> Create, move, and update tasks with intuitive drag-and-drop functionality
+                </li>
+                <li className="text-lg">
+                  <span className="font-medium">Clean Visual Design:</span> Choose between light and dark themes, and personalize your boards with custom backgrounds
+                </li>
+                <li className="text-lg">
+                  <span className="font-medium">Seamless Collaboration:</span> Share boards, assign tasks, and keep everyone aligned with minimal effort
+                </li>
+              </ul>
+            </div>
         
             <div className="block md:hidden space-y-4 md:mx-24 xl:mx-72">
               <img
