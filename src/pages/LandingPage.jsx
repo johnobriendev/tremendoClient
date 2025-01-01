@@ -10,6 +10,36 @@ import 'slick-carousel/slick/slick-theme.css';
 const LandingPage = () => {
   const [enlargedImage, setEnlargedImage] = useState(null)
   const [isScrolled, setIsScrolled] = useState(false)
+  const [backgroundImage, setBackgroundImage] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+
+  // useEffect(() => {
+  //   const fetchBackgroundImage = async () => {
+  //     try {
+  //       // You would need to replace this with your actual API key
+  //       const response = await fetch(
+  //         `https://api.unsplash.com/photos/random?collections=${import.meta.env.VITE_UNSPLASH_COLLECTION_ID}&orientation=landscape&w=1920&fit=crop&q=85`,
+  //         {
+  //           headers: {
+  //             Authorization: `Client-ID ${import.meta.env.VITE_UNSPLASH_ACCESS_KEY}`
+  //           }
+  //         }
+  //       );
+  //       const data = await response.json();
+  //       setBackgroundImage(data.urls.regular);
+  //       setIsLoading(false);
+  //     } catch (error) {
+  //       console.error('Error fetching background image:', error);
+  //       // Fallback to a default image
+  //       setBackgroundImage('/beach.webp');
+  //       setIsLoading(false);
+  //     }
+  //   };
+
+  //   fetchBackgroundImage();
+  // }, []);
+
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -75,7 +105,7 @@ const LandingPage = () => {
         <section
           className="h-screen flex flex-col items-center justify-items-start p-6 bg-cover bg-center"
           style={{
-            backgroundImage: "url(/beach.webp)",
+            backgroundImage: "url(/playa.webp)",
           }}
         >
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 mt-24 text-center">Tremendo</h1>
@@ -86,6 +116,30 @@ const LandingPage = () => {
             Learn More
           </a>
         </section>
+
+        {/* <section
+          className={`h-screen flex flex-col items-center justify-items-start p-6 bg-cover bg-center transition-opacity duration-500 ${
+            isLoading ? 'opacity-0' : 'opacity-100'
+          }`}
+          style={{
+            backgroundImage: `url(${backgroundImage})`,
+            backgroundColor: '#1a1a1a', // Fallback color while loading
+          }}
+        >
+          {isLoading && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          )}
+          
+          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 mt-24 text-center">Tremendo</h1>
+          <h2 className="text-xl md:text-2xl text-white mb-8 text-center max-w-2xl">
+            Streamline your workflow, boost productivity, and collaborate seamlessly with our intuitive task management platform.
+          </h2>
+          <a href="#about" onClick={scrollToAbout} className="bg-white bg-opacity-80 hover:bg-opacity-100 text-blue-600 font-bold py-2 px-4 rounded">
+            Learn More
+          </a>
+        </section> */}
 
         <section id="about" className="min-h-screen flex flex-col items-center justify-center p-6 bg-cover bg-center overflow-auto relative" style={{backgroundImage: "url(/mountain.jpg)"}}>
           <div className="max-w-6xl mx-auto bg-white/80 backdrop-blur-md rounded-lg p-8 shadow-lg">
@@ -152,12 +206,7 @@ const LandingPage = () => {
           </div>
         </section>
 
-        {/* <section className="bg-gray-100">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-            <h2 className="text-3xl font-extrabold text-gray-900 mb-8">Try Our Interactive Demo</h2>
-            <DemoBoard />
-          </div>
-        </section> */}
+      
       </main>
 
       <footer className="bg-gray-100 py-12">
