@@ -1,16 +1,17 @@
 import React, { useRef, useEffect } from 'react';
+import { useTheme } from '../hooks/useTheme';
+import { getButtonStyles } from '../utils/styleSystem';
+import { backgroundThemes } from '../utils/styleSystem';
+
 
 const PageSettingsModal = ({ 
   isOpen, 
   onClose, 
-  theme, 
+  themeColor, 
   onThemeChange, 
-  backgroundImages, 
-  currentBackground,
-  onBackgroundSelect,
-  onRemoveBackground,
-  getModalStyles, 
+  onThemeColorChange
 }) => {
+  const { isDark, colors } = useTheme();
   const modalRef = useRef(null);
 
   useEffect(() => {
@@ -35,6 +36,9 @@ const PageSettingsModal = ({
 
   if (!isOpen) return null;
 
+  const themeOptions = Object.keys(backgroundThemes);
+
+
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="min-h-screen px-4 text-center">
@@ -48,7 +52,8 @@ const PageSettingsModal = ({
           ref={modalRef}
           className="inline-block w-full max-w-md p-6 my-8 text-left align-middle transition-all transform rounded-lg shadow-xl relative"
           style={{
-            ...getModalStyles(theme === 'dark'),
+            backgroundColor: colors.background.secondary,
+            color: colors.text.primary,
             maxHeight: '85vh',
             overflowY: 'auto'
           }}
@@ -60,17 +65,13 @@ const PageSettingsModal = ({
             <p className="font-medium mb-2">Theme</p>
             <div className="flex gap-2">
               <button
-                className={`flex-1 px-4 py-2 rounded transition-colors ${
-                  theme === 'light' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-black'
-                }`}
+                {...getButtonStyles(isDark ? 'default' : 'primary')}
                 onClick={() => onThemeChange('light')}
               >
                 Light Mode
               </button>
               <button
-                className={`flex-1 px-4 py-2 rounded transition-colors ${
-                  theme === 'dark' ? 'bg-blue-500 text-white' : 'bg-gray-600 text-white'
-                }`}
+                {...getButtonStyles(isDark ? 'primary' : 'default')}
                 onClick={() => onThemeChange('dark')}
               >
                 Dark Mode
@@ -82,32 +83,19 @@ const PageSettingsModal = ({
           <div className="mb-6">
             <p className="font-medium mb-2">Background</p>
             <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mb-3">
-              {/* No Background Option */}
-              <button
-                className={`border-2 rounded p-1 aspect-square ${
-                  currentBackground === null ? 'border-blue-500' : 'border-transparent'
-                }`}
-                onClick={onRemoveBackground}
-              >
-                <div className={`w-full h-full rounded ${theme === 'dark' ? 'bg-gray-700' : 'bg-gray-100'}`}>
-                  <p className="text-center text-xs mt-1">None</p>
-                </div>
-              </button>
-              
-              {/* Background Images */}
-              {backgroundImages.map((image) => (
+            {themeOptions.map((theme) => (
                 <button
-                  key={image.url}
-                  className={`border-2 rounded p-1 aspect-square ${
-                    currentBackground === image.url ? 'border-blue-500' : 'border-transparent'
+                  key={theme}
+                  onClick={() => onThemeColorChange(theme)}
+                  className={`p-4 rounded-lg transition-all ${
+                    themeColor === theme ? 'ring-2 ring-offset-2 ring-blue-500' : ''
                   }`}
-                  onClick={() => onBackgroundSelect(image.url)}
+                  style={{
+                    backgroundColor: backgroundThemes[theme][isDark ? 'dark' : 'light'],
+                    color: isDark ? colors.text.primary : colors.text.secondary
+                  }}
                 >
-                  <div 
-                    className="w-full h-full bg-cover bg-center rounded" 
-                    style={{backgroundImage: image.thumbnail}}
-                  />
-                  <p className="text-center text-xs mt-1">{image.label}</p>
+                  {theme.charAt(0).toUpperCase() + theme.slice(1)}
                 </button>
               ))}
             </div>
@@ -115,7 +103,8 @@ const PageSettingsModal = ({
 
           {/* Close Button */}
           <button
-            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded w-full transition-colors"
+            {...getButtonStyles('danger')}
+            className="w-full"
             onClick={onClose}
           >
             Close

@@ -1,16 +1,18 @@
 import React, { useRef, useEffect } from 'react';
+import { useTheme } from '../hooks/useTheme';
+import { getButtonStyles } from '../utils/styleSystem';
+
 
 const CreateBoardModal = ({ 
   isOpen, 
   onClose, 
-  theme, 
   newBoardName, 
   setNewBoardName, 
   selectedTemplate, 
   setSelectedTemplate, 
   handleCreateBoard,
-  getModalStyles 
 }) => {
+  const { colors } = useTheme();
   const createInputRef = useRef(null);
   const modalRef = useRef(null);
 
@@ -39,17 +41,28 @@ const CreateBoardModal = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="p-6 rounded shadow" ref={modalRef} style={getModalStyles(theme === 'dark')}>
+    <div className="fixed inset-0 flex items-center justify-center z-50">
+      <div className="fixed inset-0 bg-black bg-opacity-50" />
+      <div 
+        className="relative p-6 rounded-lg shadow-xl"
+        ref={modalRef}
+        style={{
+          backgroundColor: colors.background.secondary,
+          color: colors.text.primary
+        }}
+      >
         <h2 className="text-xl font-bold mb-4">Create New Board</h2>
         <div className="mb-4">
           <label className="block mb-2">Board Name</label>
           <input
             ref={createInputRef}
             type="text"
-            className={`border p-2 w-full rounded ${
-              theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-black'
-            }`}
+            className="w-full p-2 rounded"
+            style={{
+              backgroundColor: colors.background.tertiary,
+              color: colors.text.primary,
+              border: `1px solid ${colors.text.muted}`
+            }}
             value={newBoardName}
             onChange={(e) => setNewBoardName(e.target.value)}
             onKeyDown={(e) => {
@@ -62,9 +75,12 @@ const CreateBoardModal = ({
         <div className="mb-4">
           <label className="block mb-2">Board Template</label>
           <select
-            className={`border p-2 w-full rounded ${
-              theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-white text-black'
-            }`}
+            className="w-full p-2 rounded"
+            style={{
+              backgroundColor: colors.background.tertiary,
+              color: colors.text.primary,
+              border: `1px solid ${colors.text.muted}`
+            }}
             value={selectedTemplate}
             onChange={(e) => setSelectedTemplate(e.target.value)}
           >
@@ -73,20 +89,20 @@ const CreateBoardModal = ({
             <option value="weekly">Weekly Planner</option>
           </select>
         </div>
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-          onClick={handleCreateBoard}
-        >
-          Create
-        </button>
-        <button
-          className={`px-4 py-2 rounded ${
-            theme === 'dark' ? 'bg-gray-600 text-white' : 'bg-white text-black'
-          }`}
-          onClick={onClose}
-        >
-          Cancel
-        </button>
+        <div className="flex justify-end gap-2">
+          <button
+            {...getButtonStyles('danger')}
+            onClick={onClose}
+          >
+            Cancel
+          </button>
+          <button
+            {...getButtonStyles('success')}
+            onClick={handleCreateBoard}
+          >
+            Create
+          </button>
+        </div>
       </div>
     </div>
   );

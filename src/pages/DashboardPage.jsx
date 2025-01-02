@@ -11,13 +11,14 @@ import DeleteBoardModal from '../components/DeleteBoardModal';
 import InviteUserModal from '../components/InviteUserModal';
 import { useTheme } from '../hooks/useTheme';
 import { useBackground } from '../hooks/useBackground';
-import { getThemeStyles, getModalStyles, getBoardStyles, getButtonStyles, getNavBarStyles } from '../utils/styles';
+//import { getThemeStyles, getModalStyles, getBoardStyles, getButtonStyles, getNavBarStyles } from '../utils/styles';
+import { getThemeStyles, getComponentStyles } from '../utils/styleSystem';
 import * as api from '../utils/api';
 
 const DashboardPage = () => {
   const navigate = useNavigate();
-  const [theme, setTheme] = useTheme();
   const [backgroundImage, setBackgroundImage] = useBackground();
+  const { theme, setTheme, themeColor, setThemeColor, colors } = useTheme();
   
   const [user, setUser] = useState(null);
   const [ownedBoards, setOwnedBoards] = useState([]);
@@ -158,6 +159,8 @@ const DashboardPage = () => {
     navigate('/login');
   };
 
+
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar 
@@ -168,24 +171,18 @@ const DashboardPage = () => {
           setIsDropdownOpen(false);
         }}
         onLogout={handleLogout}
-        theme={theme}
+        //theme={theme}
         isDropdownOpen={isDropdownOpen}
         setIsDropdownOpen={setIsDropdownOpen}
-        getNavBarStyles={getNavBarStyles}
+        //getNavBarStyles={getNavBarStyles}
         settingsRef={settingsRef}
       />
    
       <div 
         className={`flex-grow pt-28 sm:pt-24 p-6 overflow-auto`}
         style={{
-          ...(backgroundImage ? {
-            backgroundImage,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            // The key change: using 'scroll' instead of 'fixed'
-            backgroundAttachment: 'scroll',
-          } : getThemeStyles(theme === 'dark')),
+          backgroundColor: colors.background.primary,
+          color: colors.text.primary,
         }}
       >
         {error && <p className="text-red-500">{error}</p>}
@@ -228,13 +225,9 @@ const DashboardPage = () => {
         <PageSettingsModal
           isOpen={isPageSettingsModalOpen}
           onClose={() => setIsPageSettingsModalOpen(false)}
-          theme={theme}
           onThemeChange={setTheme}
-          backgroundImages={backgroundImages}
-          currentBackground={backgroundImage}
-          onBackgroundSelect={setBackgroundImage}
-          onRemoveBackground={() => setBackgroundImage(null)}
-          getModalStyles={getModalStyles}
+          themeColor={themeColor}
+          onThemeColorChange={setThemeColor}
         />
         <CreateBoardModal
           isOpen={isCreateModalOpen}
@@ -245,23 +238,18 @@ const DashboardPage = () => {
           selectedTemplate={selectedTemplate}
           setSelectedTemplate={setSelectedTemplate}
           handleCreateBoard={handleCreateBoard}
-          getModalStyles={getModalStyles}
         />
         <EditBoardModal
           isOpen={isEditModalOpen}
           onClose={() => setIsEditModalOpen(false)}
-          theme={theme}
           editBoardName={editBoardName}
           setEditBoardName={setEditBoardName}
           handleEditBoard={handleEditBoard}
-          getModalStyles={getModalStyles}
         />
         <DeleteBoardModal
           isOpen={isDeleteModalOpen}
           onClose={() => setIsDeleteModalOpen(false)}
-          theme={theme}
           handleConfirmDelete={handleConfirmDeleteBoard}
-          getModalStyles={getModalStyles}
         />
         <InviteUserModal
           isOpen={isInviteModalOpen}
@@ -270,21 +258,11 @@ const DashboardPage = () => {
             setSelectedBoardId(null);
           }}
           onInviteUser={handleInviteUser}
-          theme={theme}
-          getModalStyles={getModalStyles}
-
         />
       </div>
     </div>
   );
-
-  
-
-  
-
-  
 };
-
 export default DashboardPage;
 
 

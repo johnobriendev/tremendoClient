@@ -1,3 +1,5 @@
+//src/utils/boardStyles
+
 export const getThemeStyles = (isDark) => ({
   backgroundColor: isDark ? '#1F2937' : '#dae8f1' , //'#181d28' '#b1cee2'
   color: isDark ? '#CBD5E0' : '#1A202C', //#fff #000

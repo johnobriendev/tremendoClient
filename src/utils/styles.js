@@ -1,3 +1,5 @@
+//src/utils/styles
+
 export const getThemeStyles = (isDark) => ({
   backgroundColor: isDark ? '#181d28' : '#dae8f1',
   color: isDark ? '#fff' : '#000',
