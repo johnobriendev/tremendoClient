@@ -6,14 +6,16 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import List from '../components/List'; 
 import Navbar from '../components/Navbar';
 import PageSettingsModal from '../components/PageSettingsModal';
-import { useTheme } from '../hooks/useTheme';
-import { useBackground } from '../hooks/useBackground';
-import { getThemeStyles, getModalStyles, getNavBarStyles } from '../utils/boardStyles';
+import { useTheme } from '../context/ThemeContext.jsx';
+// import { useTheme } from '../hooks/useTheme';
+// import { useBackground } from '../hooks/useBackground';
+// import { getThemeStyles, getModalStyles, getNavBarStyles } from '../utils/boardStyles';
 import * as api from '../utils/api';
 
 function BoardPage() {
-  const [theme, setTheme] = useTheme();
-  const [backgroundImage, setBackgroundImage] = useBackground();
+  const { colors, accent, theme } = useTheme();
+
+  //const [backgroundImage, setBackgroundImage] = useBackground();
 
   const { boardId } = useParams();
   const [board, setBoard] = useState(null);
@@ -282,7 +284,6 @@ function BoardPage() {
         theme={theme}
         isDropdownOpen={isDropdownOpen}
         setIsDropdownOpen={setIsDropdownOpen}
-        getNavBarStyles={getNavBarStyles}
         settingsRef={settingsRef}
         boardName={board?.name}
         showCreateBoard={false}
@@ -292,13 +293,9 @@ function BoardPage() {
       <div 
         className="flex-grow pt-24 sm:pt-20 overflow-x-auto relative"
         style={{
-          ...(backgroundImage ? {
-            backgroundImage,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            backgroundAttachment: 'scroll', // This prevents mobile resize issues
-          } : getThemeStyles(theme === 'dark')),
+            backgroundColor: colors.background.primary,
+            color: colors.text.primary,
+            transition: 'background-color 0.2s, color 0.2s'
         }}
       >
         <DragDropContext onDragEnd={handleDragEnd}>
@@ -331,7 +328,7 @@ function BoardPage() {
                       handleUpdateCard={handleUpdateCard} 
                       handleDeleteCard={handleDeleteCard} 
                       index={index}
-                      theme={theme}
+                      //theme={theme}
                     />
                   ))}
                   {provided.placeholder}
@@ -341,31 +338,43 @@ function BoardPage() {
                     {!isAddingList ? (
                       <button
                         onClick={() => setIsAddingList(true)}
-                        className={`w-full py-2 px-4 rounded shadow-xl ${
-                          theme === 'dark' ? 'bg-[#2B2F3A] hover:bg-opacity-70 text-[#CBD5E0]' : 'bg-[#c4d5e5] hover:bg-opacity-70'
-                        }`}
+                        className="w-full py-2 px-4 rounded shadow-xl"
+                        style={{
+                          backgroundColor: colors.background.secondary,
+                          color: colors.text.primary,
+                          transition: 'background-color 0.2s, color 0.2s'
+                        }}
                       >
                         + Add another list 
                       </button>
                     ) : (
-                      <div className={`${
-                        theme === 'dark' ? 'bg-[#2B2F3A]' : 'bg-[#c4d5e5]'
-                      } p-2 rounded`}>
+                      <div className="p-2 rounded" style={{
+                        backgroundColor: colors.background.secondary,
+                        transition: 'background-color 0.2s'
+                      }}>
                         <input
                           type="text"
                           value={newListName}
                           onChange={(e) => setNewListName(e.target.value)}
                           onKeyPress={handleKeyPress}
                           placeholder="Enter list title..."
-                          className={`${
-                            theme === 'dark' ? 'bg-gray-700 text-white' : 'bg-[#EDF2F7] placeholder:text-black text-black'
-                          } w-full p-2 rounded mb-2`}
+                          className="w-full p-2 rounded mb-2"
+                          style={{
+                            backgroundColor: colors.background.tertiary,
+                            color: colors.text.primary,
+                            transition: 'background-color 0.2s, color 0.2s'
+                          }}
                           ref={newListInputRef}
                         />
                         <div className="flex justify-between">
                           <button
                             onClick={handleCreateList}
-                            className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+                            className="px-4 py-2 rounded hover:opacity-90"
+                            style={{
+                              backgroundColor: accent.primary,
+                              color: '#ffffff',
+                              transition: 'background-color 0.2s'
+                            }}
                             ref={newListButtonRef}
                           >
                             Add List
@@ -375,7 +384,7 @@ function BoardPage() {
                               setIsAddingList(false);
                               setNewListName('');
                             }}
-                            className="text-gray-500 hover:text-gray-700"
+                            style={{ color: colors.text.secondary }}
                           >
                             ✕
                           </button>
@@ -393,13 +402,7 @@ function BoardPage() {
       <PageSettingsModal
         isOpen={isPageSettingsModalOpen}
         onClose={() => setIsPageSettingsModalOpen(false)}
-        theme={theme}
-        onThemeChange={setTheme}
-        backgroundImages={backgroundImages}
-        currentBackground={backgroundImage}
-        onBackgroundSelect={setBackgroundImage}
-        onRemoveBackground={() => setBackgroundImage(null)}
-        getModalStyles={getModalStyles}
+        
       />
     </div>
   );

@@ -3,9 +3,11 @@ import { useState, useEffect, useRef } from 'react';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import Card from './Card';
 import { BsThreeDots } from "react-icons/bs";
+import { useTheme } from '../context/ThemeContext.jsx';
 
-function List({ list, cards, newCardName, editListName, setEditListName, setNewCardName, handleCreateCard, handleDeleteList, handleListNameChange, handleUpdateCard, handleDeleteCard, theme }) {
+function List({ list, cards, newCardName, editListName, setEditListName, setNewCardName, handleCreateCard, handleDeleteList, handleListNameChange, handleUpdateCard, handleDeleteCard}) {
   
+  const { colors, accent } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [listColor, setListColor] = useState(list.color || 'bg-gray-800');
@@ -18,10 +20,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
   const cardInputRef = useRef(null);
   const addCardButtonRef = useRef(null);
   
-  const getListStyles = (isDark) => ({
-    backgroundColor: isDark ? '#2B2F3A' : '#c4d5e5', 
-    color: isDark ? '#fff' : '#000',
-  });
+ 
   
   const handleListNameKeyPress = (e) => {
     if (e.key === 'Enter') {
@@ -73,33 +72,33 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
   };
 
 
-  const handleColorChange = (listId, newColor) => {
+  // const handleColorChange = (listId, newColor) => {
     
-    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-    // Send the update request to the backend
-    fetch(`${apiBaseUrl}/lists/${listId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-      },
-      body: JSON.stringify({ color: newColor }),
-    })
-    .then((response) => response.json())
-    .then((data) => {
-      setListColor(newColor);
-      console.log('List color updated:', data);
-    })
-    .catch((error) => {
-      console.error('Error updating list color:', error);
-    });
-  };
+  //   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+  //   // Send the update request to the backend
+  //   fetch(`${apiBaseUrl}/lists/${listId}`, {
+  //     method: 'PUT',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //       'Authorization': `Bearer ${localStorage.getItem('token')}`,
+  //     },
+  //     body: JSON.stringify({ color: newColor }),
+  //   })
+  //   .then((response) => response.json())
+  //   .then((data) => {
+  //     setListColor(newColor);
+  //     console.log('List color updated:', data);
+  //   })
+  //   .catch((error) => {
+  //     console.error('Error updating list color:', error);
+  //   });
+  // };
 
-  useEffect(() => {
-    if (list.color) {
-      setListColor(list.color || null);
-    }
-  }, [list.color]);
+  // useEffect(() => {
+  //   if (list.color) {
+  //     setListColor(list.color || null);
+  //   }
+  // }, [list.color]);
 
   return (
     <Draggable draggableId={list._id} index={list.position - 1}>
@@ -109,7 +108,12 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           className="relative shadow rounded-md p-2 w-[264px] max-h-[calc(100vh-6rem)] flex flex-col ${snapshot.isDragging ? 'z-50' : 'z-10'}"
-          style={getListStyles(theme === 'dark')}
+          style={{
+            backgroundColor: colors.background.secondary,
+            color: colors.text.primary,
+            transition: 'background-color 0.2s, color 0.2s',
+            ...(snapshot.isDragging ? { zIndex: 50 } : { zIndex: 10 })
+          }}
         >
           <div className="flex items-center justify-between gap-2 mb-4 ">
             <input
@@ -119,22 +123,30 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
               onBlur={() => handleListNameChange(list._id, editListName[list._id])}
               onKeyPress={handleListNameKeyPress}
               placeholder="List Name"
-              className={`p-2 rounded w-full ${
-                theme === 'dark' ? 'bg-[#374151]' : 'bg-[#EDF2F7]'
-              }`}
-              style={{ backgroundColor: listColor }}
+              className="p-2 rounded w-full"
+              style={{
+                backgroundColor: colors.background.tertiary,
+                color: colors.text.primary,
+                transition: 'background-color 0.2s, color 0.2s'
+              }}
             />
             <div className="relative" ref={menuRef}>
               <button
                 onClick={() => setMenuOpen(!menuOpen)}
-                className={` ${
-                  theme === 'dark' ? 'text-gray-400 hover:text-gray-300' : 'text-gray-600 hover:text-gray-800'
-                }`}
+                className="hover:opacity-80 transition-opacity"
+                style={{ color: colors.text.secondary }}
               >
                 <BsThreeDots />
               </button>
               {menuOpen && (
-                <div className="absolute -right-24 mt-2 w-48 z-[35] bg-gray-700 text-white border rounded shadow-lg">
+                <div 
+                className="absolute -right-24 mt-2 w-48 z-[35] rounded shadow-lg"
+                style={{
+                  backgroundColor: colors.background.tertiary,
+                  color: colors.text.primary,
+                  transition: 'background-color 0.2s, color 0.2s'
+                }}
+                >
                   <button
                     onClick={handleDeleteClick}
                     className="block px-4 py-2 text-red-500 hover:bg-gray-600 w-full text-left"
@@ -182,7 +194,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                       index={cardIndex} 
                       onUpdateCard={handleUpdateCard}
                       onDeleteCard={handleDeleteCard}
-                      theme={theme}
+                  
                     />
                   ))}
                   {provided.placeholder}
@@ -200,14 +212,21 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                         onChange={(e) => setNewCardName({ ...newCardName, [list._id]: e.target.value })}
                         onKeyPress={handleAddCardKeyPress}
                         placeholder="New Card Name"
-                        className={`p-2 border rounded w-full ${
-                          theme === 'dark' ? 'bg-gray-800' : 'bg-white'
-                        }`}
+                        className="w-full p-2 rounded mb-2"
+                        style={{
+                          backgroundColor: colors.background.tertiary,
+                          color: colors.text.primary,
+                          transition: 'background-color 0.2s, color 0.2s'
+                        }}
                         ref={cardInputRef}
                       />
                       <button
                         onClick={() => handleCreateCard(list._id)}
-                        className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 mt-4"
+                        className="px-4 py-2 rounded hover:opacity-90 transition-opacity"
+                        style={{
+                          backgroundColor: accent.primary,
+                          color: '#ffffff'
+                        }}
                         ref={addCardButtonRef}
                       >
                         Add Card
@@ -216,7 +235,11 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                   ) : (
                     <button
                       onClick={() => setShowCardInput(true)}
-                      className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+                      className="px-4 py-2 rounded hover:opacity-90 transition-opacity"
+                      style={{
+                        backgroundColor: accent.primary,
+                        color: '#ffffff'
+                      }}
                     >
                       Add Card
                     </button>
@@ -224,19 +247,33 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
            </div>
           {showModal && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-              <div className={`${
-                          theme === 'dark' ? 'bg-gray-800' : 'bg-[#e4eef5]'
-                        } p-6 rounded-md shadow-lg`} ref={modalRef}>
+              <div 
+              className="p-6 rounded-md shadow-lg"
+              style={{
+                backgroundColor: colors.background.secondary,
+                color: colors.text.primary,
+                transition: 'background-color 0.2s, color 0.2s'
+              }}
+              ref={modalRef}
+              >
                 <h2 className="text-lg mb-4">Are you sure you want to delete this list?</h2>
                 <button
                   onClick={confirmDelete}
-                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mr-4"
+                  className="px-4 py-2 rounded hover:opacity-90 mr-4"
+                  style={{
+                    backgroundColor: accent.danger,
+                    color: '#ffffff'
+                  }}
                 >
                   Delete
                 </button>
                 <button
                   onClick={() => setShowModal(false)}
-                  className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                  className="px-4 py-2 rounded hover:opacity-90"
+                  style={{
+                    backgroundColor: accent.primary,
+                    color: '#ffffff'
+                  }}
                 >
                   Cancel
                 </button>
