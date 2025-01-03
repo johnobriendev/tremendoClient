@@ -32,10 +32,10 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
 
 
 
-  const getCardStyles = (isDark) => ({
-    backgroundColor: isDark ? '#374151' : '#EDF2F7', //#212938 #bcc5d7
-    color: isDark ? '#CBD5E0' : '#1A202C',
-  });
+  // const getCardStyles = (isDark) => ({
+  //   backgroundColor: isDark ? '#374151' : '#EDF2F7', //#212938 #bcc5d7
+  //   color: isDark ? '#CBD5E0' : '#1A202C',
+  // });
 
   //calculates the position of the edit card menu
   const updateMenuPosition = () => {
@@ -273,7 +273,8 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
             border: '1px solid transparent',
             borderColor: snapshot.isDragging ? colors.text.secondary : 'transparent',
             transition: 'background-color 0.2s, color 0.2s, border-color 0.2s',
-            zIndex: snapshot.isDragging ? 90 : 20,
+            position: 'relative',
+            zIndex: snapshot.isDragging ? 35 : 1,
             ...provided.draggableProps.style
           }}
           //onClick={handleCardClick}
@@ -303,7 +304,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
                   <span className="block">{card.name}</span>
                   <MdOutlineModeEdit
                     onClick={handleEditClick}
-                    className="absolute top-0 right-0 p-1 opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity duration-300"
+                    className="absolute top-1 right-1 p-1.5 opacity-0 group-hover:opacity-100 cursor-pointer transition-opacity duration-300 hover:opacity-80"
                   style={{
                     color: colors.text.secondary,
                     backgroundColor: colors.background.secondary,
@@ -318,7 +319,10 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
 
           {/* Detail Modal */}
           {showDetailModal && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div 
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+            style={{ zIndex: 85 }}
+            >
               <div 
                 ref={detailModalRef}
                 className="w-11/12 max-w-2xl rounded-lg shadow-xl p-6"
@@ -441,7 +445,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
                 backgroundColor: colors.background.secondary,
                 color: colors.text.primary,
                 transition: 'background-color 0.2s, color 0.2s',
-                zIndex: 100,
+                zIndex: 65,
               }}          
               className="w-36 shadow-lg rounded border p-1"
             >
@@ -467,7 +471,10 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
 
           {/* Delete Confirmation Modal */}
           {showDeleteModal && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-20">
+            <div 
+            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75"
+            style={{ zIndex: 80 }}
+            >
               <div 
                 ref={deleteModalRef} 
                 className="p-6 rounded shadow-lg"

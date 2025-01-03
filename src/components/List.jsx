@@ -107,12 +107,13 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
           ref={provided.innerRef}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          className="relative shadow rounded-md p-2 w-[264px] max-h-[calc(100vh-6rem)] flex flex-col ${snapshot.isDragging ? 'z-50' : 'z-10'}"
+          className="relative shadow rounded-md p-2 w-[264px] max-h-[calc(100vh-6rem)] flex flex-col"
           style={{
             backgroundColor: colors.background.secondary,
             color: colors.text.primary,
             transition: 'background-color 0.2s, color 0.2s',
-            ...(snapshot.isDragging ? { zIndex: 50 } : { zIndex: 10 })
+            position:'relative',
+            zIndex: snapshot.isDragging ? 30 : 1
           }}
         >
           <div className="flex items-center justify-between gap-2 mb-4 ">
@@ -140,11 +141,12 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
               </button>
               {menuOpen && (
                 <div 
-                className="absolute -right-24 mt-2 w-48 z-[35] rounded shadow-lg"
+                className="absolute -right-24 mt-2 w-48 rounded shadow-lg"
                 style={{
                   backgroundColor: colors.background.tertiary,
                   color: colors.text.primary,
-                  transition: 'background-color 0.2s, color 0.2s'
+                  transition: 'background-color 0.2s, color 0.2s',
+                  zIndex: 60
                 }}
                 >
                   <button
@@ -153,7 +155,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                   >
                     Delete List
                   </button>
-                  <button
+                  {/* <button
                     onClick={() => handleColorChange(list._id, '')}
                     className="block px-4 py-2 text-blue-500 hover:bg-gray-600 w-full text-left"
                   >
@@ -168,7 +170,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                       onChange={(e) => handleColorChange(list._id, e.target.value)}
                       // onChange={(e) => setListColor(e.target.value)}
                     />
-                  </div>
+                  </div> */}
                   <button
                     onClick={() => setMenuOpen(false)}
                     className="block px-4 py-2 hover:bg-gray-600 w-full text-left"
@@ -246,13 +248,15 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                   )}
            </div>
           {showModal && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
               <div 
               className="p-6 rounded-md shadow-lg"
               style={{
                 backgroundColor: colors.background.secondary,
                 color: colors.text.primary,
-                transition: 'background-color 0.2s, color 0.2s'
+                transition: 'background-color 0.2s, color 0.2s',
+                zIndex: 80
+
               }}
               ref={modalRef}
               >
