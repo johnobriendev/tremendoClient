@@ -1,17 +1,11 @@
 import React, { useRef, useEffect } from 'react';
-import { useTheme } from '../hooks/useTheme';
-import { getButtonStyles } from '../utils/styleSystem';
-import { backgroundThemes } from '../utils/styleSystem';
+import { useTheme } from '../context/ThemeContext.jsx';
 
 
-const PageSettingsModal = ({ 
-  isOpen, 
-  onClose, 
-  themeColor, 
-  onThemeChange, 
-  onThemeColorChange
-}) => {
-  const { isDark, colors } = useTheme();
+
+
+const PageSettingsModal = ({ isOpen, onClose }) => {
+  const { colors, accent, theme, toggleTheme } = useTheme();
   const modalRef = useRef(null);
 
   useEffect(() => {
@@ -36,7 +30,6 @@ const PageSettingsModal = ({
 
   if (!isOpen) return null;
 
-  const themeOptions = Object.keys(backgroundThemes);
 
 
   return (
@@ -54,8 +47,8 @@ const PageSettingsModal = ({
           style={{
             backgroundColor: colors.background.secondary,
             color: colors.text.primary,
-            maxHeight: '85vh',
-            overflowY: 'auto'
+            // maxHeight: '85vh',
+            // overflowY: 'auto'
           }}
         >
           <h2 className="text-xl font-bold mb-4">Page Settings</h2>
@@ -65,46 +58,38 @@ const PageSettingsModal = ({
             <p className="font-medium mb-2">Theme</p>
             <div className="flex gap-2">
               <button
-                {...getButtonStyles(isDark ? 'default' : 'primary')}
-                onClick={() => onThemeChange('light')}
-              >
-                Light Mode
-              </button>
-              <button
-                {...getButtonStyles(isDark ? 'primary' : 'default')}
-                onClick={() => onThemeChange('dark')}
-              >
-                Dark Mode
-              </button>
+                  className="px-4 py-2 rounded-lg hover:opacity-90 transition-all"
+                  style={{
+                    backgroundColor: theme === 'light' ? accent.primary : colors.background.tertiary,
+                    color: theme === 'light' ? '#ffffff' : colors.text.primary,
+                    transition: 'background-color 0.2s, color 0.2s'
+                  }}
+                  onClick={() => toggleTheme('light')}
+                >
+                  Light Mode
+                </button>
+                <button
+                  className="px-4 py-2 rounded-lg hover:opacity-90 transition-all"
+                  style={{
+                    backgroundColor: theme === 'dark' ? accent.primary : colors.background.tertiary,
+                    color: theme === 'dark' ? '#ffffff' : colors.text.primary,
+                    transition: 'background-color 0.2s, color 0.2s'
+                  }}
+                  onClick={() => toggleTheme('dark')}
+                >
+                  Dark Mode
+                </button>
             </div>
           </div>
 
-          {/* Background Section */}
-          <div className="mb-6">
-            <p className="font-medium mb-2">Background</p>
-            <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mb-3">
-            {themeOptions.map((theme) => (
-                <button
-                  key={theme}
-                  onClick={() => onThemeColorChange(theme)}
-                  className={`p-4 rounded-lg transition-all ${
-                    themeColor === theme ? 'ring-2 ring-offset-2 ring-blue-500' : ''
-                  }`}
-                  style={{
-                    backgroundColor: backgroundThemes[theme][isDark ? 'dark' : 'light'],
-                    color: isDark ? colors.text.primary : colors.text.secondary
-                  }}
-                >
-                  {theme.charAt(0).toUpperCase() + theme.slice(1)}
-                </button>
-              ))}
-            </div>
-          </div>
 
           {/* Close Button */}
           <button
-            {...getButtonStyles('danger')}
-            className="w-full"
+            className="px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
+            style={{
+              backgroundColor: accent.danger,
+              color: '#ffffff'
+            }}
             onClick={onClose}
           >
             Close

@@ -1,9 +1,8 @@
 import React from 'react';
-import { useTheme } from '../hooks/useTheme';
-import { getButtonStyles } from '../utils/styleSystem';
+import { useTheme } from '../context/ThemeContext.jsx';
 
 const BoardList = ({ boards, onBoardClick, onEditClick, onDeleteClick, onInviteClick, isOwned }) => {
-  const { colors } = useTheme();
+  const { colors, accent } = useTheme();
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
       {boards.map((board) => (
@@ -30,7 +29,11 @@ const BoardList = ({ boards, onBoardClick, onEditClick, onDeleteClick, onInviteC
           
           <div className="flex flex-wrap gap-2">
             <button
-              {...getButtonStyles('primary')}
+              className="px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
+              style={{
+                backgroundColor: accent.primary,
+                color: '#ffffff'
+              }}
               onClick={() => onBoardClick(board._id)}
             >
               View
@@ -39,19 +42,31 @@ const BoardList = ({ boards, onBoardClick, onEditClick, onDeleteClick, onInviteC
             {isOwned && (
               <>
                 <button
-                  {...getButtonStyles('success')}
+                  className="px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
+                  style={{
+                    backgroundColor: accent.success,
+                    color: '#ffffff'
+                  }}
                   onClick={() => onEditClick(board)}
                 >
                   Edit
                 </button>
                 <button
-                  {...getButtonStyles('danger')}
+                  className="px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
+                  style={{
+                    backgroundColor: accent.danger,
+                    color: '#ffffff'
+                  }}
                   onClick={() => onDeleteClick(board._id)}
                 >
                   Delete
                 </button>
                 <button
-                  {...getButtonStyles('special')}
+                  className="px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
+                  style={{
+                    backgroundColor: accent.special,
+                    color: '#ffffff'
+                  }}
                   onClick={() => onInviteClick(board._id)}
                 >
                   Invite

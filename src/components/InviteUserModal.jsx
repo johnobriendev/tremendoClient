@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useTheme } from '../hooks/useTheme';
-import { getButtonStyles } from '../utils/styleSystem';
+import { useTheme } from '../context/ThemeContext.jsx';
 
 export default function InviteUserModal({ isOpen, onClose, onInviteUser,}) {
-  const { colors } = useTheme();
+  const { colors, accent } = useTheme();
   const [email, setEmail] = useState('');
   const [statusMessage, setStatusMessage] = useState(null);
   const [statusType, setStatusType] = useState('');
@@ -107,15 +106,22 @@ export default function InviteUserModal({ isOpen, onClose, onInviteUser,}) {
           
           <div className="flex justify-end gap-2">
             <button
-              type="button"
-              {...getButtonStyles('danger')}
+              className="px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
+              style={{
+                backgroundColor: accent.danger,
+                color: '#ffffff'
+              }}
               onClick={onClose}
             >
               Cancel
             </button>
             <button
               type="submit"
-              {...getButtonStyles('primary')}
+              className="px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
+              style={{
+                backgroundColor: accent.primary,
+                color: '#ffffff'
+              }}
             >
               Invite
             </button>

@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { useTheme } from '../hooks/useTheme';
-import { getButtonStyles } from '../utils/styleSystem';
+import { useTheme } from '../context/ThemeContext.jsx';
 
 
 
@@ -16,7 +15,7 @@ const Navbar = ({
   boardName, 
   showCreateBoard = true,  
 }) => {
-  const { colors } = useTheme();
+  const { colors, accent } = useTheme();
   const dropdownRef = useRef(null);
 
   useEffect(() => {
@@ -35,22 +34,26 @@ const Navbar = ({
       className="p-2 fixed top-0 left-0 right-0 z-10" 
       style={{
         backgroundColor: colors.background.navbar,
-        color: colors.text.navbar,
+        color: colors.text.primary,
         boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
       }}>
       <div className="container mx-auto flex justify-between items-center">
         <div className="flex items-center space-x-4">
-          <Link to="/dashboard" className="text-2xl font-semibold">
+          <Link to="/dashboard" className="text-2xl font-semibold" style={{ color: colors.text.primary }} >
             Tremendo
           </Link>
           {boardName && <h1 className="text-2xl ml-4">{boardName}</h1>}
-          {!boardName && user && <h1 className="text-2xl ml-4">Welcome, {user.name}!</h1>}
+          {!boardName && user && <h1 className="text-2xl ml-4" style={{ color: colors.text.primary }}>Welcome, {user.name}!</h1>}
         </div>
         
         <div className="flex items-center space-x-4">
           {showCreateBoard && (
             <button
-              {...getButtonStyles('primary')}
+              className="px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
+              style={{
+                backgroundColor: accent.primary,
+                color: '#ffffff'
+              }}
               onClick={onCreateBoard}
             >
               Create New Board
@@ -58,9 +61,12 @@ const Navbar = ({
           )}
           <div className="relative inline-block text-left" ref={dropdownRef}>
             <button
-              className="px-4 py-2 text-sm rounded hover:opacity-90"
+              className="px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
+              style={{
+                backgroundColor: accent.primary,
+                color: '#ffffff'
+              }}
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              {...getButtonStyles('primary')}
             >
               Settings
             </button>
@@ -82,7 +88,8 @@ const Navbar = ({
                   </button>
                   <button
                     className="block w-full text-left px-4 py-2 text-sm hover:opacity-80"
-                    style={{ color: colors.accent.red }}
+                    style={{ color: accent.danger }}
+
                     onClick={onLogout}
                   >
                     Log Out

@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { useTheme } from '../hooks/useTheme';
-import { getButtonStyles } from '../utils/styleSystem';
+import { useTheme } from '../context/ThemeContext.jsx';
 
 
 const CreateBoardModal = ({ 
@@ -12,7 +11,7 @@ const CreateBoardModal = ({
   setSelectedTemplate, 
   handleCreateBoard,
 }) => {
-  const { colors } = useTheme();
+  const { colors, accent } = useTheme();
   const createInputRef = useRef(null);
   const modalRef = useRef(null);
 
@@ -91,13 +90,21 @@ const CreateBoardModal = ({
         </div>
         <div className="flex justify-end gap-2">
           <button
-            {...getButtonStyles('danger')}
+            className="px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
+            style={{
+              backgroundColor: accent.danger,
+              color: '#ffffff'
+            }}
             onClick={onClose}
           >
             Cancel
           </button>
           <button
-            {...getButtonStyles('success')}
+            className="px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
+            style={{
+              backgroundColor: accent.success,
+              color: '#ffffff'
+            }}
             onClick={handleCreateBoard}
           >
             Create

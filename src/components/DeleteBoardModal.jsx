@@ -1,14 +1,13 @@
 // DeleteBoardModal.jsx
 import React, { useRef, useEffect } from 'react';
-import { useTheme } from '../hooks/useTheme';
-import { getButtonStyles } from '../utils/styleSystem';
+import { useTheme } from '../context/ThemeContext.jsx';
 
 const DeleteBoardModal = ({ 
   isOpen, 
   onClose, 
   handleConfirmDelete,
 }) => {
-  const { colors } = useTheme();
+  const { colors, accent } = useTheme();
   const modalRef = useRef(null);
 
   useEffect(() => {
@@ -49,13 +48,21 @@ const DeleteBoardModal = ({
         </p>
         <div className="flex justify-end gap-2">
           <button
-            {...getButtonStyles('primary')}
+            className="px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
+            style={{
+              backgroundColor: accent.primary,
+              color: '#ffffff'
+            }}
             onClick={onClose}
           >
             Cancel
           </button>
           <button
-            {...getButtonStyles('danger')}
+            className="px-4 py-2 rounded-lg hover:opacity-90 transition-opacity"
+            style={{
+              backgroundColor: accent.danger,
+              color: '#ffffff'
+            }}
             onClick={handleConfirmDelete}
           >
             Delete

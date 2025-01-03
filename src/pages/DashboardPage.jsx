@@ -3,22 +3,22 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import BoardList from '../components/BoardList';
 import InvitationList from '../components/InvitationList';
-import { backgroundImages } from '../constants/backgroundImages';
+//import { backgroundImages } from '../constants/backgroundImages';
 import PageSettingsModal from '../components/PageSettingsModal';
 import CreateBoardModal from '../components/CreateBoardModal';
 import EditBoardModal from '../components/EditBoardModal';
 import DeleteBoardModal from '../components/DeleteBoardModal';
 import InviteUserModal from '../components/InviteUserModal';
-import { useTheme } from '../hooks/useTheme';
-import { useBackground } from '../hooks/useBackground';
+import { useTheme } from '../context/ThemeContext.jsx';
+//import { useBackground } from '../hooks/useBackground';
 //import { getThemeStyles, getModalStyles, getBoardStyles, getButtonStyles, getNavBarStyles } from '../utils/styles';
-import { getThemeStyles, getComponentStyles } from '../utils/styleSystem';
+//import { getThemeStyles, getComponentStyles } from '../utils/styleSystem';
 import * as api from '../utils/api';
 
 const DashboardPage = () => {
   const navigate = useNavigate();
-  const [backgroundImage, setBackgroundImage] = useBackground();
-  const { theme, setTheme, themeColor, setThemeColor, colors } = useTheme();
+  //const [backgroundImage, setBackgroundImage] = useBackground();
+  const { colors } = useTheme();
   
   const [user, setUser] = useState(null);
   const [ownedBoards, setOwnedBoards] = useState([]);
@@ -201,6 +201,7 @@ const DashboardPage = () => {
 
             <h2 className="text-2xl font-bold mb-4">Your Boards</h2>
             <BoardList
+              
               boards={ownedBoards}
               onBoardClick={(id) => navigate(`/boards/${id}`)}
               onEditClick={(board) => {
@@ -215,6 +216,7 @@ const DashboardPage = () => {
             
             <h2 className="text-2xl font-bold mt-8 mb-4">Collaborative Boards</h2>
             <BoardList
+      
               boards={collaborativeBoards}
               onBoardClick={(id) => navigate(`/boards/${id}`)}
               isOwned={false}
@@ -223,16 +225,17 @@ const DashboardPage = () => {
         )}
 
         <PageSettingsModal
+          
           isOpen={isPageSettingsModalOpen}
           onClose={() => setIsPageSettingsModalOpen(false)}
-          onThemeChange={setTheme}
-          themeColor={themeColor}
-          onThemeColorChange={setThemeColor}
+          // onThemeChange={setTheme}
+          // themeColor={themeColor}
+          // onThemeColorChange={setThemeColor}
         />
         <CreateBoardModal
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
-          theme={theme}
+          //theme={theme}
           newBoardName={newBoardName}
           setNewBoardName={setNewBoardName}
           selectedTemplate={selectedTemplate}

@@ -10,7 +10,6 @@ export const colors = {
     text: {
       primary: '#000000',    // Main text color
       secondary: '#2d3748',  // Secondary text
-      navbar: '#000000',     // Navbar text
     }
   },
   dark: {
@@ -23,14 +22,13 @@ export const colors = {
     text: {
       primary: '#ffffff',    // Main text color
       secondary: '#e2e8f0',  // Secondary text
-      navbar: '#ffffff',     // Navbar text
     }
   },
   accent: {
-    blue: '#3B82F6',     // Primary actions
-    green: '#22C55E',    // Success actions
-    red: '#EF4444',      // Destructive actions
-    purple: '#A855F7',   // Special actions
+    primary: '#3B82F6',     // Primary actions
+    success: '#22C55E',    // Success actions
+    danger: '#EF4444',      // Destructive actions
+    special: '#A855F7',   // Special actions
   }
 };
 

@@ -10,6 +10,8 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import AboutPage from './pages/AboutPage';
 import WorkInProgress from './pages/WorkInProgressPage';
+import { ThemeProvider } from './context/ThemeContext';
+
 
 
 const router = createBrowserRouter([
@@ -65,9 +67,11 @@ const router = createBrowserRouter([
 
 function App() {
   return(
-    // <CardsProvider>
+   <ThemeProvider>
       <RouterProvider router={router} />
-    // </CardsProvider>
+   </ThemeProvider>
+      
+   
 
   );
 }

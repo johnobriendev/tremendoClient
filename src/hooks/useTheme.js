@@ -1,42 +1,23 @@
-// src/hooks/useTheme.js
 import { useState, useEffect } from 'react';
-import { colors } from '../theme/colors';  // Import from theme/colors.js instead of styleSystem
-import { backgroundThemes } from '../utils/styleSystem';  // Only import backgroundThemes from styleSystem
-
+import { colors } from '../theme/colors';
 
 export const useTheme = () => {
-  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
-  const [themeColor, setThemeColor] = useState(() => localStorage.getItem('themeColor') || 'neutral');
-  
+  // Initialize theme from localStorage or default to light
+  const [theme, setTheme] = useState(() => 
+    localStorage.getItem('theme') || 'light'
+  );
+
+  // Save theme changes to localStorage
   useEffect(() => {
     localStorage.setItem('theme', theme);
-    localStorage.setItem('themeColor', themeColor);
-  }, [theme, themeColor]);
+  }, [theme]);
 
+  // Return everything components need
   return {
     theme,
     setTheme,
-    themeColor,
-    setThemeColor,
     isDark: theme === 'dark',
-    colors: {
-      background: {
-        ...colors[theme].background,
-        ...backgroundThemes[themeColor][theme]
-      },
-      text: colors[theme].text,
-      accent: colors.accent
-    }
+    colors: colors[theme],    // Current theme colors
+    accent: colors.accent     // Accent colors (same in both themes)
   };
 };
-// import { useState, useEffect } from 'react';
-
-// export const useTheme = () => {
-//   const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
-  
-//   useEffect(() => {
-//     localStorage.setItem('theme', theme);
-//   }, [theme]);
-
-//   return [theme, setTheme];
-// };
