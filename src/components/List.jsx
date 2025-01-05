@@ -5,7 +5,7 @@ import Card from './Card';
 import { BsThreeDots } from "react-icons/bs";
 import { useTheme } from '../context/ThemeContext.jsx';
 
-function List({ list, cards, newCardName, editListName, setEditListName, setNewCardName, handleCreateCard, handleDeleteList, handleListNameChange, handleUpdateCard, handleDeleteCard}) {
+function List({ list, cards, newCardName, editListName, setEditListName, setNewCardName, handleCreateCard, handleDeleteList, handleListNameChange, handleUpdateCard, handleDeleteCard, index}) {
   
   const { colors, accent } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -101,7 +101,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
   // }, [list.color]);
 
   return (
-    <Draggable draggableId={list._id} index={list.position - 1}>
+    <Draggable draggableId={list._id} index={index} type="LIST">
       {(provided, snapshot) => (
         <div
           ref={provided.innerRef}
@@ -113,7 +113,8 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
             color: colors.text.primary,
             transition: 'background-color 0.2s, color 0.2s',
             position:'relative',
-            zIndex: snapshot.isDragging ? 30 : 1
+            zIndex: snapshot.isDragging ? 30 : 1,
+            ...provided.draggableProps.style
           }}
         >
           <div className="flex items-center justify-between gap-2 mb-4 ">

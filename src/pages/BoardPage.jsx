@@ -187,7 +187,36 @@ function BoardPage() {
     
     if (!destination) return;
     if (destination.droppableId === source.droppableId && destination.index === source.index) return;
-    
+
+    if (type === 'LIST') {
+        // Create a new array of lists
+        const newLists = Array.from(lists);
+        const [removed] = newLists.splice(source.index, 1);
+        newLists.splice(destination.index, 0, removed);
+        
+        // Calculate new positions for all lists
+        const updatedLists = newLists.map((list, index) => ({
+            ...list,
+            position: index + 1
+        }));
+        
+        // Optimistically update the UI
+        setLists(updatedLists);
+        
+        try {
+            const token = localStorage.getItem('token');
+            // Use your existing api function to update each list's position
+            await Promise.all(updatedLists.map(list => 
+                api.updateList(token, list._id, { position: list.position })
+            ));
+        } catch (error) {
+            console.error('Error updating list positions:', error);
+            // On error, refresh the board data
+            fetchBoardData();
+        }
+        return;
+    }
+      
     if (type === 'CARD') {
       const startListId = source.droppableId;
       const endListId = destination.droppableId;
@@ -289,7 +318,7 @@ function BoardPage() {
         showCreateBoard={false}
       />
       
-      {/* Main content area with improved background handling */}
+      
       <div 
         className="flex-grow pt-24 sm:pt-20 overflow-x-auto relative"
         style={{
@@ -299,10 +328,12 @@ function BoardPage() {
         }}
       >
         <DragDropContext onDragEnd={handleDragEnd}>
-          <div className="flex-grow w-full">
-            <Droppable droppableId="all-lists" direction="horizontal">
-              {(provided) => (
+          {/* <div className="flex-grow w-full"> */}
+            <Droppable droppableId="all-lists" direction="horizontal" type="LIST">
+              {(provided, snapshot) => (
                 <div
+                  {...provided.droppableProps}
+                  ref={provided.innerRef} 
                   className="flex items-start px-6 space-x-4"
                   style={{
                     paddingRight: '1.5rem',
@@ -310,10 +341,11 @@ function BoardPage() {
                     // Adjusted height calculation to work with new padding
                     minHeight: 'calc(100vh - 96px)'
                   }}
-                  {...provided.droppableProps}
-                  ref={provided.innerRef} 
+                 
                 >
-                  {lists.map((list, index) => (
+                  {lists
+                  .sort((a, b) => a.position - b.position)
+                  .map((list, index) => (
                     <List
                       key={list._id}
                       list={list}
@@ -395,7 +427,7 @@ function BoardPage() {
                 </div>
               )}
             </Droppable>
-          </div>
+          {/* </div> */}
         </DragDropContext>
       </div>
 
