@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { backgroundImages } from '../constants/backgroundImages';
 import { useParams, useNavigate } from 'react-router-dom';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import StrictModeDroppable from '../components/StrictModeDroppable';
+
 import List from '../components/List'; 
 import Navbar from '../components/Navbar';
 import PageSettingsModal from '../components/PageSettingsModal';
@@ -329,7 +331,7 @@ function BoardPage() {
       >
         <DragDropContext onDragEnd={handleDragEnd}>
           {/* <div className="flex-grow w-full"> */}
-            <Droppable droppableId="all-lists" direction="horizontal" type="LIST">
+            <StrictModeDroppable droppableId="all-lists" direction="horizontal" type="LIST">
               {(provided, snapshot) => (
                 <div
                   {...provided.droppableProps}
@@ -426,7 +428,7 @@ function BoardPage() {
                   </div>
                 </div>
               )}
-            </Droppable>
+            </StrictModeDroppable>
           {/* </div> */}
         </DragDropContext>
       </div>
