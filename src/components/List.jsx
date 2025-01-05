@@ -4,6 +4,8 @@ import { Draggable, Droppable } from 'react-beautiful-dnd';
 import Card from './Card';
 import { BsThreeDots } from "react-icons/bs";
 import { useTheme } from '../context/ThemeContext.jsx';
+import { createPortal } from 'react-dom';
+
 
 function List({ list, cards, newCardName, editListName, setEditListName, setNewCardName, handleCreateCard, handleDeleteList, handleListNameChange, handleUpdateCard, handleDeleteCard, index}) {
   
@@ -19,6 +21,22 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
   const modalRef = useRef(null);
   const cardInputRef = useRef(null);
   const addCardButtonRef = useRef(null);
+
+   // Create portal container for modals
+   useEffect(() => {
+      if (!document.getElementById('modal-root')) {
+        const modalRoot = document.createElement('div');
+        modalRoot.id = 'modal-root';
+        document.body.appendChild(modalRoot);
+      }
+      
+      return () => {
+        const modalRoot = document.getElementById('modal-root');
+        if (modalRoot && modalRoot.childNodes.length === 0) {
+          modalRoot.remove();
+        }
+      };
+    }, []);
   
  
   
@@ -29,23 +47,55 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
     }
   };
 
+
   useEffect(() => {
     if (showCardInput && cardInputRef.current) {
       cardInputRef.current.focus();
     }
   }, [showCardInput]);
 
+
+  // const handleClickOutside = (event) => {
+  //   if (menuRef.current && !menuRef.current.contains(event.target)) {
+  //     setMenuOpen(false);
+  //   }
+  //   if (showModal && modalRef.current && !modalRef.current.contains(event.target)) {
+  //     setShowModal(false);
+  //   }
+  //   if (cardInputRef.current && !cardInputRef.current.contains(event.target) && !addCardButtonRef.current.contains(event.target)) {
+  //     setShowCardInput(false);
+  //   }
+  // };
+
   const handleClickOutside = (event) => {
+    // First, we check if we're clicking the delete button or the modal itself
+    const isClickingDeleteButton = event.target.closest('[data-delete-list]');
+    const isClickingModal = modalRef.current?.contains(event.target);
+  
+    // If we're interacting with the delete functionality, we don't want to 
+    // process any other click outside behaviors
+    if (isClickingDeleteButton || isClickingModal) {
+      return;
+    }
+  
+    // Handle menu closing - this stays mostly the same
     if (menuRef.current && !menuRef.current.contains(event.target)) {
       setMenuOpen(false);
     }
-    if (showModal && modalRef.current && !modalRef.current.contains(event.target)) {
+  
+    // Handle modal closing - modified to work with the portal
+    if (showModal && !isClickingModal) {
       setShowModal(false);
     }
-    if (cardInputRef.current && !cardInputRef.current.contains(event.target) && !addCardButtonRef.current.contains(event.target)) {
+  
+    // Handle card input closing - this stays the same
+    if (cardInputRef.current && 
+        !cardInputRef.current.contains(event.target) && 
+        !addCardButtonRef.current.contains(event.target)) {
       setShowCardInput(false);
     }
   };
+
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
@@ -72,33 +122,53 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
   };
 
 
-  // const handleColorChange = (listId, newColor) => {
-    
-  //   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-  //   // Send the update request to the backend
-  //   fetch(`${apiBaseUrl}/lists/${listId}`, {
-  //     method: 'PUT',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //       'Authorization': `Bearer ${localStorage.getItem('token')}`,
-  //     },
-  //     body: JSON.stringify({ color: newColor }),
-  //   })
-  //   .then((response) => response.json())
-  //   .then((data) => {
-  //     setListColor(newColor);
-  //     console.log('List color updated:', data);
-  //   })
-  //   .catch((error) => {
-  //     console.error('Error updating list color:', error);
-  //   });
-  // };
+  const renderDeleteModal = () => {
+    if (!showModal) return null;
 
-  // useEffect(() => {
-  //   if (list.color) {
-  //     setListColor(list.color || null);
-  //   }
-  // }, [list.color]);
+    return createPortal(
+      <div 
+        className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+        style={{ zIndex: 1000 }}
+      >
+        <div 
+          ref={modalRef}
+          className="p-6 rounded-md shadow-lg"
+          style={{
+            backgroundColor: colors.background.secondary,
+            color: colors.text.primary,
+            transition: 'background-color 0.2s, color 0.2s'
+          }}
+        >
+          <h2 className="text-lg mb-4">Are you sure you want to delete this list?</h2>
+          <div className="flex justify-end gap-4">
+            <button
+              onClick={confirmDelete}
+              className="px-4 py-2 rounded hover:opacity-90"
+              style={{
+                backgroundColor: accent.danger,
+                color: '#ffffff',
+                transition: 'background-color 0.2s'
+              }}
+            >
+              Delete
+            </button>
+            <button
+              onClick={() => setShowModal(false)}
+              className="px-4 py-2 rounded hover:opacity-90"
+              style={{
+                backgroundColor: accent.primary,
+                color: '#ffffff',
+                transition: 'background-color 0.2s'
+              }}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>,
+      document.getElementById('modal-root')
+    );
+  };
 
   return (
     <Draggable draggableId={list._id} index={index} type="LIST">
@@ -150,6 +220,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                 }}
                 >
                   <button
+                    data-delete-list
                     onClick={handleDeleteClick}
                     className="block px-4 py-2 text-red-500 hover:bg-gray-600 w-full text-left"
                   >
@@ -231,45 +302,9 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                     </button>
                   )}
            </div>
-          {showModal && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
-            style={{ zIndex: 50 }}
-            >
-              <div 
-              className="p-6 rounded-md shadow-lg"
-              style={{
-                backgroundColor: colors.background.secondary,
-                color: colors.text.primary,
-                transition: 'background-color 0.2s, color 0.2s',
-                
+          {/* Render delete modal using portal */}
+          {renderDeleteModal()}
 
-              }}
-              ref={modalRef}
-              >
-                <h2 className="text-lg mb-4">Are you sure you want to delete this list?</h2>
-                <button
-                  onClick={confirmDelete}
-                  className="px-4 py-2 rounded hover:opacity-90 mr-4"
-                  style={{
-                    backgroundColor: accent.danger,
-                    color: '#ffffff'
-                  }}
-                >
-                  Delete
-                </button>
-                <button
-                  onClick={() => setShowModal(false)}
-                  className="px-4 py-2 rounded hover:opacity-90"
-                  style={{
-                    backgroundColor: accent.primary,
-                    color: '#ffffff'
-                  }}
-                >
-                  Cancel
-                </button>
-              </div>
-            </div>
-          )}
         </div>
       )}
     </Draggable>
@@ -281,3 +316,42 @@ export default List;
 
 
 
+// {showModal && (
+//   <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+//   style={{ zIndex: 50 }}
+//   >
+//     <div 
+//     className="p-6 rounded-md shadow-lg"
+//     style={{
+//       backgroundColor: colors.background.secondary,
+//       color: colors.text.primary,
+//       transition: 'background-color 0.2s, color 0.2s',
+      
+
+//     }}
+//     ref={modalRef}
+//     >
+//       <h2 className="text-lg mb-4">Are you sure you want to delete this list?</h2>
+//       <button
+//         onClick={confirmDelete}
+//         className="px-4 py-2 rounded hover:opacity-90 mr-4"
+//         style={{
+//           backgroundColor: accent.danger,
+//           color: '#ffffff'
+//         }}
+//       >
+//         Delete
+//       </button>
+//       <button
+//         onClick={() => setShowModal(false)}
+//         className="px-4 py-2 rounded hover:opacity-90"
+//         style={{
+//           backgroundColor: accent.primary,
+//           color: '#ffffff'
+//         }}
+//       >
+//         Cancel
+//       </button>
+//     </div>
+//   </div>
+// )}
