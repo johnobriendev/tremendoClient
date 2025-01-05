@@ -341,7 +341,9 @@ function BoardPage() {
                     paddingRight: '1.5rem',
                     minWidth: 'max-content',
                     // Adjusted height calculation to work with new padding
-                    minHeight: 'calc(100vh - 96px)'
+                    minHeight: 'calc(100vh - 96px)',
+                    position: 'relative', // Added to create stacking context
+                    
                   }}
                  
                 >

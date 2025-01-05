@@ -113,7 +113,6 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
             color: colors.text.primary,
             transition: 'background-color 0.2s, color 0.2s',
             position:'relative',
-            zIndex: snapshot.isDragging ? 30 : 1,
             ...provided.draggableProps.style
           }}
         >
@@ -147,7 +146,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                   backgroundColor: colors.background.tertiary,
                   color: colors.text.primary,
                   transition: 'background-color 0.2s, color 0.2s',
-                  zIndex: 60
+                  zIndex: 35
                 }}
                 >
                   <button
@@ -156,22 +155,6 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                   >
                     Delete List
                   </button>
-                  {/* <button
-                    onClick={() => handleColorChange(list._id, '')}
-                    className="block px-4 py-2 text-blue-500 hover:bg-gray-600 w-full text-left"
-                  >
-                    Clear List Color
-                  </button>
-                  <div className="block px-4 py-2 hover:bg-gray-600 w-full text-left">
-                    <label className="block text-gray-400 mb-2">List Color</label>
-                    <input
-                      type="color"
-                      className="w-16 h-8"
-                      value={listColor}
-                      onChange={(e) => handleColorChange(list._id, e.target.value)}
-                      // onChange={(e) => setListColor(e.target.value)}
-                    />
-                  </div> */}
                   <button
                     onClick={() => setMenuOpen(false)}
                     className="block px-4 py-2 hover:bg-gray-600 w-full text-left"
@@ -249,14 +232,16 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                   )}
            </div>
           {showModal && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+            style={{ zIndex: 50 }}
+            >
               <div 
               className="p-6 rounded-md shadow-lg"
               style={{
                 backgroundColor: colors.background.secondary,
                 color: colors.text.primary,
                 transition: 'background-color 0.2s, color 0.2s',
-                zIndex: 80
+                
 
               }}
               ref={modalRef}
