@@ -126,11 +126,8 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
         className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
         style={{ zIndex: 1000 }}
         data-modal-id={`list-${list._id}`}
-        onClick={(e) => {
-          // Stop propagation and prevent default more aggressively
-          e.stopPropagation();
-          e.preventDefault();
-        }}
+        onClick={() => setShowModal(false)}
+
       >
         <div 
           ref={modalRef}
