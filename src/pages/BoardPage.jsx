@@ -111,7 +111,7 @@ function BoardPage() {
       });
       setLists([...lists, newList]);
       setNewListName('');
-      setIsAddingList(false);
+      //setIsAddingList(false);
     } catch (error) {
       console.error('Error creating list:', error);
     }
