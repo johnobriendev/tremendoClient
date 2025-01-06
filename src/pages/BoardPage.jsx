@@ -92,6 +92,13 @@ function BoardPage() {
     };
   }, [isDropdownOpen, isPageSettingsModalOpen]);
 
+  //focuses on the add a list input after pressing add another list
+  useEffect(() => {
+    if (isAddingList && newListInputRef.current) {
+      newListInputRef.current.focus();
+    }
+  }, [isAddingList]);
+
 
   //allows the user to use the enter key to add a new list
   const handleKeyPress = (event) => {
