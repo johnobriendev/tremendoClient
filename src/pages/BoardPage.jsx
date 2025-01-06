@@ -1,23 +1,17 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { backgroundImages } from '../constants/backgroundImages';
 import { useParams, useNavigate } from 'react-router-dom';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import StrictModeDroppable from '../components/StrictModeDroppable';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
+//import StrictModeDroppable from '../components/StrictModeDroppable';
 
 import List from '../components/List'; 
 import Navbar from '../components/Navbar';
 import PageSettingsModal from '../components/PageSettingsModal';
 import { useTheme } from '../context/ThemeContext.jsx';
-// import { useTheme } from '../hooks/useTheme';
-// import { useBackground } from '../hooks/useBackground';
-// import { getThemeStyles, getModalStyles, getNavBarStyles } from '../utils/boardStyles';
 import * as api from '../utils/api';
 
 function BoardPage() {
   const { colors, accent, theme } = useTheme();
 
-  //const [backgroundImage, setBackgroundImage] = useBackground();
 
   const { boardId } = useParams();
   const [board, setBoard] = useState(null);
@@ -331,7 +325,7 @@ function BoardPage() {
       >
         <DragDropContext onDragEnd={handleDragEnd}>
           {/* <div className="flex-grow w-full"> */}
-            <StrictModeDroppable droppableId="all-lists" direction="horizontal" type="LIST">
+            <Droppable droppableId="all-lists" direction="horizontal" type="LIST">
               {(provided, snapshot) => (
                 <div
                   {...provided.droppableProps}
@@ -430,7 +424,7 @@ function BoardPage() {
                   </div>
                 </div>
               )}
-            </StrictModeDroppable>
+            </Droppable>
           {/* </div> */}
         </DragDropContext>
       </div>

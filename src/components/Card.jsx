@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Draggable } from 'react-beautiful-dnd';
+import { Draggable } from '@hello-pangea/dnd';
 import { MdOutlineModeEdit, MdSave } from "react-icons/md";
+import { getOrCreateModalRoot, registerPortalUser, unregisterPortalUser } from '../utils/portalManager';
 
 import { IoMdClose } from "react-icons/io";
 import { FaTrash } from "react-icons/fa";
@@ -21,6 +22,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
   const [newComment, setNewComment] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isDescriptionChanged, setIsDescriptionChanged] = useState(false);
+  const [portalContainer, setPortalContainer] = useState(null);
 
   const { colors, accent } = useTheme();
 
@@ -32,22 +34,17 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
   const detailModalRef = useRef(null);
 
 
-  // Create portal container for modals
   useEffect(() => {
-    // Create portal container if it doesn't exist
-    if (!document.getElementById('modal-root')) {
-      const modalRoot = document.createElement('div');
-      modalRoot.id = 'modal-root';
-      document.body.appendChild(modalRoot);
-    }
-    
+    // Register this component as a portal user when it mounts
+    registerPortalUser();
+    const modalRoot = getOrCreateModalRoot();
+    setPortalContainer(modalRoot);
+
+    // Clean up when the component unmounts
     return () => {
-      const modalRoot = document.getElementById('modal-root');
-      if (modalRoot && modalRoot.childNodes.length === 0) {
-        modalRoot.remove();
-      }
+      unregisterPortalUser();
     };
-  }, []);
+  }, []); 
 
   
 

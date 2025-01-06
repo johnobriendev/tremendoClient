@@ -1,10 +1,13 @@
 import React from 'react';
 import { useState, useEffect, useRef } from 'react';
-import { Draggable, Droppable } from 'react-beautiful-dnd';
+import { Draggable, Droppable } from '@hello-pangea/dnd';
 import Card from './Card';
 import { BsThreeDots } from "react-icons/bs";
 import { useTheme } from '../context/ThemeContext.jsx';
 import { createPortal } from 'react-dom';
+import { getOrCreateModalRoot, registerPortalUser, unregisterPortalUser } from '../utils/portalManager';
+
+
 
 
 function List({ list, cards, newCardName, editListName, setEditListName, setNewCardName, handleCreateCard, handleDeleteList, handleListNameChange, handleUpdateCard, handleDeleteCard, index}) {
@@ -12,8 +15,9 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
   const { colors, accent } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const [listColor, setListColor] = useState(list.color || 'bg-gray-800');
   const [showCardInput, setShowCardInput] = useState(false);
+  const [portalContainer, setPortalContainer] = useState(null);
+
 
   const listCards = cards.filter(card => card.listId === list._id).sort((a, b) => a.position - b.position);
 
@@ -21,23 +25,18 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
   const modalRef = useRef(null);
   const cardInputRef = useRef(null);
   const addCardButtonRef = useRef(null);
+  const listIdRef = useRef(list._id);
 
-   // Create portal container for modals
-   useEffect(() => {
-      if (!document.getElementById('modal-root')) {
-        const modalRoot = document.createElement('div');
-        modalRoot.id = 'modal-root';
-        document.body.appendChild(modalRoot);
-      }
-      
-      return () => {
-        const modalRoot = document.getElementById('modal-root');
-        if (modalRoot && modalRoot.childNodes.length === 0) {
-          modalRoot.remove();
-        }
-      };
-    }, []);
-  
+  useEffect(() => {
+    registerPortalUser();
+    const modalRoot = getOrCreateModalRoot();
+    setPortalContainer(modalRoot);
+
+    return () => {
+      unregisterPortalUser();
+    };
+  }, []);
+
  
   
   const handleListNameKeyPress = (e) => {
@@ -55,48 +54,6 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
   }, [showCardInput]);
 
 
-  // const handleClickOutside = (event) => {
-  //   if (menuRef.current && !menuRef.current.contains(event.target)) {
-  //     setMenuOpen(false);
-  //   }
-  //   if (showModal && modalRef.current && !modalRef.current.contains(event.target)) {
-  //     setShowModal(false);
-  //   }
-  //   if (cardInputRef.current && !cardInputRef.current.contains(event.target) && !addCardButtonRef.current.contains(event.target)) {
-  //     setShowCardInput(false);
-  //   }
-  // };
-
-  const handleClickOutside = (event) => {
-    // First, we check if we're clicking the delete button or the modal itself
-    const isClickingDeleteButton = event.target.closest('[data-delete-list]');
-    const isClickingModal = modalRef.current?.contains(event.target);
-  
-    // If we're interacting with the delete functionality, we don't want to 
-    // process any other click outside behaviors
-    if (isClickingDeleteButton || isClickingModal) {
-      return;
-    }
-  
-    // Handle menu closing - this stays mostly the same
-    if (menuRef.current && !menuRef.current.contains(event.target)) {
-      setMenuOpen(false);
-    }
-  
-    // Handle modal closing - modified to work with the portal
-    if (showModal && !isClickingModal) {
-      setShowModal(false);
-    }
-  
-    // Handle card input closing - this stays the same
-    if (cardInputRef.current && 
-        !cardInputRef.current.contains(event.target) && 
-        !addCardButtonRef.current.contains(event.target)) {
-      setShowCardInput(false);
-    }
-  };
-
-
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
@@ -105,10 +62,49 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
   }, [showModal, showCardInput]);
 
 
-  const handleDeleteClick = () => {
-    setShowModal(true);
-    setMenuOpen(false);
+  const handleDeleteClick = (e) => {
+     // Prevent event bubbling immediately
+     e.stopPropagation();
+     e.preventDefault();
+     
+     // Close menu and show modal in the next tick to avoid state collision
+     setTimeout(() => {
+       setShowModal(true);
+       setMenuOpen(false);
+     }, 0);
+    
+    //setShowModal(true);
+    //setMenuOpen(false);
   };
+
+  const handleClickOutside = (event) => {
+    // First check if we're clicking within the modal or on the delete button
+    const isClickingModal = event.target.closest(`[data-modal-id="list-${list._id}"]`);
+    const isClickingDeleteButton = event.target.closest('[data-delete-list]');
+    
+    // If we're interacting with the modal or delete button, don't process other clicks
+    if (isClickingModal || isClickingDeleteButton) {
+      return;
+    }
+
+    // Handle menu closing
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      setMenuOpen(false);
+    }
+
+    // Handle modal closing
+    if (showModal && !isClickingModal) {
+      setShowModal(false);
+    }
+
+    // Handle card input closing
+    if (cardInputRef.current && 
+        !cardInputRef.current.contains(event.target) && 
+        !addCardButtonRef.current?.contains(event.target)) {
+      setShowCardInput(false);
+    }
+  };
+
 
   const confirmDelete = () => {
     handleDeleteList(list._id);
@@ -123,12 +119,18 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
 
 
   const renderDeleteModal = () => {
-    if (!showModal) return null;
+    if (!showModal || !portalContainer) return null;
 
     return createPortal(
       <div 
         className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
         style={{ zIndex: 1000 }}
+        data-modal-id={`list-${list._id}`}
+        onClick={(e) => {
+          // Stop propagation and prevent default more aggressively
+          e.stopPropagation();
+          e.preventDefault();
+        }}
       >
         <div 
           ref={modalRef}
@@ -166,7 +168,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
           </div>
         </div>
       </div>,
-      document.getElementById('modal-root')
+      portalContainer
     );
   };
 
