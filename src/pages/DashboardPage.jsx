@@ -3,21 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import BoardList from '../components/BoardList';
 import InvitationList from '../components/InvitationList';
-//import { backgroundImages } from '../constants/backgroundImages';
 import PageSettingsModal from '../components/PageSettingsModal';
 import CreateBoardModal from '../components/CreateBoardModal';
 import EditBoardModal from '../components/EditBoardModal';
 import DeleteBoardModal from '../components/DeleteBoardModal';
 import InviteUserModal from '../components/InviteUserModal';
 import { useTheme } from '../context/ThemeContext.jsx';
-//import { useBackground } from '../hooks/useBackground';
-//import { getThemeStyles, getModalStyles, getBoardStyles, getButtonStyles, getNavBarStyles } from '../utils/styles';
-//import { getThemeStyles, getComponentStyles } from '../utils/styleSystem';
 import * as api from '../utils/api';
 
 const DashboardPage = () => {
   const navigate = useNavigate();
-  //const [backgroundImage, setBackgroundImage] = useBackground();
+
   const { colors } = useTheme();
   
   const [user, setUser] = useState(null);
@@ -41,7 +37,7 @@ const DashboardPage = () => {
   const [editBoardId, setEditBoardId] = useState('');
   const [newBoardColor, setNewBoardColor] = useState('#ffffff');
   const [deleteBoardId, setDeleteBoardId] = useState('');
-  //const [inviteBoardId, setInviteBoardId] = useState('');
+ 
   
   const settingsRef = useRef(null);
 
@@ -171,10 +167,8 @@ const DashboardPage = () => {
           setIsDropdownOpen(false);
         }}
         onLogout={handleLogout}
-        //theme={theme}
         isDropdownOpen={isDropdownOpen}
         setIsDropdownOpen={setIsDropdownOpen}
-        //getNavBarStyles={getNavBarStyles}
         settingsRef={settingsRef}
       />
    
@@ -228,14 +222,11 @@ const DashboardPage = () => {
           
           isOpen={isPageSettingsModalOpen}
           onClose={() => setIsPageSettingsModalOpen(false)}
-          // onThemeChange={setTheme}
-          // themeColor={themeColor}
-          // onThemeColorChange={setThemeColor}
+         
         />
         <CreateBoardModal
           isOpen={isCreateModalOpen}
           onClose={() => setIsCreateModalOpen(false)}
-          //theme={theme}
           newBoardName={newBoardName}
           setNewBoardName={setNewBoardName}
           selectedTemplate={selectedTemplate}
@@ -271,226 +262,3 @@ export default DashboardPage;
 
 
 
-
-// return (
-  //   <div className="min-h-screen flex flex-col">
-  //      <Navbar 
-  //       user={user}
-  //       onCreateBoard={() => setIsCreateModalOpen(true)}
-  //       onPageSettings={() => {
-  //         setIsPageSettingsModalOpen(true);
-  //         setIsDropdownOpen(false);
-  //       }}
-  //       onLogout={handleLogout}
-  //       theme={theme}
-  //       isDropdownOpen={isDropdownOpen}
-  //       setIsDropdownOpen={setIsDropdownOpen}
-  //       getNavBarStyles={getNavBarStyles}
-  //       settingsRef={settingsRef}
-  //     />
-   
-  //     <div 
-  //       className={`flex-grow pt-20 ${
-  //         backgroundImage ? "bg-cover bg-center bg-no-repeat bg-fixed" : ""
-  //       } p-6 overflow-auto`}
-  //       style={{
-  //         ...(backgroundImage ? { backgroundImage } : getThemeStyles(theme === 'dark')),
-  //       }}
-  //     >
-  //       {error && <p className="text-red-500">{error}</p>}
-  //       {user && (
-  //         <>
-          
-  //           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:mx-12 lg:mx-24 xl:mx-48 mt-24">
-  //             {boards.map((board) => (
-  //               <div
-  //                 key={board._id}
-  //                 className=" p-4 rounded shadow max-w-[264px]"
-  //                 // style={{ backgroundColor: board.backgroundColor }}
-  //                 style={getBoardStyles(theme === 'dark')}
-  //               >
-  //                 <h2 className="text-xl font-bold">{board.name}</h2>
-  //                 <button
-  //                   className={getButtonStyles(theme === 'dark', 'blue')}
-  //                   onClick={() => navigate(`/boards/${board._id}`)}
-  //                 >
-  //                   View Board
-  //                 </button>
-  //                 <button
-  //                   className={getButtonStyles(theme === 'dark', 'green')}
-  //                   onClick={() => {
-  //                     setEditBoardName(board.name);
-  //                     setEditBoardId(board._id);
-  //                     setIsEditModalOpen(true);
-  //                   }}
-  //                 >
-  //                   Edit
-  //                 </button>
-  //                 <button
-  //                   className={getButtonStyles(theme === 'dark', 'red')}
-  //                   onClick={() => handleOpenDeleteModal(board._id)}
-  //                 >
-  //                   Delete
-  //                 </button>
-  //               </div>
-  //             ))}
-  //           </div>
-  //         </>
-  //       )}
-
-  //       <PageSettingsModal
-  //         isOpen={isPageSettingsModalOpen}
-  //         onClose={() => setIsPageSettingsModalOpen(false)}
-  //         theme={theme}
-  //         onThemeChange={setTheme}
-  //         backgroundImages={backgroundImages}
-  //         currentBackground={backgroundImage}
-  //         onBackgroundSelect={setBackgroundImage}
-  //         onRemoveBackground={() => setBackgroundImage(null)}
-  //         getModalStyles={getModalStyles}
-  //       />
-  //       <CreateBoardModal
-  //         isOpen={isCreateModalOpen}
-  //         onClose={() => setIsCreateModalOpen(false)}
-  //         theme={theme}
-  //         newBoardName={newBoardName}
-  //         setNewBoardName={setNewBoardName}
-  //         selectedTemplate={selectedTemplate}
-  //         setSelectedTemplate={setSelectedTemplate}
-  //         handleCreateBoard={handleCreateBoard}
-  //         getModalStyles={getModalStyles}
-  //       />
-  //       <EditBoardModal
-  //         isOpen={isEditModalOpen}
-  //         onClose={() => setIsEditModalOpen(false)}
-  //         theme={theme}
-  //         editBoardName={editBoardName}
-  //         setEditBoardName={setEditBoardName}
-  //         handleEditBoard={handleEditBoard}
-  //         getModalStyles={getModalStyles}
-  //       />
-  //       <DeleteBoardModal
-  //         isOpen={isDeleteModalOpen}
-  //         onClose={() => setIsDeleteModalOpen(false)}
-  //         theme={theme}
-  //         handleConfirmDelete={handleConfirmDeleteBoard}
-  //         getModalStyles={getModalStyles}
-  //       />
-  //     </div>
-  //   </div>
-  // );
-
-  //pre wrapper render
-
-  
-
-  // return (
-  //   <div className="min-h-screen flex flex-col">
-  //     <Navbar 
-  //       user={user}
-  //       onCreateBoard={() => setIsCreateModalOpen(true)}
-  //       onPageSettings={() => {
-  //         setIsPageSettingsModalOpen(true);
-  //         setIsDropdownOpen(false);
-  //       }}
-  //       onLogout={handleLogout}
-  //       theme={theme}
-  //       isDropdownOpen={isDropdownOpen}
-  //       setIsDropdownOpen={setIsDropdownOpen}
-  //       getNavBarStyles={getNavBarStyles}
-  //       settingsRef={settingsRef}
-  //     />
-
-  //     <BackgroundWrapper 
-  //       backgroundImage={backgroundImage} 
-  //       theme={theme}
-  //       getThemeStyles={getThemeStyles}
-  //     >
-  //       <div className="pt-24 sm:pt-20 p-6 overflow-auto">
-  //         {error && <p className="text-red-500">{error}</p>}
-  //         {user && (
-  //           <>
-  //             {invitations.length > 0 && (
-  //               <div className="mb-8">
-  //                 <h2 className="text-2xl font-bold mb-4">Pending Invitations</h2>
-  //                 <InvitationList
-  //                   invitations={invitations}
-  //                   onAccept={handleAcceptInvitation}
-  //                   onReject={handleRejectInvitation}
-  //                 />
-  //               </div>
-  //             )}
-
-  //             <h2 className="text-2xl font-bold mb-4">Your Boards</h2>
-  //             <BoardList
-  //               boards={ownedBoards}
-  //               onBoardClick={(id) => navigate(`/boards/${id}`)}
-  //               onEditClick={(board) => {
-  //                 setEditBoardName(board.name);
-  //                 setEditBoardId(board._id);
-  //                 setIsEditModalOpen(true);
-  //               }}
-  //               onDeleteClick={handleOpenDeleteModal}
-  //               onInviteClick={handleOpenInviteModal}
-  //               isOwned={true}
-  //             />
-              
-  //             <h2 className="text-2xl font-bold mt-8 mb-4">Collaborative Boards</h2>
-  //             <BoardList
-  //               boards={collaborativeBoards}
-  //               onBoardClick={(id) => navigate(`/boards/${id}`)}
-  //               isOwned={false}
-  //             />
-  //           </>
-  //         )}
-  //       </div>
-  //     </BackgroundWrapper>
-
-  //     <PageSettingsModal
-  //       isOpen={isPageSettingsModalOpen}
-  //       onClose={() => setIsPageSettingsModalOpen(false)}
-  //       theme={theme}
-  //       onThemeChange={setTheme}
-  //       backgroundImages={backgroundImages}
-  //       currentBackground={backgroundImage}
-  //       onBackgroundSelect={setBackgroundImage}
-  //       onRemoveBackground={() => setBackgroundImage(null)}
-  //       getModalStyles={getModalStyles}
-  //     />
-  //     <CreateBoardModal
-  //       isOpen={isCreateModalOpen}
-  //       onClose={() => setIsCreateModalOpen(false)}
-  //       theme={theme}
-  //       newBoardName={newBoardName}
-  //       setNewBoardName={setNewBoardName}
-  //       selectedTemplate={selectedTemplate}
-  //       setSelectedTemplate={setSelectedTemplate}
-  //       handleCreateBoard={handleCreateBoard}
-  //       getModalStyles={getModalStyles}
-  //     />
-  //     <EditBoardModal
-  //       isOpen={isEditModalOpen}
-  //       onClose={() => setIsEditModalOpen(false)}
-  //       theme={theme}
-  //       editBoardName={editBoardName}
-  //       setEditBoardName={setEditBoardName}
-  //       handleEditBoard={handleEditBoard}
-  //       getModalStyles={getModalStyles}
-  //     />
-  //     <DeleteBoardModal
-  //       isOpen={isDeleteModalOpen}
-  //       onClose={() => setIsDeleteModalOpen(false)}
-  //       theme={theme}
-  //       handleConfirmDelete={handleConfirmDeleteBoard}
-  //       getModalStyles={getModalStyles}
-  //     />
-  //     <InviteUserModal
-  //       isOpen={isInviteModalOpen}
-  //       onClose={() => {
-  //         setIsInviteModalOpen(false);
-  //         setSelectedBoardId(null);
-  //       }}
-  //       onInviteUser={handleInviteUser}
-  //     />
-  //   </div>
-  // );
