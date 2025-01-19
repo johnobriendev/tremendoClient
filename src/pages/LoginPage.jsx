@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { loginUser } from '../utils/api';
 
 const LoginPage = () => {
@@ -11,28 +10,21 @@ const LoginPage = () => {
   const navigate = useNavigate();
 
   const validateForm = () => {
-    // Clear any existing errors when starting validation
     setError('');
 
-    // Check if email is empty
     if (!email.trim()) {
       setError('Please enter your email address');
       return false;
     }
-
-    // Check email format using regex
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setError('Please enter a valid email address');
       return false;
     }
-
-    // Check if password is empty
     if (!password.trim()) {
       setError('Please enter your password');
       return false;
     }
-
     return true;
   };
 
@@ -44,11 +36,7 @@ const LoginPage = () => {
     }
 
     try {
-      // Use our API function instead of direct fetch
-      const data = await loginUser({ email, password });
-      
-      // Store the token and navigate on success
-      localStorage.setItem('token', data.token);
+      await loginUser({ email, password });
       navigate('/dashboard');
       
     } catch (error) {
@@ -140,32 +128,4 @@ const LoginPage = () => {
 export default LoginPage;
 
 
-// const handleLogin = async (e) => {
-//   e.preventDefault();
-//   try {
-//     const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/users/login`, {
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify({ email, password })
-//     });
-//     if (response.ok) {
-//       const data = await response.json();
-//       localStorage.setItem('token', data.token);
-//       navigate('/dashboard');
-//     } else {
-//       const data = await response.json();
-//       switch (data.message) {
-//         case 'Please verify your email before logging in':
-//           setError('Please verify your email address to login. Check your inbox for the verification email.');
-//           break;
-//         case 'Invalid email or password':
-//           setError('Incorrect email or password. Please try again.');
-//           break;
-//         default:
-//           setError(data.message || 'Unable to log in. Please try again. Contact johnobrien.dev@gmail.com if you continue having issues.');
-//       }
-//     }
-//   } catch (err) {
-//     setError('Login failed');
-//   }
-// };
+
