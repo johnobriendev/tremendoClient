@@ -11,13 +11,17 @@ import ResetPasswordPage from './pages/ResetPasswordPage';
 import AboutPage from './pages/AboutPage';
 import WorkInProgress from './pages/WorkInProgressPage';
 import { ThemeProvider } from './context/ThemeContext';
-
+import AuthRoute from './components/AuthRoute';
 
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <LandingPage />,
+    element: (
+      <AuthRoute>
+        <LandingPage />
+      </AuthRoute>
+    ),
   },
   {
     path: '/about',
@@ -29,11 +33,19 @@ const router = createBrowserRouter([
   },
   {
     path: '/register',
-    element: <RegisterPage />,
+    element: (
+      <AuthRoute>
+        <RegisterPage />
+      </AuthRoute>
+    ),
   },
   {
     path: '/login',
-    element: <LoginPage/>,
+    element: (
+      <AuthRoute>
+        <LoginPage />
+      </AuthRoute>
+    ),
   },
   {
     path: '/verify-email',
