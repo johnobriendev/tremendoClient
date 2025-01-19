@@ -2,13 +2,12 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Draggable } from '@hello-pangea/dnd';
 import { MdOutlineModeEdit, MdSave } from "react-icons/md";
 import { getOrCreateModalRoot, registerPortalUser, unregisterPortalUser } from '../utils/portalManager';
+import { addCardComment, deleteCardComment } from '../utils/api';
 
 import { IoMdClose } from "react-icons/io";
 import { FaTrash } from "react-icons/fa";
 import { useTheme } from '../context/ThemeContext.jsx';
 import { createPortal } from 'react-dom';
-
-
 
 function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
   const [showOptions, setShowOptions] = useState(false);
@@ -70,23 +69,6 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
   };
 
 
-  //saves the edited card onblur
-  // const handleSaveAndClose = async (e) => {
-  //     // Check if the blur event is caused by the delete button being clicked
-  //   if (e && e.relatedTarget && e.relatedTarget.id === 'delete-button') {
-  //     return; // Skip saving and closing if the delete button is clicked
-  //   }
-    
-  //   if (editingName && newName !== card.name) {
-  //     try {
-  //       await onUpdateCard(card._id, { name: newName });
-  //     } catch (error) {
-  //       console.error("Error updating card name:", error);
-  //     }
-  //   }
-  //   setEditingName(false);
-  //   setShowOptions(false);
-  // };
 
   const handleSaveAndClose = async (e) => {
       // Enhanced check for delete button click with optional chaining
@@ -107,34 +89,6 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
   };
 
 
-  //click outside and scroll events to close the card menu
-  // useEffect(() => {
-  //   const handleClickOutside = (event) => {
-  //     if (cardRef.current && !cardRef.current.contains(event.target)) {
-  //       handleSaveAndClose();
-  //     }
-  //     if (showOptions && optionsRef.current && !optionsRef.current.contains(event.target)) {
-  //       setShowOptions(false);
-  //     }
-  //     if (showDeleteModal && deleteModalRef.current && !deleteModalRef.current.contains(event.target)) {
-  //       setShowDeleteModal(false);
-  //     }
-  //   };
-
-  //   const handleScroll = () => {
-  //     if (showOptions) {
-  //       setShowOptions(false);
-  //     }
-  //   };
-
-  //   document.addEventListener('mousedown', handleClickOutside);
-  //   window.addEventListener('scroll', handleScroll, true);
-
-  //   return () => {
-  //     document.removeEventListener('mousedown', handleClickOutside);
-  //     window.removeEventListener('scroll', handleScroll, true);
-  //   };
-  // }, [showOptions, showDeleteModal]);
 
 
   useEffect(() => {
@@ -281,26 +235,11 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
     }
   };
 
-  //adds a comment to the card
   const handleAddComment = async () => {
     if (!newComment.trim()) return;
     setIsLoading(true);
     try {
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-      const response = await fetch(`${apiBaseUrl}/cards/${card._id}/comments`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify({ text: newComment }),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error adding comment: ${response.statusText}`);
-      }
-
-      const updatedCard = await response.json();
+      const updatedCard = await addCardComment(card._id, newComment);
       onUpdateCard(card._id, updatedCard); // Update local state with the returned card
       setNewComment('');
     } catch (error) {
@@ -310,23 +249,10 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
     }
   };
 
-  //deletes comment from the card
   const handleDeleteComment = async (commentId) => {
     setIsLoading(true);
     try {
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-      const response = await fetch(`${apiBaseUrl}/cards/${card._id}/comments/${commentId}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Error deleting comment: ${response.statusText}`);
-      }
-
-      const updatedCard = await response.json();
+      const updatedCard = await deleteCardComment(card._id, commentId);
       onUpdateCard(card._id, updatedCard); // Update local state with the returned card
     } catch (error) {
       console.error("Error deleting comment:", error);
@@ -606,10 +532,6 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
           {renderOptionsMenu()}
           {renderDeleteModal()}
 
-          
-          
-
-
         </div>
       )}
     </Draggable>
@@ -618,200 +540,3 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
 
 export default Card;
 
-
-
-
-// {showDetailModal && (
-//   <div 
-//   className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
-//   style={{ zIndex: 50 }}
-//   >
-//     <div 
-//       ref={detailModalRef}
-//       className="w-11/12 max-w-2xl rounded-lg shadow-xl p-6"
-//       style={{
-//         backgroundColor: colors.background.secondary,
-//         color: colors.text.primary,
-//         transition: 'background-color 0.2s, color 0.2s'
-//       }}
-//     >
-//       <div className="flex justify-between items-center mb-4">
-//         <h2 className="text-xl font-semibold">{card.name}</h2>
-//         <button 
-//           onClick={() => setShowDetailModal(false)}
-//           style={{ color: colors.text.secondary }}
-//           className="hover:opacity-80"
-//         >
-//           <IoMdClose size={24} />
-//         </button>
-//       </div>
-
-//       <div className="mb-6">
-//         <h3 className="text-lg font-medium mb-2">Description</h3>
-//         <div className="flex flex-col">
-//           <textarea
-//             value={description}
-//             onChange={handleDescriptionChange}
-//             className="w-full p-2 rounded mb-2"
-//             style={{
-//               backgroundColor: colors.background.tertiary,
-//               color: colors.text.primary,
-//               transition: 'background-color 0.2s, color 0.2s'
-//             }}
-//             rows={4}
-//             placeholder="Add a description..."
-//             disabled={isLoading}
-//           />
-//           <button
-//             onClick={handleDescriptionSave}
-//             className={`flex items-center justify-center bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 ${isLoading || !isDescriptionChanged ? 'opacity-50 cursor-not-allowed' : ''}`}
-//             disabled={isLoading || !isDescriptionChanged}
-//           >
-//             <MdSave className="mr-2" />
-//             Save Description
-//           </button>
-//         </div>
-//       </div>
-
-//       <div>
-//         <h3 className="text-lg font-medium mb-2">Comments</h3>
-//         <div className="space-y-4 mb-4">
-//           {card.comments && card.comments.map((comment) => (
-//             <div 
-//               key={comment._id} 
-//               className="p-2 rounded"
-//               style={{
-//                 backgroundColor: colors.background.tertiary,
-//                 transition: 'background-color 0.2s'
-//               }}
-//             >
-//               <div className="flex justify-between items-start">
-//                 <p className="flex-grow">{comment.text}</p>
-//                 <button
-//                   onClick={() => handleDeleteComment(comment._id)}
-//                   className={`text-red-500 hover:text-red-700 ml-2 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-//                   disabled={isLoading}
-//                 >
-//                   <FaTrash size={14} />
-//                 </button>
-//               </div>
-//             </div>
-//           ))}
-//         </div>
-
-
-//         <div className="mb-4">
-//           <textarea
-//             value={newComment}
-//             onChange={(e) => setNewComment(e.target.value)}
-//             className="w-full p-2 rounded mb-2"
-//             style={{
-//               backgroundColor: colors.background.tertiary,
-//               color: colors.text.primary,
-//               transition: 'background-color 0.2s, color 0.2s'
-//             }}
-//             rows={2}
-//             placeholder="Write a comment..."
-//             disabled={isLoading}
-//           />
-//           <button
-//             onClick={handleAddComment}
-//             className="px-4 py-2 rounded hover:opacity-90 disabled:opacity-50"
-//             style={{
-//               backgroundColor: accent.primary,
-//               color: '#ffffff',
-//               transition: 'background-color 0.2s'
-//             }}
-//             disabled={isLoading}
-//           >
-//             Add Comment
-//           </button>
-//         </div>
-
-     
-//       </div>
-//     </div>
-//   </div>
-// )}
-
-
-
-
-
-// {showOptions && (
-//   <div
-//     ref={optionsRef}
-//     style={{
-//       position: 'fixed',
-//       top: `${menuPosition.top}px`,
-//       left: `${menuPosition.left}px`,
-//       backgroundColor: colors.background.secondary,
-//       color: colors.text.primary,
-//       transition: 'background-color 0.2s, color 0.2s',
-//       zIndex: 100,
-//     }}          
-//     className="w-36 shadow-lg rounded border p-1 z-[100]"
-//   >
-//     <button
-//       id="delete-button"
-//       onClick={handleDeleteClick}
-//       className="w-full text-left px-2 py-1 rounded hover:opacity-80"
-//       style={{ color: accent.danger }}
-//     >
-//       Delete Card
-//     </button>
-//     <button 
-//       onClick={() => setShowOptions(false)} 
-//       className="w-full text-left px-2 py-1 rounded hover:opacity-80"
-//       style={{ color: colors.text.primary }}
-//     >
-//       Close
-//     </button>
-//   </div>
-// )}
-
-
-
-
-// {showDeleteModal && (
-//   <div 
-//   className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75"
-//   style={{ zIndex: 20 }}
-//   >
-//     <div 
-//       ref={deleteModalRef} 
-//       className="p-6 rounded shadow-lg"
-//       style={{
-//         backgroundColor: colors.background.secondary,
-//         color: colors.text.primary,
-//         transition: 'background-color 0.2s, color 0.2s'
-//       }}
-//     >
-//       <p className="text-lg mb-4">Are you sure you want to delete this card?</p>
-//       <div className="flex justify-end gap-4">
-//         <button
-//           onClick={handleDeleteConfirm}
-//           className="px-4 py-2 rounded hover:opacity-90"
-//           style={{
-//             backgroundColor: accent.danger,
-//             color: '#ffffff',
-//             transition: 'background-color 0.2s'
-//           }}
-//         >
-//           Yes, Delete
-//         </button>
-//         <button
-//           onClick={() => setShowDeleteModal(false)}
-//           className="px-4 py-2 rounded hover:opacity-90"
-//           style={{
-//             backgroundColor: accent.primary,
-//             color: '#ffffff',
-//             transition: 'background-color 0.2s'
-//           }}
-//         >
-//           Cancel
-//         </button>
-//       </div>
-//     </div>
-//   </div>
-// )}

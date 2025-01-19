@@ -276,6 +276,21 @@ export const deleteCard = async (cardId) => {
   });
 };
 
+export const addCardComment = async (cardId, commentText) => {
+  return makeAuthenticatedRequest(`${API_BASE_URL}/cards/${cardId}/comments`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text: commentText })
+  });
+};
+
+export const deleteCardComment = async (cardId, commentId) => {
+  return makeAuthenticatedRequest(`${API_BASE_URL}/cards/${cardId}/comments/${commentId}`, {
+    method: 'DELETE'
+  });
+};
+
+
 
 
 
