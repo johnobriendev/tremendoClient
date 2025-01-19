@@ -1,5 +1,86 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const setTokens = (accessToken, refreshToken) => {
+  localStorage.setItem('token', accessToken);
+  localStorage.setItem('refreshToken', refreshToken);
+};
 
+const clearTokens = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('refreshToken');
+};
+
+const getRefreshToken = () => localStorage.getItem('refreshToken');
+
+const refreshAccessToken = async () => {
+  const refreshToken = getRefreshToken();
+  if (!refreshToken) {
+    throw new Error('No refresh token available');
+  }
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/users/refresh-token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refreshToken })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to refresh token');
+    }
+
+    const { accessToken } = await response.json();
+    localStorage.setItem('token', accessToken);
+    return accessToken;
+  } catch (error) {
+    clearTokens();
+    throw error;
+  }
+};
+
+
+// Helper function for authenticated requests
+const makeAuthenticatedRequest = async (url, options = {}) => {
+  try {
+    const token = localStorage.getItem('token');
+    
+    const response = await fetch(url, {
+      ...options,
+      headers: {
+        ...options.headers,
+        'Authorization': `Bearer ${token}`
+      }
+    });
+
+    if (response.status === 401) {
+      const newToken = await refreshAccessToken();
+      
+      const retryResponse = await fetch(url, {
+        ...options,
+        headers: {
+          ...options.headers,
+          'Authorization': `Bearer ${newToken}`
+        }
+      });
+
+      if (!retryResponse.ok) {
+        const error = await retryResponse.json();
+        throw new Error(error.message || 'Request failed');
+      }
+      return retryResponse.json();
+    }
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(error.message || 'Request failed');
+    }
+    return response.json();
+  } catch (error) {
+    if (error.message === 'Failed to refresh token') {
+      clearTokens();
+    }
+    throw error;
+  }
+};
 
 export const registerUser = async (userData) => {
   const response = await fetch(`${API_BASE_URL}/users/register`, {
@@ -28,8 +109,24 @@ export const loginUser = async (credentials) => {
   if (!response.ok) {
     throw new Error(data.message || 'Login failed');
   }
-
+  setTokens(data.accessToken, data.refreshToken);
   return data;
+};
+
+export const logoutUser = async () => {
+  const refreshToken = getRefreshToken();
+  if (refreshToken) {
+    try {
+      await fetch(`${API_BASE_URL}/users/logout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refreshToken })
+      });
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  }
+  clearTokens();
 };
 
 export const resendVerification = async (email) => {
@@ -65,277 +162,123 @@ export const resetPassword = async (token, passwordData) => {
   return data;
 };
 
-export const fetchUserData = async (token) => {
-  const response = await fetch(`${API_BASE_URL}/users`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  if (!response.ok) {
-    throw new Error('Failed to fetch user data');
-  }
-  return response.json();
+export const fetchUserData = async () => {
+  return makeAuthenticatedRequest(`${API_BASE_URL}/users`);
 };
 
-export const fetchBoards = async (token) => {
-  const response = await fetch(`${API_BASE_URL}/boards`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  if (!response.ok) {
-    throw new Error('Failed to fetch boards');
-  }
-  return response.json();
+export const fetchBoards = async () => {
+  return makeAuthenticatedRequest(`${API_BASE_URL}/boards`);
 };
 
-export const fetchAllBoards = async (token) => {
-  const response = await fetch(`${API_BASE_URL}/boards/all`, {
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || 'Failed to fetch boards');
-  }
-
-  return response.json();
+export const fetchAllBoards = async () => {
+  return makeAuthenticatedRequest(`${API_BASE_URL}/boards/all`);
 };
 
-export const createBoard = async (token, boardData) => {
-  const response = await fetch(`${API_BASE_URL}/boards`, {
+export const createBoard = async (boardData) => {
+  return makeAuthenticatedRequest(`${API_BASE_URL}/boards`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(boardData),
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(boardData)
   });
-  if (!response.ok) {
-    throw new Error('Failed to create a new board');
-  }
-  return response.json();
 };
 
-export const updateBoard = async (token, boardId, boardData) => {
-  const response = await fetch(`${API_BASE_URL}/boards/${boardId}`, {
+export const updateBoard = async (boardId, boardData) => {
+  return makeAuthenticatedRequest(`${API_BASE_URL}/boards/${boardId}`, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(boardData),
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(boardData)
   });
-  if (!response.ok) {
-    throw new Error('Failed to update the board');
-  }
-  return response.json();
 };
 
-export const deleteBoard = async (token, boardId) => {
-  const response = await fetch(`${API_BASE_URL}/boards/${boardId}`, {
-    method: 'DELETE',
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
+export const deleteBoard = async (boardId) => {
+  return makeAuthenticatedRequest(`${API_BASE_URL}/boards/${boardId}`, {
+    method: 'DELETE'
   });
-  if (!response.ok) {
-    throw new Error('Failed to delete the board');
-  }
 };
 
-export const fetchBoardData = async (token, boardId) => {
-  const boardResponse = await fetch(`${API_BASE_URL}/boards/${boardId}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  if (!boardResponse.ok) {
-    throw new Error(`Error fetching board: ${boardResponse.statusText}`);
-  }
-  return boardResponse.json();
+export const fetchBoardData = async (boardId) => {
+  return makeAuthenticatedRequest(`${API_BASE_URL}/boards/${boardId}`);
 };
 
-export const fetchBoardDetails = async (token, boardId) => {
-  const response = await fetch(`${API_BASE_URL}/boards/${boardId}/details`, {
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || 'Failed to fetch board details');
-  }
-
-  return response.json();
+export const fetchBoardDetails = async (boardId) => {
+  return makeAuthenticatedRequest(`${API_BASE_URL}/boards/${boardId}/details`);
 };
 
-export const inviteUserToBoard = async (token, boardId, email) => {
-  const response = await fetch(`${API_BASE_URL}/invitations/boards/${boardId}/invite`, {
+export const inviteUserToBoard = async (boardId, email) => {
+  return makeAuthenticatedRequest(`${API_BASE_URL}/invitations/boards/${boardId}/invite`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
-    body: JSON.stringify({ email }),
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email })
   });
-
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || 'Failed to invite user');
-  }
-
-  return response.json();
 };
 
-export const fetchInvitations = async (token) => {
-  const response = await fetch(`${API_BASE_URL}/invitations`, {
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
-  });
-
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || 'Failed to fetch invitations');
-  }
-
-  return response.json();
+export const fetchInvitations = async () => {
+  return makeAuthenticatedRequest(`${API_BASE_URL}/invitations`);
 };
 
-export const respondToInvitation = async (token, invitationId, accept) => {
-  const response = await fetch(`${API_BASE_URL}/invitations/${invitationId}/respond`, {
+export const respondToInvitation = async (invitationId, accept) => {
+  return makeAuthenticatedRequest(`${API_BASE_URL}/invitations/${invitationId}/respond`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
-    },
-    body: JSON.stringify({ accept }),
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ accept })
   });
-
-  if (!response.ok) {
-    const error = await response.json();
-    throw new Error(error.message || 'Failed to respond to invitation');
-  }
-
-  return response.json();
 };
 
-export const fetchLists = async (token, boardId) => {
-  const response = await fetch(`${API_BASE_URL}/lists/${boardId}`, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  if (!response.ok) {
-    throw new Error(`Error fetching lists: ${response.statusText}`);
-  }
-  return response.json();
+export const fetchLists = async (boardId) => {
+  return makeAuthenticatedRequest(`${API_BASE_URL}/lists/${boardId}`);
 };
 
-export const fetchCards = async (token, boardId) => {
-  const response = await fetch(`${API_BASE_URL}/cards/${boardId}/cards`, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  if (!response.ok) {
-    throw new Error(`Error fetching cards: ${response.statusText}`);
-  }
-  return response.json();
+export const fetchCards = async (boardId) => {
+  return makeAuthenticatedRequest(`${API_BASE_URL}/cards/${boardId}/cards`);
 };
 
-export const createList = async (token, boardId, listData) => {
-  const response = await fetch(`${API_BASE_URL}/lists/${boardId}`, {
+export const createList = async (boardId, listData) => {
+  return makeAuthenticatedRequest(`${API_BASE_URL}/lists/${boardId}`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(listData),
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(listData)
   });
-  if (!response.ok) {
-    throw new Error(`Error creating list: ${response.statusText}`);
-  }
-  return response.json();
 };
 
-export const updateList = async (token, listId, listData) => {
-  const response = await fetch(`${API_BASE_URL}/lists/${listId}`, {
+export const updateList = async (listId, listData) => {
+  return makeAuthenticatedRequest(`${API_BASE_URL}/lists/${listId}`, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(listData),
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(listData)
   });
-  if (!response.ok) {
-    throw new Error(`Error updating list: ${response.statusText}`);
-  }
-  return response.json();
 };
 
-export const deleteList = async (token, listId) => {
-  const response = await fetch(`${API_BASE_URL}/lists/${listId}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
+export const deleteList = async (listId) => {
+  return makeAuthenticatedRequest(`${API_BASE_URL}/lists/${listId}`, {
+    method: 'DELETE'
   });
-  if (!response.ok) {
-    throw new Error(`Error deleting list: ${response.statusText}`);
-  }
 };
 
-export const createCard = async (token, boardId, cardData) => {
-  const response = await fetch(`${API_BASE_URL}/cards/${boardId}/cards`, {
+export const createCard = async (boardId, cardData) => {
+  return makeAuthenticatedRequest(`${API_BASE_URL}/cards/${boardId}/cards`, {
     method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(cardData),
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(cardData)
   });
-  if (!response.ok) {
-    throw new Error(`Error creating card: ${response.statusText}`);
-  }
-  return response.json();
 };
 
-export const updateCard = async (token, cardId, cardData) => {
-  const response = await fetch(`${API_BASE_URL}/cards/${cardId}`, {
+export const updateCard = async (cardId, cardData) => {
+  return makeAuthenticatedRequest(`${API_BASE_URL}/cards/${cardId}`, {
     method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(cardData),
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(cardData)
   });
-  if (!response.ok) {
-    throw new Error(`Error updating card: ${response.statusText}`);
-  }
-  return response.json();
 };
 
-export const deleteCard = async (token, cardId) => {
-  const response = await fetch(`${API_BASE_URL}/cards/${cardId}`, {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
-    },
+export const deleteCard = async (cardId) => {
+  return makeAuthenticatedRequest(`${API_BASE_URL}/cards/${cardId}`, {
+    method: 'DELETE'
   });
-  if (!response.ok) {
-    throw new Error(`Error deleting card: ${response.statusText}`);
-  }
 };
+
+
+
+
 
 
 
