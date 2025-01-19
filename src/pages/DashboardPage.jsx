@@ -44,14 +44,12 @@ const DashboardPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const userData = await api.fetchUserData(token);
+        const userData = await api.fetchUserData();
         setUser(userData);
-        const boardsData = await api.fetchAllBoards(token);
-        //setBoards(boardsData);
+        const boardsData = await api.fetchAllBoards();
         setOwnedBoards(boardsData.ownedBoards);
         setCollaborativeBoards(boardsData.collaborativeBoards);
-        const invitationsData = await api.fetchInvitations(token);
+        const invitationsData = await api.fetchInvitations();
         setInvitations(invitationsData);
       } catch (err) {
         if (err.message === 'Failed to fetch user data') {
@@ -67,8 +65,7 @@ const DashboardPage = () => {
 
   const handleCreateBoard = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const newBoard = await api.createBoard(token, {
+      const newBoard = await api.createBoard({
         name: newBoardName,
         description: '',
         isPrivate: true,
@@ -87,8 +84,7 @@ const DashboardPage = () => {
 
   const handleEditBoard = async () => {
     try {
-      const token = localStorage.getItem('token');
-      const updatedBoard = await api.updateBoard(token, editBoardId, { name: editBoardName });
+      const updatedBoard = await api.updateBoard(editBoardId, { name: editBoardName });
       setOwnedBoards(ownedBoards.map(board => (board._id === editBoardId ? updatedBoard : board)));
       setIsEditModalOpen(false);
       setEditBoardName('');
@@ -105,8 +101,7 @@ const DashboardPage = () => {
 
   const handleConfirmDeleteBoard = async () => {
     try {
-      const token = localStorage.getItem('token');
-      await api.deleteBoard(token, deleteBoardId);
+      await api.deleteBoard(deleteBoardId);
       setOwnedBoards(ownedBoards.filter(board => board._id !== deleteBoardId));
       setIsDeleteModalOpen(false);
       setDeleteBoardId('');
@@ -121,17 +116,15 @@ const DashboardPage = () => {
   };
 
   const handleInviteUser = async (email) => {
-      const token = localStorage.getItem('token');
-      await api.inviteUserToBoard(token, selectedBoardId, email);
+      
+      await api.inviteUserToBoard(selectedBoardId, email);
       setIsInviteModalOpen(false);
-      //setInviteBoardId('');
       setSelectedBoardId(null);
   };
 
   const handleAcceptInvitation = async (invitationId) => {
     try {
-      const token = localStorage.getItem('token');
-      await api.respondToInvitation(token, invitationId, true);
+      await api.respondToInvitation(invitationId, true);
       setInvitations(invitations.filter(inv => inv._id !== invitationId));
       const boardsData = await api.fetchAllBoards(token);
       setCollaborativeBoards(boardsData.collaborativeBoards);
@@ -142,8 +135,7 @@ const DashboardPage = () => {
 
   const handleRejectInvitation = async (invitationId) => {
     try {
-      const token = localStorage.getItem('token');
-      await api.respondToInvitation(token, invitationId, false);
+      await api.respondToInvitation(invitationId, false);
       setInvitations(invitations.filter(inv => inv._id !== invitationId));
     } catch (err) {
       setError(err.message);
@@ -151,7 +143,7 @@ const DashboardPage = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    api.logoutUser();
     navigate('/login');
   };
 
