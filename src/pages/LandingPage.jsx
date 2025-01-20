@@ -198,7 +198,7 @@ const LandingPage = () => {
             <h2 className="text-3xl md:text-4xl font-thin text-center mb-4">
               Try Our Demo Board
             </h2>
-            <p className="text-center text-lg mb-8 px-4">
+            <p className="text-center text-lg mb-4 px-4">
               Experience Tremendo's features without creating an account
             </p>
             <div className="w-full overflow-hidden">
