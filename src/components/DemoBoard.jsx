@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 import List from '../components/List';
-import Navbar from '../components/Navbar';
+import DemoBoardNav from '../components/DemoBoardNav';
 import PageSettingsModal from '../components/PageSettingsModal';
 import { useTheme } from '../context/ThemeContext.jsx';
 
@@ -304,13 +304,10 @@ const DemoBoard = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar
-        boardName="Demo Board"
-        showCreateBoard={false}
+     <DemoBoardNav
         isDropdownOpen={isDropdownOpen}
         setIsDropdownOpen={setIsDropdownOpen}
         onPageSettings={() => setIsPageSettingsModalOpen(true)}
-        onLogout={() => {}}
       />
       
       <div

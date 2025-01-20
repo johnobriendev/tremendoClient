@@ -43,7 +43,7 @@ const DemoBoardNav = ({
         </button>
         {isDropdownOpen && (
           <div 
-            className="absolute right-0 mt-2 w-48 rounded-md shadow-lg"
+            className="absolute right-0 mt-2 w-48 z-20 rounded-md shadow-lg"
             style={{
               backgroundColor: colors.background.secondary,
               color: colors.text.primary
