@@ -5,12 +5,14 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-// import DemoBoard from './DemoBoard';
+import DemoBoard from '../components/DemoBoard';
+import { useTheme } from '../context/ThemeContext';
+
 
 const LandingPage = () => {
   const [enlargedImage, setEnlargedImage] = useState(null)
   const [isScrolled, setIsScrolled] = useState(false)
-
+  const { colors } = useTheme();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,6 +38,12 @@ const LandingPage = () => {
     aboutSection.scrollIntoView({ behavior: 'smooth' })
   }
 
+  const scrollToDemo = (e) => {
+    e.preventDefault()
+    const demoSection = document.getElementById('demo')
+    demoSection.scrollIntoView({ behavior: 'smooth' })
+  }
+
   const settings = {
     dots: true,
     infinite: true,
@@ -49,7 +57,7 @@ const LandingPage = () => {
   return (
     <div className="flex flex-col min-h-screen">
 
-      <header className={`w-full py-4 px-6 fixed top-0 z-10 transition-all duration-300 ${isScrolled ? 'bg-white/80 backdrop-blur-md' : 'bg-transparent'}`}>
+      <header className={`w-full py-4 px-6 fixed top-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/80 backdrop-blur-md' : 'bg-transparent'}`}>
         <nav className={`flex ${isScrolled ? 'justify-between' : 'justify-end'}  items-center max-w-7xl mx-auto`}>
           <a href="#" onClick={scrollToTop} className={`text-4xl font-bold ${isScrolled ? 'text-black font-thin' : 'hidden'}`}>
             Tremendo
@@ -57,6 +65,9 @@ const LandingPage = () => {
           <div className="space-x-4">
             <a href="#about" onClick={scrollToAbout} className={`text-sm font-medium hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}>
               About
+            </a>
+            <a href="#demo" onClick={scrollToDemo} className={`text-sm font-medium hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}>
+              Demo
             </a>
             <Link to="/login" className={`text-sm font-medium hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}>
               Login
@@ -77,9 +88,14 @@ const LandingPage = () => {
           }}
         >
           <h1 className="text-4xl md:text-6xl font-thin  text-white mb-4 mt-24 text-center">Tremendo</h1>
-          <a href="#about" onClick={scrollToAbout} className="bg-white bg-opacity-40 hover:bg-opacity-50 hover:border hover:border-white text-white font-thin py-2 px-4 rounded">
-            Learn More
-          </a>
+          <div className="space-y-4">
+            <a href="#about" onClick={scrollToAbout} className="bg-white bg-opacity-40 hover:bg-opacity-50 hover:border hover:border-white text-white font-thin py-2 px-4 rounded">
+              Learn More
+            </a>
+            <a href="#demo" onClick={scrollToDemo} className="block text-center text-white hover:underline">
+                Try the Demo
+            </a>
+          </div>
         </section>
 
         <section id="about" className="min-h-screen flex flex-col items-center justify-center p-16 bg-cover bg-center overflow-auto relative" style={{backgroundImage: "url(/mountain.jpg)"}}>
@@ -153,6 +169,28 @@ const LandingPage = () => {
               <Link to="/login" className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
                 Login
               </Link>
+            </div>
+          </div>
+        </section>
+
+        <section 
+          id="demo" 
+          className="min-h-screen relative bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 overflow-hidden"
+          style={{
+            backgroundColor: colors.background.primary,
+            color: colors.text.primary,
+          }}
+        >
+          <div className="absolute inset-0 bg-opacity-75 backdrop-blur-sm"></div>
+          <div className="relative z-10 pt-16 pb-8">
+            <h2 className="text-4xl md:text-5xl font-thin text-center mb-12">
+              Try Our Demo Board
+            </h2>
+            <p className="text-center text-lg mb-8 px-4">
+              Experience Tremendo's features without creating an account
+            </p>
+            <div className="w-full overflow-hidden">
+              <DemoBoard />
             </div>
           </div>
         </section>

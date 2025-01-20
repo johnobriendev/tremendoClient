@@ -10,99 +10,200 @@ const DemoBoard = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isPageSettingsModalOpen, setIsPageSettingsModalOpen] = useState(false);
 
-  // Initial demo data
+  // Create a demo board ID to mimic MongoDB ObjectId
+  const demoBoardId = 'demo123456789';
+
+  // Initialize lists with proper schema structure
   const [lists, setLists] = useState([
     {
-      _id: 'list-1',
+      _id: 'list1',
       name: 'Todo',
+      boardId: demoBoardId,
       position: 1,
-      cards: [
-        { _id: 'card-1', name: 'Hi, welcome to Tremendo', position: 1 },
-        { _id: 'card-2', name: 'A simple project management tool', position: 2 },
-        { _id: 'card-3', name: 'Give this demoboard a try to see our main features', position: 3 }
-      ]
+      color: null
     },
     {
-      _id: 'list-2',
+      _id: 'list2',
       name: 'Doing',
+      boardId: demoBoardId,
       position: 2,
-      cards: [
-        { _id: 'card-4', name: 'Try creating a List or a Card', position: 1 },
-        { _id: 'card-5', name: 'Or dragging a card from list to list', position: 2 },
-        { _id: 'card-6', name: 'Lists can also be reordered by dragging', position: 3 }
-      ]
+      color: null
     },
     {
-      _id: 'list-3',
+      _id: 'list3',
       name: 'Done',
+      boardId: demoBoardId,
       position: 3,
-      cards: [
-        { _id: 'card-7', name: 'Tremendo is a great way to keep your projects organized and work in teams!', position: 1 },
-        { _id: 'card-8', name: 'Tremendo offers an intuitive user interface as well as many different themes', position: 2 },
-        { _id: 'card-9', name: 'Try changing the theme from light to dark to see what Tremendo can do', position: 3 }
-      ]
+      color: null
     }
   ]);
 
+  // Initialize cards with proper schema structure
+  const [cards, setCards] = useState([
+    {
+      _id: 'card1',
+      boardId: demoBoardId,
+      listId: 'list1',
+      name: 'Hi, welcome to Tremendo',
+      description: '',
+      position: 1,
+      comments: [],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      _id: 'card2',
+      boardId: demoBoardId,
+      listId: 'list1',
+      name: 'A simple project management tool',
+      description: '',
+      position: 2,
+      comments: [],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      _id: 'card3',
+      boardId: demoBoardId,
+      listId: 'list1',
+      name: 'Give this demoboard a try to see our main features',
+      description: '',
+      position: 3,
+      comments: [],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      _id: 'card4',
+      boardId: demoBoardId,
+      listId: 'list2',
+      name: 'Try creating a List or a Card',
+      description: '',
+      position: 1,
+      comments: [],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      _id: 'card5',
+      boardId: demoBoardId,
+      listId: 'list2',
+      name: 'Or dragging a card from list to list',
+      description: '',
+      position: 2,
+      comments: [],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      _id: 'card6',
+      boardId: demoBoardId,
+      listId: 'list2',
+      name: 'Lists can also be reordered by dragging',
+      description: '',
+      position: 3,
+      comments: [],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      _id: 'card7',
+      boardId: demoBoardId,
+      listId: 'list3',
+      name: 'Tremendo is a great way to keep your projects organized and work in teams!',
+      description: '',
+      position: 1,
+      comments: [],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      _id: 'card8',
+      boardId: demoBoardId,
+      listId: 'list3',
+      name: 'Tremendo offers an intuitive user interface as well as many different themes',
+      description: '',
+      position: 2,
+      comments: [],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    },
+    {
+      _id: 'card9',
+      boardId: demoBoardId,
+      listId: 'list3',
+      name: 'Try changing the theme from light to dark to see what Tremendo can do',
+      description: '',
+      position: 3,
+      comments: [],
+      createdAt: new Date(),
+      updatedAt: new Date()
+    }
+  ]);
+
+  // Counter for new IDs
   const [newListId, setNewListId] = useState(4);
   const [newCardId, setNewCardId] = useState(10);
+  const [newCardName, setNewCardName] = useState({});
+  const [editListName, setEditListName] = useState({});
+
 
   // Create new list
   const handleCreateList = (name) => {
     const newList = {
-      _id: `list-${newListId}`,
+      _id: `list${newListId}`,
       name,
+      boardId: demoBoardId,
       position: lists.length + 1,
-      cards: []
+      color: null
     };
     setLists([...lists, newList]);
     setNewListId(newListId + 1);
   };
 
-  // Update list
-  const handleUpdateList = (listId, updates) => {
-    setLists(lists.map(list => 
-      list._id === listId ? { ...list, ...updates } : list
+   // Update list name
+   const handleListNameChange = (listId, newName) => {
+    if (!newName) return;
+    setLists(lists.map(list =>
+      list._id === listId ? { ...list, name: newName } : list
     ));
+    setEditListName(prev => ({ ...prev, [listId]: '' }));
   };
 
   // Delete list
   const handleDeleteList = (listId) => {
     setLists(lists.filter(list => list._id !== listId));
+    // Also delete associated cards
+    setCards(cards.filter(card => card.listId !== listId));
   };
 
   // Create card
   const handleCreateCard = (listId, name) => {
     const newCard = {
-      _id: `card-${newCardId}`,
+      _id: `card${newCardId}`,
+      boardId: demoBoardId,
+      listId,
       name,
-      position: lists.find(list => list._id === listId).cards.length + 1
+      description: '',
+      position: cards.filter(card => card.listId === listId).length + 1,
+      comments: [],
+      createdAt: new Date(),
+      updatedAt: new Date()
     };
-    
-    setLists(lists.map(list => 
-      list._id === listId
-        ? { ...list, cards: [...list.cards, newCard] }
-        : list
-    ));
+    setCards([...cards, newCard]);
     setNewCardId(newCardId + 1);
   };
 
   // Update card
   const handleUpdateCard = (cardId, updates) => {
-    setLists(lists.map(list => ({
-      ...list,
-      cards: list.cards.map(card =>
-        card._id === cardId ? { ...card, ...updates } : card
-      )
-    })));
+    setCards(cards.map(card =>
+      card._id === cardId ? { ...card, ...updates, updatedAt: new Date() } : card
+    ));
   };
 
   // Delete card
   const handleDeleteCard = (cardId) => {
-    setLists(lists.map(list => ({
-      ...list,
-      cards: list.cards.filter(card => card._id !== cardId)
-    })));
+    setCards(cards.filter(card => card._id !== cardId));
   };
 
   // Handle drag and drop
@@ -110,10 +211,8 @@ const DemoBoard = () => {
     const { destination, source, draggableId, type } = result;
 
     if (!destination) return;
-    if (
-      destination.droppableId === source.droppableId &&
-      destination.index === source.index
-    ) return;
+    if (destination.droppableId === source.droppableId && 
+        destination.index === source.index) return;
 
     if (type === 'LIST') {
       const newLists = Array.from(lists);
@@ -130,46 +229,78 @@ const DemoBoard = () => {
     }
 
     if (type === 'CARD') {
-      const sourceList = lists.find(list => list._id === source.droppableId);
-      const destList = lists.find(list => list._id === destination.droppableId);
-      const draggedCard = sourceList.cards.find(card => card._id === draggableId);
+      const startListId = source.droppableId;
+      const endListId = destination.droppableId;
+      
+      // Get all cards for source and destination lists
+      const sourceListCards = cards
+        .filter(card => card.listId === startListId)
+        .sort((a, b) => a.position - b.position);
+      
+      const destinationListCards = startListId === endListId 
+        ? sourceListCards 
+        : cards
+            .filter(card => card.listId === endListId)
+            .sort((a, b) => a.position - b.position);
 
-      if (source.droppableId === destination.droppableId) {
+      const draggedCard = cards.find(card => card._id === draggableId);
+      
+      if (startListId === endListId) {
         // Moving within the same list
-        const newCards = Array.from(sourceList.cards);
+        const newCards = Array.from(sourceListCards);
         newCards.splice(source.index, 1);
         newCards.splice(destination.index, 0, draggedCard);
-
+        
         const updatedCards = newCards.map((card, index) => ({
           ...card,
-          position: index + 1
+          position: index + 1,
+          updatedAt: new Date()
         }));
 
-        setLists(lists.map(list =>
-          list._id === sourceList._id
-            ? { ...list, cards: updatedCards }
-            : list
+        setCards(cards.map(card => 
+          card.listId === startListId
+            ? updatedCards.find(uc => uc._id === card._id) || card
+            : card
         ));
       } else {
         // Moving to a different list
-        const sourceCards = Array.from(sourceList.cards);
-        const destCards = Array.from(destList.cards);
-        
+        const sourceCards = Array.from(sourceListCards);
         sourceCards.splice(source.index, 1);
-        destCards.splice(destination.index, 0, draggedCard);
+        
+        const destCards = Array.from(destinationListCards);
+        destCards.splice(destination.index, 0, {
+          ...draggedCard,
+          listId: endListId
+        });
 
-        setLists(lists.map(list => {
-          if (list._id === source.droppableId) {
-            return { ...list, cards: sourceCards };
+        // Update all affected cards
+        const updatedCards = [
+          ...sourceCards.map((card, index) => ({
+            ...card,
+            position: index + 1,
+            updatedAt: new Date()
+          })),
+          ...destCards.map((card, index) => ({
+            ...card,
+            position: index + 1,
+            updatedAt: new Date()
+          }))
+        ];
+
+        setCards(cards.map(card => {
+          if (card.listId === startListId || card.listId === endListId) {
+            return updatedCards.find(uc => uc._id === card._id) || card;
           }
-          if (list._id === destination.droppableId) {
-            return { ...list, cards: destCards };
-          }
-          return list;
+          return card;
         }));
       }
     }
   };
+
+
+  
+
+  
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -208,13 +339,20 @@ const DemoBoard = () => {
                     <List
                       key={list._id}
                       list={list}
-                      cards={list.cards}
+                      cards={cards}
                       index={index}
-                      onCreateCard={(name) => handleCreateCard(list._id, name)}
-                      onDeleteList={() => handleDeleteList(list._id)}
-                      onUpdateList={(updates) => handleUpdateList(list._id, updates)}
-                      onUpdateCard={handleUpdateCard}
-                      onDeleteCard={handleDeleteCard}
+                      newCardName={newCardName}
+                      editListName={editListName}
+                      setEditListName={setEditListName}
+                      setNewCardName={setNewCardName}
+                      handleCreateCard={(listId) => {
+                        handleCreateCard(listId, newCardName[listId]);
+                        setNewCardName(prev => ({ ...prev, [listId]: '' }));
+                      }}
+                      handleDeleteList={handleDeleteList}
+                      handleListNameChange={handleListNameChange}
+                      handleUpdateCard={handleUpdateCard}
+                      handleDeleteCard={handleDeleteCard}
                     />
                   ))}
                 {provided.placeholder}
