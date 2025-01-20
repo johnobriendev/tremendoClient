@@ -41,8 +41,21 @@ const LandingPage = () => {
   const scrollToDemo = (e) => {
     e.preventDefault()
     const demoSection = document.getElementById('demo')
-    demoSection.scrollIntoView({ behavior: 'smooth' })
+    const offset = 60 // Approximate height of your header in pixels
+    const elementPosition = demoSection.getBoundingClientRect().top
+    const offsetPosition = elementPosition + window.pageYOffset - offset
+  
+    window.scrollTo({
+      top: offsetPosition,
+      behavior: 'smooth'
+    })
   }
+
+  // const scrollToDemo = (e) => {
+  //   e.preventDefault()
+  //   const demoSection = document.getElementById('demo')
+  //   demoSection.scrollIntoView({ behavior: 'smooth' })
+  // }
 
   const settings = {
     dots: true,
@@ -175,15 +188,14 @@ const LandingPage = () => {
 
         <section 
           id="demo" 
-          className="min-h-screen relative bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 overflow-hidden"
+          className="min-h-screen relative bg-gray-100 dark:bg-gray-800  overflow-hidden"
           style={{
-            backgroundColor: colors.background.primary,
-            color: colors.text.primary,
+            backgroundColor: '#1e293b',
+            color: '#e6eaee',
           }}
         >
-          <div className="absolute inset-0 bg-opacity-75 backdrop-blur-sm"></div>
-          <div className="relative z-10 pt-16 pb-8">
-            <h2 className="text-4xl md:text-5xl font-thin text-center mb-12">
+          <div className="relative z-10 pt-8 ">
+            <h2 className="text-3xl md:text-4xl font-thin text-center mb-4">
               Try Our Demo Board
             </h2>
             <p className="text-center text-lg mb-8 px-4">
