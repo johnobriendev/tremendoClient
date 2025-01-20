@@ -30,7 +30,10 @@ export const colors = {
     danger: '#8c6e72',         // Muted burgundy
     special: '#767a98',        // Twilight purple-grey
   }
-  // light: {
+ 
+};
+
+ // light: {
   //   background: {
   //     primary: '#dae8f1',    // Main background
   //     secondary: '#bfd7e7',  // Board cards
@@ -60,5 +63,3 @@ export const colors = {
   //   danger: '#EF4444',      // Destructive actions
   //   special: '#A855F7',   // Special actions
   // }
-};
-

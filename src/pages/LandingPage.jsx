@@ -10,35 +10,6 @@ import 'slick-carousel/slick/slick-theme.css';
 const LandingPage = () => {
   const [enlargedImage, setEnlargedImage] = useState(null)
   const [isScrolled, setIsScrolled] = useState(false)
-  const [backgroundImage, setBackgroundImage] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-
-  // useEffect(() => {
-  //   const fetchBackgroundImage = async () => {
-  //     try {
-  //       // You would need to replace this with your actual API key
-  //       const response = await fetch(
-  //         `https://api.unsplash.com/photos/random?collections=${import.meta.env.VITE_UNSPLASH_COLLECTION_ID}&orientation=landscape&w=1920&fit=crop&q=85`,
-  //         {
-  //           headers: {
-  //             Authorization: `Client-ID ${import.meta.env.VITE_UNSPLASH_ACCESS_KEY}`
-  //           }
-  //         }
-  //       );
-  //       const data = await response.json();
-  //       setBackgroundImage(data.urls.regular);
-  //       setIsLoading(false);
-  //     } catch (error) {
-  //       console.error('Error fetching background image:', error);
-  //       // Fallback to a default image
-  //       setBackgroundImage('/beach.webp');
-  //       setIsLoading(false);
-  //     }
-  //   };
-
-  //   fetchBackgroundImage();
-  // }, []);
-
 
 
   useEffect(() => {
@@ -53,9 +24,6 @@ const LandingPage = () => {
     window.addEventListener('scroll', handleScroll)
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
-
-
-
 
   const scrollToTop = (e) => {
     e.preventDefault()
@@ -109,55 +77,13 @@ const LandingPage = () => {
           }}
         >
           <h1 className="text-4xl md:text-6xl font-thin  text-white mb-4 mt-24 text-center">Tremendo</h1>
-          {/* <h2 className="text-xl md:text-2xl text-white font-thin mb-8 text-center max-w-2xl">
-            Your go-to solution for everything you need related to productivity and organization.
-          </h2> */}
           <a href="#about" onClick={scrollToAbout} className="bg-white bg-opacity-40 hover:bg-opacity-50 hover:border hover:border-white text-white font-thin py-2 px-4 rounded">
             Learn More
           </a>
         </section>
 
-        {/* <section
-          className={`h-screen flex flex-col items-center justify-items-start p-6 bg-cover bg-center transition-opacity duration-500 ${
-            isLoading ? 'opacity-0' : 'opacity-100'
-          }`}
-          style={{
-            backgroundImage: `url(${backgroundImage})`,
-            backgroundColor: '#1a1a1a', // Fallback color while loading
-          }}
-        >
-          {isLoading && (
-            <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-            </div>
-          )}
-          
-          <h1 className="text-4xl md:text-6xl font-bold text-white mb-4 mt-24 text-center">Tremendo</h1>
-          <h2 className="text-xl md:text-2xl text-white mb-8 text-center max-w-2xl">
-            Streamline your workflow, boost productivity, and collaborate seamlessly with our intuitive task management platform.
-          </h2>
-          <a href="#about" onClick={scrollToAbout} className="bg-white bg-opacity-80 hover:bg-opacity-100 text-blue-600 font-bold py-2 px-4 rounded">
-            Learn More
-          </a>
-        </section> */}
-
         <section id="about" className="min-h-screen flex flex-col items-center justify-center p-16 bg-cover bg-center overflow-auto relative" style={{backgroundImage: "url(/mountain.jpg)"}}>
           <div className="max-w-6xl mx-auto bg-white/80 backdrop-blur-md rounded-lg p-8 shadow-lg">
-            {/* <h2 className="text-3xl md:text-4xl font-bold mb-6 text-center mt-6">Welcome to Tremendo</h2> */}
-            {/* <p className="text-lg mb-6">
-              Tremendo is the ultimate productivity tool designed to help you manage tasks effortlessly. Tremendo offers a
-              clean and intuitive interface where you can create boards, organize lists, and keep track of your tasks all in
-              one place. Whether you're managing personal to-dos or working on team projects, its flexible drag-and-drop
-              system makes task management seamless.
-            </p>
-            <h3 className="text-xl font-semibold mb-4">Users can:</h3>
-            <ul className="list-disc pl-6 mb-6 space-y-2">
-              <li>Create and Edit Boards</li>
-              <li>Select between light and dark themes and different background images</li>
-              <li>Create, Edit, and Delete Lists</li>
-              <li>Create, Edit, and Delete Cards</li>
-              <li>Drag and Drop Cards between lists</li>
-            </ul> */}
            <div className="space-y-6">
               <p className="text-lg">
                 Tremendo brings clarity to task management through beautifully simple design. Our clean, intuitive interface helps you organize work without the clutter, letting you focus on what matters most.
