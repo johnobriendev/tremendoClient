@@ -194,13 +194,13 @@ const LandingPage = () => {
             color: '#e6eaee',
           }}
         >
-          <div className="relative z-10 pt-8 ">
-            <h2 className="text-3xl md:text-4xl font-thin text-center mb-4">
+          <div className="relative z-10">
+            {/* <h2 className="text-3xl md:text-4xl font-thin text-center mb-4">
               Try Our Demo Board
             </h2>
             <p className="text-center text-lg mb-4 px-4">
               Experience Tremendo's features without creating an account
-            </p>
+            </p> */}
             <div className="w-full overflow-hidden">
               <DemoBoard />
             </div>
