@@ -115,7 +115,7 @@ const LandingPage = () => {
         </section>
 
         {/* Overview Section */}
-        <section id="about" className="min-h-screen flex flex-col items-center justify-center py-24 bg-slate-900">
+        <section id="about" className="min-h-screen flex flex-col items-center justify-center py-24 bg-gradient-to-b from-slate-700 to-slate-600">
           <div className="max-w-6xl mx-auto text-center px-4">
             {/* Main heading and description */}
             <h2 className="text-4xl md:text-5xl font-thin mb-8 text-white">Where Tasks Find Their Flow</h2>
@@ -154,7 +154,7 @@ const LandingPage = () => {
       
 
         {/* Features Section */}
-        <section className="min-h-screen bg-slate-800 py-24">
+        <section id='features' className="min-h-screen bg-gradient-to-b from-slate-600 to-slate-800 py-24">
           <div className="max-w-6xl mx-auto px-4">
             <h2 className="text-4xl md:text-5xl font-thin text-center mb-16 text-white">Features You'll Love</h2>
             
@@ -226,7 +226,7 @@ const LandingPage = () => {
        
 
         {/* Workflow Section */}
-        <section className="min-h-screen bg-slate-900 py-24">
+        <section className="min-h-screen bg-gradient-to-b from-slate-800 to-slate-900 py-24">
           <div className="max-w-6xl mx-auto px-4">
             <h2 className="text-4xl md:text-5xl font-thin text-center mb-16 text-white">Built for Your Workflow</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
@@ -309,12 +309,6 @@ const LandingPage = () => {
           }}
         >
           <div className="relative z-10">
-            {/* <h2 className="text-3xl md:text-4xl font-thin text-center mb-4">
-              Try Our Demo Board
-            </h2>
-            <p className="text-center text-lg mb-4 px-4">
-              Experience Tremendo's features without creating an account
-            </p> */}
             <div className="w-full overflow-hidden">
               <DemoBoard />
             </div>
@@ -324,42 +318,42 @@ const LandingPage = () => {
       
       </main>
 
-      <footer className="bg-gray-100 py-12">
+      <footer className="bg-gradient-to-b from-slate-800 to-slate-900 text-gray-400 py-12">
         <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-8">
           <div className='flex flex-col gap-2'>
             <h3 className="font-semibold mb-2">Company</h3>
             
-              <Link to='/workinprogress' className="text-sm text-gray-600 hover:underline">About Us</Link>
-              <Link to='/workinprogress' className="text-sm text-gray-600 hover:underline">Careers</Link>
-              <Link to='/workinprogress' className="text-sm text-gray-600 hover:underline">Press</Link>
+              <Link to='/workinprogress' className="text-sm text-gray-500 hover:underline">About Us</Link>
+              <Link to='/workinprogress' className="text-sm text-gray-500 hover:underline">Careers</Link>
+              <Link to='/workinprogress' className="text-sm text-gray-500 hover:underline">Press</Link>
             
           </div>
           <div className='flex flex-col gap-2'>
             <h3 className="font-semibold mb-2">Resources</h3>
             
-              <Link to='/workinprogress' className="text-sm text-gray-600 hover:underline">Blog</Link>
-              <Link to='/workinprogress' className="text-sm text-gray-600 hover:underline">Help Center</Link>
-              <Link to='/workinprogress' className="text-sm text-gray-600 hover:underline">FAQ</Link>
+              <Link to='/workinprogress' className="text-sm text-gray-500 hover:underline">Blog</Link>
+              <Link to='/workinprogress' className="text-sm text-gray-500 hover:underline">Help Center</Link>
+              <Link to='/workinprogress' className="text-sm text-gray-500 hover:underline">FAQ</Link>
             
           </div>
           <div className='flex flex-col gap-2'>
             <h3 className="font-semibold mb-2">Legal</h3>
             
-              <Link to='/workinprogress' className="text-sm text-gray-600 hover:underline">Terms of Service</Link>
-              <Link to='/workinprogress' className="text-sm text-gray-600 hover:underline">Privacy Policy</Link>
-              <Link to='/workinprogress' className="text-sm text-gray-600 hover:underline">Cookie Policy</Link>
+              <Link to='/workinprogress' className="text-sm text-gray-500 hover:underline">Terms of Service</Link>
+              <Link to='/workinprogress' className="text-sm text-gray-500 hover:underline">Privacy Policy</Link>
+              <Link to='/workinprogress' className="text-sm text-gray-500 hover:underline">Cookie Policy</Link>
             
           </div>
           <div className='flex flex-col gap-2'>
             <h3 className="font-semibold mb-2">Connect</h3>
             
-              <Link to='/workinprogress' className="text-sm text-gray-600 hover:underline">Twitter</Link>
-              <Link to='/workinprogress' className="text-sm text-gray-600 hover:underline">Facebook</Link>
-              <Link to='/workinprogress' className="text-sm text-gray-600 hover:underline">LinkedIn</Link>
+              <Link to='/workinprogress' className="text-sm text-gray-500 hover:underline">Twitter</Link>
+              <Link to='/workinprogress' className="text-sm text-gray-500 hover:underline">Facebook</Link>
+              <Link to='/workinprogress' className="text-sm text-gray-500 hover:underline">LinkedIn</Link>
             
           </div>
         </div>
-        <div className="mt-8 text-center text-sm text-gray-600">
+        <div className="mt-8 text-center text-sm text-gray-500">
           © {new Date().getFullYear()} Tremendo. All rights reserved.
         </div>
       </footer>
