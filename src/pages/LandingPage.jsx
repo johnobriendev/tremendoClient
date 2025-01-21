@@ -7,7 +7,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import DemoBoard from '../components/DemoBoard';
 import { useTheme } from '../context/ThemeContext';
-import { Layout, Users, Sparkles, Move, UserCircle } from 'lucide-react';
+import { Layout, Users, Sparkles, Move, UserCircle, Menu, X } from 'lucide-react';
 
 
 
@@ -15,6 +15,9 @@ import { Layout, Users, Sparkles, Move, UserCircle } from 'lucide-react';
 const LandingPage = () => {
   const [enlargedImage, setEnlargedImage] = useState(null)
   const [isScrolled, setIsScrolled] = useState(false)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+
   const { colors } = useTheme();
 
   useEffect(() => {
@@ -74,26 +77,113 @@ const LandingPage = () => {
     <div className="flex flex-col min-h-screen">
 
       <header className={`w-full py-4 px-6 fixed top-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/80 backdrop-blur-md' : 'bg-transparent'}`}>
-        <nav className={`flex ${isScrolled ? 'justify-between' : 'justify-end'}  items-center max-w-7xl mx-auto`}>
-          <a href="#" onClick={scrollToTop} className={`text-4xl font-bold ${isScrolled ? 'text-black font-thin' : 'hidden'}`}>
+        <nav className={`flex ${isScrolled ? 'justify-between' : 'justify-end'} items-center max-w-7xl mx-auto`}>
+          <a 
+            href="#" 
+            onClick={scrollToTop} 
+            className={`text-4xl font-bold ${isScrolled ? 'text-black font-thin' : 'hidden'}`}
+          >
             Tremendo
           </a>
-          <div className="space-x-4">
-            <a href="#about" onClick={scrollToAbout} className={`text-sm font-medium hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}>
+          
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex space-x-4">
+            <a 
+              href="#about" 
+              onClick={scrollToAbout} 
+              className={`text-sm font-medium hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}
+            >
               About
             </a>
-            <a href="#demo" onClick={scrollToDemo} className={`text-sm font-medium hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}>
+            <a 
+              href="#demo" 
+              onClick={scrollToDemo} 
+              className={`text-sm font-medium hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}
+            >
               Demo
             </a>
-            <Link to="/login" className={`text-sm font-medium hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}>
+            <Link 
+              to="/login" 
+              className={`text-sm font-medium hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}
+            >
               Login
             </Link>
-            <Link to="/register" className={`text-sm font-medium hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}>
+            <Link 
+              to="/register" 
+              className={`text-sm font-medium hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}
+            >
               Register
             </Link>
           </div>
+
+          {/* Mobile Menu Button */}
+          <button 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className={`md:hidden ${isScrolled ? 'text-black' : 'text-white'}`}
+            aria-label="Toggle menu"
+          >
+            {isMobileMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
+          </button>
+
+          {/* Mobile Menu Overlay */}
+          <div 
+            className={`fixed md:hidden inset-0 bg-black bg-opacity-50 transition-opacity duration-300 ${
+              isMobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            }`}
+            onClick={() => setIsMobileMenuOpen(false)}
+          />
+
+          {/* Mobile Navigation */}
+          <div 
+            className={`fixed md:hidden top-[72px] right-0 w-64 bg-white/95 backdrop-blur-md h-screen transform transition-transform duration-300 ease-in-out ${
+              isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+            }`}
+          >
+            <div className="flex flex-col space-y-4 p-6">
+              <a 
+                href="#about" 
+                onClick={(e) => {
+                  scrollToAbout(e);
+                  setIsMobileMenuOpen(false);
+                }} 
+                className="text-black text-sm font-medium hover:underline"
+              >
+                About
+              </a>
+              <a 
+                href="#demo" 
+                onClick={(e) => {
+                  scrollToDemo(e);
+                  setIsMobileMenuOpen(false);
+                }} 
+                className="text-black text-sm font-medium hover:underline"
+              >
+                Demo
+              </a>
+              <Link 
+                to="/login" 
+                onClick={() => setIsMobileMenuOpen(false)} 
+                className="text-black text-sm font-medium hover:underline"
+              >
+                Login
+              </Link>
+              <Link 
+                to="/register" 
+                onClick={() => setIsMobileMenuOpen(false)} 
+                className="text-black text-sm font-medium hover:underline"
+              >
+                Register
+              </Link>
+            </div>
+          </div>
         </nav>
       </header>
+
+      
         
 
       <main className="flex-grow">
@@ -376,3 +466,24 @@ const LandingPage = () => {
 
 
 
+// <header className={`w-full py-4 px-6 fixed top-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/80 backdrop-blur-md' : 'bg-transparent'}`}>
+//         <nav className={`flex ${isScrolled ? 'justify-between' : 'justify-end'}  items-center max-w-7xl mx-auto`}>
+//           <a href="#" onClick={scrollToTop} className={`text-4xl font-bold ${isScrolled ? 'text-black font-thin' : 'hidden'}`}>
+//             Tremendo
+//           </a>
+//           <div className="space-x-4">
+//             <a href="#about" onClick={scrollToAbout} className={`text-sm font-medium hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}>
+//               About
+//             </a>
+//             <a href="#demo" onClick={scrollToDemo} className={`text-sm font-medium hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}>
+//               Demo
+//             </a>
+//             <Link to="/login" className={`text-sm font-medium hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}>
+//               Login
+//             </Link>
+//             <Link to="/register" className={`text-sm font-medium hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}>
+//               Register
+//             </Link>
+//           </div>
+//         </nav>
+//       </header>
