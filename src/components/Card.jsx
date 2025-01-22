@@ -265,6 +265,28 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
   //MODAL RENDERING
   const renderDetailModal = () => {
     if (!showDetailModal) return null;
+  
+    const formatTimestamp = (timestamp) => {
+      const date = new Date(timestamp);
+      const now = new Date();
+      const diffInSeconds = Math.floor((now - date) / 1000);
+      
+      if (diffInSeconds < 60) {
+        return 'just now';
+      } else if (diffInSeconds < 3600) {
+        const minutes = Math.floor(diffInSeconds / 60);
+        return `${minutes}m ago`;
+      } else if (diffInSeconds < 86400) {
+        const hours = Math.floor(diffInSeconds / 3600);
+        return `${hours}h ago`;
+      } else {
+        return date.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: date.getFullYear() !== now.getFullYear() ? 'numeric' : undefined
+        });
+      }
+    };
     
     return createPortal(
       <div 
@@ -273,103 +295,134 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
       >
         <div 
           ref={detailModalRef}
-          className="w-11/12 max-w-2xl rounded-lg shadow-xl p-6"
+          className="w-11/12 max-w-2xl h-[80vh] rounded-lg shadow-xl flex flex-col"
           style={{
             backgroundColor: colors.background.secondary,
             color: colors.text.primary,
             transition: 'background-color 0.2s, color 0.2s'
           }}
         >
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold">{card.name}</h2>
-            <button 
-              onClick={() => setShowDetailModal(false)}
-              style={{ color: colors.text.secondary }}
-              className="hover:opacity-80"
-            >
-              <IoMdClose size={24} />
-            </button>
-          </div>
-
-          <div className="mb-6">
-            <h3 className="text-lg font-medium mb-2">Description</h3>
-            <div className="flex flex-col">
-              <textarea
-                value={description}
-                onChange={handleDescriptionChange}
-                className="w-full p-2 rounded mb-2"
-                style={{
-                  backgroundColor: colors.background.tertiary,
-                  color: colors.text.primary,
-                  transition: 'background-color 0.2s, color 0.2s'
-                }}
-                rows={4}
-                placeholder="Add a description..."
-                disabled={isLoading}
-              />
-              <button
-                onClick={handleDescriptionSave}
-                className={`flex items-center justify-center bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 ${isLoading || !isDescriptionChanged ? 'opacity-50 cursor-not-allowed' : ''}`}
-                disabled={isLoading || !isDescriptionChanged}
+          {/* Header Section */}
+          <div className="p-6 border-b" style={{ borderColor: colors.background.tertiary }}>
+            <div className="flex justify-between items-center">
+              <h2 className="text-xl font-semibold">{card.name}</h2>
+              <button 
+                onClick={() => setShowDetailModal(false)}
+                style={{ color: colors.text.secondary }}
+                className="hover:opacity-80"
               >
-                <MdSave className="mr-2" />
-                Save Description
+                <IoMdClose size={24} />
               </button>
             </div>
           </div>
-
-          <div>
-            <h3 className="text-lg font-medium mb-2">Comments</h3>
-            <div className="space-y-4 mb-4">
-              {card.comments && card.comments.map((comment) => (
-                <div 
-                  key={comment._id} 
-                  className="p-2 rounded"
+  
+          {/* Scrollable Content Section */}
+          <div className="flex-1 overflow-y-auto p-6 space-y-6">
+            {/* Description Section */}
+            <div>
+              <h3 className="text-lg font-medium mb-2">Description</h3>
+              <div className="flex flex-col">
+                <textarea
+                  value={description}
+                  onChange={handleDescriptionChange}
+                  className="w-full p-2 rounded mb-2"
                   style={{
                     backgroundColor: colors.background.tertiary,
+                    color: colors.text.primary,
+                    transition: 'background-color 0.2s, color 0.2s'
+                  }}
+                  rows={4}
+                  placeholder="Add a description..."
+                  disabled={isLoading}
+                />
+                <button
+                  onClick={handleDescriptionSave}
+                  className={`flex items-center justify-center bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 ${
+                    isLoading || !isDescriptionChanged ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
+                  disabled={isLoading || !isDescriptionChanged}
+                >
+                  <MdSave className="mr-2" />
+                  Save Description
+                </button>
+              </div>
+            </div>
+  
+            {/* Comments Section */}
+            <div>
+              <h3 className="text-lg font-medium mb-2">Comments</h3>
+              <div className="space-y-4 mb-4">
+                {card.comments && card.comments.map((comment) => (
+                  <div 
+                    key={comment._id} 
+                    className="p-4 rounded"
+                    style={{
+                      backgroundColor: colors.background.tertiary,
+                      transition: 'background-color 0.2s'
+                    }}
+                  >
+                    <div className="flex flex-col">
+                      {/* Comment Header with User Info */}
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="flex items-center">
+                          <span className="font-medium">
+                            {comment.userId?.name || 'Anonymous'}
+                          </span>
+                          <span className="mx-2 text-sm" style={{ color: colors.text.secondary }}>
+                            •
+                          </span>
+                          <span className="text-sm" style={{ color: colors.text.secondary }}>
+                            {formatTimestamp(comment.createdAt)}
+                          </span>
+                        </div>
+                        <button
+                          onClick={() => handleDeleteComment(comment._id)}
+                          className={`text-red-500 hover:text-red-700 ${
+                            isLoading ? 'opacity-50 cursor-not-allowed' : ''
+                          }`}
+                          disabled={isLoading}
+                        >
+                          <FaTrash size={14} />
+                        </button>
+                      </div>
+                      {/* Comment Content */}
+                      <p className="whitespace-pre-wrap">{comment.text}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+  
+              {/* Add Comment Section - Made sticky */}
+              <div 
+                className="sticky bottom-0 bg-opacity-90 backdrop-blur-sm py-4"
+                style={{ backgroundColor: colors.background.secondary }}
+              >
+                <textarea
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  className="w-full p-2 rounded mb-2"
+                  style={{
+                    backgroundColor: colors.background.tertiary,
+                    color: colors.text.primary,
+                    transition: 'background-color 0.2s, color 0.2s'
+                  }}
+                  rows={2}
+                  placeholder="Write a comment..."
+                  disabled={isLoading}
+                />
+                <button
+                  onClick={handleAddComment}
+                  className="w-full px-4 py-2 rounded hover:opacity-90 disabled:opacity-50"
+                  style={{
+                    backgroundColor: accent.primary,
+                    color: '#ffffff',
                     transition: 'background-color 0.2s'
                   }}
+                  disabled={isLoading}
                 >
-                  <div className="flex justify-between items-start">
-                    <p className="flex-grow">{comment.text}</p>
-                    <button
-                      onClick={() => handleDeleteComment(comment._id)}
-                      className={`text-red-500 hover:text-red-700 ml-2 ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
-                      disabled={isLoading}
-                    >
-                      <FaTrash size={14} />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="mb-4">
-              <textarea
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                className="w-full p-2 rounded mb-2"
-                style={{
-                  backgroundColor: colors.background.tertiary,
-                  color: colors.text.primary,
-                  transition: 'background-color 0.2s, color 0.2s'
-                }}
-                rows={2}
-                placeholder="Write a comment..."
-                disabled={isLoading}
-              />
-              <button
-                onClick={handleAddComment}
-                className="px-4 py-2 rounded hover:opacity-90 disabled:opacity-50"
-                style={{
-                  backgroundColor: accent.primary,
-                  color: '#ffffff',
-                  transition: 'background-color 0.2s'
-                }}
-                disabled={isLoading}
-              >
-                Add Comment
-              </button>
+                  Add Comment
+                </button>
+              </div>
             </div>
           </div>
         </div>
