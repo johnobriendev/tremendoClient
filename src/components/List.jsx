@@ -61,6 +61,13 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
     };
   }, [showModal, showCardInput]);
 
+  useEffect(() => {
+    if (cardInputRef.current && newCardName[list._id]) {
+      cardInputRef.current.style.height = 'auto';
+      cardInputRef.current.style.height = `${cardInputRef.current.scrollHeight}px`;
+    }
+  }, [newCardName[list._id]]);
+
 
   const handleDeleteClick = (e) => {
      // Prevent event bubbling immediately
@@ -112,7 +119,8 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
   };
 
   const handleAddCardKeyPress = (e) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
       handleCreateCard(list._id);
     }
   };
@@ -263,7 +271,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
           <div className="mt-4">
                 {showCardInput ? (
                     <div >
-                      <input
+                      {/* <input
                         type="text"
                         value={newCardName[list._id] || ''}
                         onChange={(e) => setNewCardName({ ...newCardName, [list._id]: e.target.value })}
@@ -276,6 +284,21 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                           transition: 'background-color 0.2s, color 0.2s'
                         }}
                         ref={cardInputRef}
+                      /> */}
+                      <textarea
+                        value={newCardName[list._id] || ''}
+                        onChange={(e) => setNewCardName({ ...newCardName, [list._id]: e.target.value })}
+                        onKeyPress={handleAddCardKeyPress}
+                        placeholder="New Card Name"
+                        className="w-full p-2 rounded mb-2 resize-none overflow-hidden"
+                        style={{
+                          backgroundColor: colors.background.tertiary,
+                          color: colors.text.primary,
+                          transition: 'background-color 0.2s, color 0.2s',
+                          minHeight: '2.5rem'
+                        }}
+                        ref={cardInputRef}
+                        rows={1}
                       />
                       <button
                         onClick={() => handleCreateCard(list._id)}
