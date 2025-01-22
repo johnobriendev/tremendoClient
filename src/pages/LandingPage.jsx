@@ -1,13 +1,14 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronLeft, ChevronRight, Layout, Users, Sparkles, Move, UserCircle, Menu, X, 
+  Code, Brain, Book, Workflow, Columns, Zap } from 'lucide-react'
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import DemoBoard from '../components/DemoBoard';
 import { useTheme } from '../context/ThemeContext';
-import { Layout, Users, Sparkles, Move, UserCircle, Menu, X } from 'lucide-react';
+
 
 
 
@@ -194,7 +195,7 @@ const LandingPage = () => {
           }}
         >
           <h1 className="text-4xl md:text-6xl font-thin  text-white mb-4 mt-24 text-center">Tremendo</h1>
-          <p className="text-l md:text-xl text-white/90 font-light max-w-2xl mx-auto text-center">
+          <p className="text-l md:text-xl text-white font-light max-w-2xl mx-auto text-center">
             Simplify your workflow. Visualize your progress.
             The open-source project management tool that works the way you think.
           </p>
@@ -223,19 +224,115 @@ const LandingPage = () => {
           </div>
         </section>
 
+          {/*workflow simplification section  */}
+        <section id='about' className="min-h-screen bg-gradient-to-b from-slate-600 to-slate-800 py-24">
+          <div className="max-w-6xl mx-auto px-4">
+            <h2 className="text-4xl md:text-5xl font-thin text-center mb-16 text-white">
+              Simplify Your Project Workflow
+            </h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-20">
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg transform transition-transform group-hover:scale-105 opacity-0 group-hover:opacity-100 -z-10" />
+                <div className="bg-slate-700/50 backdrop-blur p-8 rounded-lg border border-slate-600 transition-transform group-hover:translate-x-2 group-hover:-translate-y-2">
+                  <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mb-6">
+                    <Workflow className="w-6 h-6 text-blue-400" />
+                  </div>
+                  <h3 className="text-xl font-medium mb-4 text-white">Visual Organization</h3>
+                  <p className="text-slate-300">
+                    Transform complex projects into clear, visual workflows. Drag and drop tasks to instantly update progress and keep everyone aligned.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg transform transition-transform group-hover:scale-105 opacity-0 group-hover:opacity-100 -z-10" />
+                <div className="bg-slate-700/50 backdrop-blur p-8 rounded-lg border border-slate-600 transition-transform group-hover:translate-x-2 group-hover:-translate-y-2">
+                  <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mb-6">
+                    <Columns className="w-6 h-6 text-blue-400" />
+                  </div>
+                  <h3 className="text-xl font-medium mb-4 text-white">Flexible Workflows</h3>
+                  <p className="text-slate-300">
+                    Customize boards to match your process. Create lists that reflect your workflow stages and adapt as your needs change.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg transform transition-transform group-hover:scale-105 opacity-0 group-hover:opacity-100 -z-10" />
+                <div className="bg-slate-700/50 backdrop-blur p-8 rounded-lg border border-slate-600 transition-transform group-hover:translate-x-2 group-hover:-translate-y-2">
+                  <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mb-6">
+                    <Zap className="w-6 h-6 text-blue-400" />
+                  </div>
+                  <h3 className="text-xl font-medium mb-4 text-white">Instant Updates</h3>
+                  <p className="text-slate-300">
+                    See changes in real-time as you and your team collaborate. No more out-of-date information or missed updates.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative mt-20">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-600 opacity-10 rounded-2xl" />
+              <div className="relative bg-slate-700/50 backdrop-blur p-8 md:p-12 rounded-2xl border border-slate-600">
+                <h3 className="text-2xl md:text-3xl font-thin text-white mb-6">
+                  From Chaos to Clarity
+                </h3>
+                <div className="grid md:grid-cols-2 gap-8">
+                  <div className="space-y-4">
+                    <h4 className="text-xl text-white font-medium">Before Tremendo</h4>
+                    <ul className="space-y-3 text-slate-300">
+                      <li className="flex items-center">
+                        <span className="text-red-400 mr-2">✕</span>
+                        Scattered tasks across multiple tools
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-red-400 mr-2">✕</span>
+                        Unclear project status and priorities
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-red-400 mr-2">✕</span>
+                        Time lost in status update meetings
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="space-y-4">
+                    <h4 className="text-xl text-white font-medium">With Tremendo</h4>
+                    <ul className="space-y-3 text-slate-300">
+                      <li className="flex items-center">
+                        <span className="text-green-400 mr-2">✓</span>
+                        All tasks organized in one visual space
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-400 mr-2">✓</span>
+                        Real-time progress tracking
+                      </li>
+                      <li className="flex items-center">
+                        <span className="text-green-400 mr-2">✓</span>
+                        Efficient team collaboration
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
         
 
        
       
 
         {/* Features Section */}
-        <section id='about' className="min-h-screen bg-gradient-to-b from-slate-600 to-slate-800 py-24">
+        <section id="features" className="min-h-screen bg-gradient-to-b from-slate-800 to-slate-900 py-24">
           <div className="max-w-6xl mx-auto px-4">
-            <h2 className="text-4xl md:text-5xl font-thin text-center mb-16 text-white">Features You'll Love</h2>
+            <h2 className="text-4xl md:text-5xl font-thin text-center mb-16 text-white">
+              See Tremendo in Action
+            </h2>
             
-            {/* Demo Video */}
-            <div className="mb-16">
-              <div className="max-w-4xl mx-auto rounded-lg overflow-hidden shadow-xl border border-slate-700">
+            <div className="max-w-6xl mx-auto mb-16">
+              <div className="relative rounded-lg overflow-hidden shadow-xl border border-slate-700">
                 <video
                   className="w-full"
                   controls
@@ -248,90 +345,93 @@ const LandingPage = () => {
                 </video>
               </div>
             </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-              {/* Left column with feature descriptions */}
-              <div className="space-y-12">
-                <div className="p-6 bg-slate-700/50 rounded-lg border border-slate-600">
-                  <h3 className="text-2xl font-medium mb-4 flex items-center text-white">
-                    <Layout className="w-6 h-6 text-blue-400 mr-2" />
-                    Board Organization
-                  </h3>
-                  <p className="text-slate-300 mb-4">
-                    Create and manage multiple boards for different projects or areas of focus. Each board becomes a dedicated space for your team to collaborate and track progress.
-                  </p>
-                </div>
-                
-                <div className="p-6 bg-slate-700/50 rounded-lg border border-slate-600">
-                  <h3 className="text-2xl font-medium mb-4 flex items-center text-white">
-                    <Move className="w-6 h-6 text-blue-400 mr-2" />
-                    Task Management
-                  </h3>
-                  <p className="text-slate-300 mb-4">
-                    Drag and drop tasks between lists with ease. Add labels, due dates, and detailed descriptions to keep everything organized and accessible.
-                  </p>
-                </div>
-              </div>
-
-              {/* Right column with feature highlights */}
-              <div className="space-y-12">
-                <div className="p-6 bg-slate-700/50 rounded-lg border border-slate-600">
-                  <h3 className="text-2xl font-medium mb-4 flex items-center text-white">
-                    <Users className="w-6 h-6 text-blue-400 mr-2" />
-                    Team Collaboration
-                  </h3>
-                  <p className="text-slate-300 mb-4">
-                    Share boards, assign tasks, and keep everyone aligned with minimal effort. Real-time updates ensure your team stays in sync.
-                  </p>
-                </div>
-
-                <div className="p-6 bg-slate-700/50 rounded-lg border border-slate-600">
-                  <h3 className="text-2xl font-medium mb-4 flex items-center text-white">
-                    <Sparkles className="w-6 h-6 text-blue-400 mr-2" />
-                    Beautiful Interface
-                  </h3>
-                  <p className="text-slate-300 mb-4">
-                    A clean, modern design that makes productivity beautiful. Customize your workspace with labels, colors, and more.
-                  </p>
-                </div>
-              </div>
-            </div>
           </div>
         </section>
        
 
         {/* Workflow Section */}
-        <section className="min-h-screen bg-gradient-to-b from-slate-800 to-slate-900 py-24">
+        <section id="use-cases" className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-950 py-24">
           <div className="max-w-6xl mx-auto px-4">
-            <h2 className="text-4xl md:text-5xl font-thin text-center mb-16 text-white">Built for Your Workflow</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-              <div className="text-center p-8 bg-slate-800 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-slate-700">
-                <div className="w-16 h-16 bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <UserCircle className="w-8 h-8 text-blue-400" />
+            <h2 className="text-4xl md:text-5xl font-thin text-center mb-16 text-white">
+              Built for Every Workflow
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {[
+                {
+                  icon: <Code className="w-6 h-6 text-blue-400" />,
+                  title: "Software Development",
+                  description: "Perfect for agile development teams managing sprints and feature releases.",
+                  features: [
+                    "Sprint planning and backlog management",
+                    "Bug tracking and feature development",
+                    "Code review and deployment workflows"
+                  ]
+                },
+                {
+                  icon: <Users className="w-6 h-6 text-blue-400" />,
+                  title: "Team Projects",
+                  description: "Streamline collaboration and keep everyone aligned on team objectives.",
+                  features: [
+                    "Task delegation and progress tracking",
+                    "Team communication and updates",
+                    "Resource allocation and scheduling"
+                  ]
+                },
+                {
+                  icon: <Brain className="w-6 h-6 text-blue-400" />,
+                  title: "Personal Productivity",
+                  description: "Organize your personal tasks and projects with clarity and purpose.",
+                  features: [
+                    "Daily task management and priorities",
+                    "Goal tracking and habit building",
+                    "Personal project organization"
+                  ]
+                },
+                {
+                  icon: <Book className="w-6 h-6 text-blue-400" />,
+                  title: "Content Planning",
+                  description: "Manage your content calendar and creative workflows efficiently.",
+                  features: [
+                    "Editorial calendar management",
+                    "Content creation pipeline",
+                    "Publication scheduling"
+                  ]
+                }
+              ].map((useCase, index) => (
+                <div key={index} className="bg-slate-800/50 backdrop-blur p-8 rounded-lg border border-slate-700 hover:border-blue-500/50 transition-colors">
+                  <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mb-6">
+                    {useCase.icon}
+                  </div>
+                  <h3 className="text-xl font-medium mb-4 text-white">{useCase.title}</h3>
+                  <div className="space-y-4">
+                    <p className="text-slate-300">{useCase.description}</p>
+                    <ul className="space-y-2 text-slate-400">
+                      {useCase.features.map((feature, fIndex) => (
+                        <li key={fIndex} className="flex items-center">
+                          <span className="text-blue-400 mr-2">•</span>
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
-                <h3 className="text-xl font-medium mb-4 text-white">Personal Projects</h3>
-                <p className="text-slate-300">
-                  Stay organized and focused with personal task boards. Track your goals, habits, and daily tasks with ease.
-                </p>
-              </div>
-              <div className="text-center p-8 bg-slate-800 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-slate-700">
-                <div className="w-16 h-16 bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Users className="w-8 h-8 text-blue-400" />
-                </div>
-                <h3 className="text-xl font-medium mb-4 text-white">Team Projects</h3>
-                <p className="text-slate-300">
-                  Collaborate seamlessly with your team. Share boards, assign tasks, and keep everyone aligned with minimal effort.
-                </p>
-              </div>
-              <div className="text-center p-8 bg-slate-800 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-slate-700">
-                <div className="w-16 h-16 bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <Layout className="w-8 h-8 text-blue-400" />
-                </div>
-                <h3 className="text-xl font-medium mb-4 text-white">Project Management</h3>
-                <p className="text-slate-300">
-                  Perfect for managing complex projects. Break down big goals into manageable tasks and track progress effortlessly.
-                </p>
-              </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+         <section 
+          id="demo" 
+          className="min-h-screen relative bg-gray-100 dark:bg-gray-800  overflow-hidden"
+          style={{
+            backgroundColor: '#1e293b',
+            color: '#e6eaee',
+          }}
+        >
+          <div className="relative z-10">
+            <div className="w-full overflow-hidden">
+              <DemoBoard />
             </div>
           </div>
         </section>
@@ -375,20 +475,7 @@ const LandingPage = () => {
         </section>
 
 
-        <section 
-          id="demo" 
-          className="min-h-screen relative bg-gray-100 dark:bg-gray-800  overflow-hidden"
-          style={{
-            backgroundColor: '#1e293b',
-            color: '#e6eaee',
-          }}
-        >
-          <div className="relative z-10">
-            <div className="w-full overflow-hidden">
-              <DemoBoard />
-            </div>
-          </div>
-        </section>
+       
 
       
       </main>
