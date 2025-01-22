@@ -167,7 +167,12 @@ const DemoBoard = () => {
     setLists(lists.map(list =>
       list._id === listId ? { ...list, name: newName } : list
     ));
-    setEditListName(prev => ({ ...prev, [listId]: '' }));
+    // Remove the list ID from editListName instead of setting it to empty string
+    setEditListName(prev => {
+      const newState = { ...prev };
+      delete newState[listId];
+      return newState;
+    });
   };
 
   // Delete list

@@ -188,7 +188,8 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
           <div className="flex items-center justify-between gap-2 mb-4 ">
             <input
               type="text"
-              value={editListName[list._id] || list.name}
+              //value={editListName[list._id] || list.name}
+              value={editListName.hasOwnProperty(list._id) ? editListName[list._id] : list.name}
               onChange={(e) => setEditListName({ ...editListName, [list._id]: e.target.value })}
               onBlur={() => handleListNameChange(list._id, editListName[list._id])}
               onKeyPress={handleListNameKeyPress}
