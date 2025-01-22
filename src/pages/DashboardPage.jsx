@@ -142,9 +142,15 @@ const DashboardPage = () => {
     }
   };
 
-  const handleLogout = () => {
-    api.logoutUser();
-    navigate('/login');
+  const handleLogout = async () => {
+    try {
+      await api.logoutUser(); // Wait for the logout process to complete
+      navigate('/login'); // Navigate only after logout is done
+    } catch (error) {
+      console.error('Logout failed:', error);
+      // Even if logout fails, we should clear local state and redirect
+      navigate('/login');
+    }
   };
 
 
