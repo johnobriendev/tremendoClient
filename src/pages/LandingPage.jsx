@@ -500,7 +500,7 @@ const LandingPage = () => {
                 to="/register" 
                 className="bg-white text-blue-900 px-8 py-4 rounded-lg hover:bg-blue-50 transition-colors text-lg font-medium min-w-[200px]"
               >
-                Start Free Trial
+                Register 
               </Link>
               <a 
                 href="#demo" 
@@ -586,41 +586,3 @@ const LandingPage = () => {
 
 
 
-
-//  {/* Overview Section */}
-//  <section id="about" className="min-h-screen flex flex-col items-center justify-center py-24 bg-gradient-to-b from-slate-700 to-slate-600">
-//  <div className="max-w-6xl mx-auto text-center px-4">
-//    {/* Main heading and description */}
-//    <h2 className="text-4xl md:text-5xl font-thin mb-8 text-white">Simplify Your Process</h2>
-//    <p className="text-xl text-slate-300 max-w-3xl mx-auto mb-12">
-//      Tremendo brings clarity to task management through beautifully simple design. Our clean, intuitive interface helps you organize work without the clutter, letting you focus on what matters most.
-//    </p>
-   
-//    {/* Feature cards */}
-//    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
-//      <div className="p-8 bg-slate-800 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-slate-700">
-//        <div className="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
-//          <Layout className="w-6 h-6 text-blue-400" />
-//        </div>
-//        <h3 className="text-xl font-medium mb-2 text-white">Visualize Your Work</h3>
-//        <p className="text-slate-300">See your projects come to life with our intuitive board layout</p>
-//      </div>
-
-//      <div className="p-8 bg-slate-800 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-slate-700">
-//        <div className="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
-//          <Users className="w-6 h-6 text-blue-400" />
-//        </div>
-//        <h3 className="text-xl font-medium mb-2 text-white">Team Collaboration</h3>
-//        <p className="text-slate-300">Work together seamlessly with real-time updates and sharing</p>
-//      </div>
-
-//      <div className="p-8 bg-slate-800 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-slate-700">
-//        <div className="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
-//          <Sparkles className="w-6 h-6 text-blue-400" />
-//        </div>
-//        <h3 className="text-xl font-medium mb-2 text-white">Beautiful Interface</h3>
-//        <p className="text-slate-300">Enjoy a clean, modern design that makes productivity beautiful</p>
-//      </div>
-//    </div>
-//  </div>
-// </section>
