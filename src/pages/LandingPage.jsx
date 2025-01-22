@@ -228,7 +228,7 @@ const LandingPage = () => {
         <section id='about' className="min-h-screen bg-gradient-to-b from-slate-600 to-slate-800 py-24">
           <div className="max-w-6xl mx-auto px-4">
             <h2 className="text-4xl md:text-5xl font-thin text-center mb-16 text-white">
-              Simplify Your Project Workflow
+              Simplify Your Project Organization
             </h2>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-20">
@@ -325,7 +325,7 @@ const LandingPage = () => {
       
 
         {/* Features Section */}
-        <section id="features" className="min-h-screen bg-gradient-to-b from-slate-800 to-slate-900 py-24">
+        {/* <section id="features" className="min-h-screen bg-gradient-to-b from-slate-800 to-slate-900 py-24">
           <div className="max-w-6xl mx-auto px-4">
             <h2 className="text-4xl md:text-5xl font-thin text-center mb-16 text-white">
               See Tremendo in Action
@@ -346,14 +346,63 @@ const LandingPage = () => {
               </div>
             </div>
           </div>
+        </section> */}
+        <section id="features" className="min-h-screen bg-gradient-to-b from-slate-800 to-slate-900 py-24">
+          <div className="max-w-6xl mx-auto px-4">
+            <h2 className="text-4xl md:text-5xl font-thin text-center mb-8 md:mb-16 text-white">
+              See Tremendo in Action
+            </h2>
+            
+            <div className="max-w-6xl mx-auto mb-8 md:mb-16">
+              <div className="rounded-lg overflow-hidden shadow-xl border border-slate-700">
+                <video
+                  className="w-full"
+                  controls
+                  autoPlay
+                  muted
+                  loop
+                >
+                  <source src="/demo-video.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            </div>
+
+            {/* Feature highlights for mobile */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+              {[
+                {
+                  title: "Task Management",
+                  description: "Create, organize, and track tasks with intuitive drag-and-drop interfaces"
+                },
+                {
+                  title: "Real-time Updates",
+                  description: "See changes instantly as your team collaborates on projects"
+                },
+                {
+                  title: "Customizable Workflow",
+                  description: "Adapt boards and lists to match your team's unique process"
+                }
+              ].map((feature, index) => (
+                <div 
+                  key={index}
+                  className="bg-slate-700/30 backdrop-blur p-6 rounded-lg border border-slate-600"
+                >
+                  <h3 className="text-lg font-medium mb-2 text-white">{feature.title}</h3>
+                  <p className="text-slate-300 text-sm">{feature.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </section>
+        
        
 
         {/* Workflow Section */}
         <section id="use-cases" className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-950 py-24">
           <div className="max-w-6xl mx-auto px-4">
             <h2 className="text-4xl md:text-5xl font-thin text-center mb-16 text-white">
-              Built for Every Workflow
+              Built for Every Process
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
