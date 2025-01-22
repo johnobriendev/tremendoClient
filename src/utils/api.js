@@ -115,18 +115,25 @@ export const loginUser = async (credentials) => {
 
 export const logoutUser = async () => {
   const refreshToken = getRefreshToken();
-  if (refreshToken) {
-    try {
-      await fetch(`${API_BASE_URL}/users/logout`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ refreshToken })
-      });
-    } catch (error) {
-      console.error('Logout error:', error);
-    }
+  if (!refreshToken){
+    clearTokens();
+    return;
   }
-  clearTokens();
+  try{
+    const response = await fetch(`${API_BASE_URL}/users/logout`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refreshToken })
+    });
+    
+    if (!response.ok) {
+      throw new Error('Logout failed');
+    }
+  } catch (error) {
+    console.error('Logout error:', error);
+  } finally {
+    clearTokens();
+  }
 };
 
 export const resendVerification = async (email) => {
