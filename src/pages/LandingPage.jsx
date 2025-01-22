@@ -234,7 +234,7 @@ const LandingPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-20">
               <div className="relative group">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg transform transition-transform group-hover:scale-105 opacity-0 group-hover:opacity-100 -z-10" />
-                <div className="bg-slate-700/50 backdrop-blur p-8 rounded-lg border border-slate-600 transition-transform group-hover:translate-x-2 group-hover:-translate-y-2">
+                <div className="bg-slate-700/50 backdrop-blur p-8 rounded-lg border border-slate-600 transition-transform group-hover:border-white">
                   <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mb-6">
                     <Workflow className="w-6 h-6 text-blue-400" />
                   </div>
@@ -247,7 +247,7 @@ const LandingPage = () => {
               
               <div className="relative group">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg transform transition-transform group-hover:scale-105 opacity-0 group-hover:opacity-100 -z-10" />
-                <div className="bg-slate-700/50 backdrop-blur p-8 rounded-lg border border-slate-600 transition-transform group-hover:translate-x-2 group-hover:-translate-y-2">
+                <div className="bg-slate-700/50 backdrop-blur p-8 rounded-lg border border-slate-600 transition-transform group-hover:border-white">
                   <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mb-6">
                     <Columns className="w-6 h-6 text-blue-400" />
                   </div>
@@ -260,7 +260,7 @@ const LandingPage = () => {
               
               <div className="relative group">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-blue-600 rounded-lg transform transition-transform group-hover:scale-105 opacity-0 group-hover:opacity-100 -z-10" />
-                <div className="bg-slate-700/50 backdrop-blur p-8 rounded-lg border border-slate-600 transition-transform group-hover:translate-x-2 group-hover:-translate-y-2">
+                <div className="bg-slate-700/50 backdrop-blur p-8 rounded-lg border border-slate-600 transition-transform group-hover:border-white">
                   <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center mb-6">
                     <Zap className="w-6 h-6 text-blue-400" />
                   </div>
