@@ -194,57 +194,42 @@ const LandingPage = () => {
           }}
         >
           <h1 className="text-4xl md:text-6xl font-thin  text-white mb-4 mt-24 text-center">Tremendo</h1>
-          <div className="space-y-4">
-            <a href="#about" onClick={scrollToAbout} className="bg-white bg-opacity-40 hover:bg-opacity-50 hover:border hover:border-white text-white font-thin py-2 px-4 rounded">
+          <p className="text-l md:text-xl text-white/90 font-light max-w-2xl mx-auto text-center">
+            Simplify your workflow. Visualize your progress.
+            The open-source project management tool that works the way you think.
+          </p>
+          <div className=" flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
+            <Link 
+              to="/register" 
+              className="w-48 bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-6 rounded-lg transition-colors"
+            >
+              Get Started Free
+            </Link>
+            <button 
+              onClick={scrollToAbout}
+              className="w-48 bg-white/10 hover:bg-white/20 text-white border border-white font-medium py-3 px-6 rounded-lg transition-colors"
+            >
               Learn More
-            </a>
-            <a href="#demo" onClick={scrollToDemo} className="block text-center text-white hover:underline">
-                Try the Demo
-            </a>
+            </button>
+            <button 
+              onClick={scrollToDemo}
+              className="w-48 bg-white hover:bg-white/90 text-blue-900 font-medium py-3 px-6 rounded-lg transition-colors"
+            >
+              Try Demo
+            </button>
+          </div>
+          <div className="text-white text-sm mt-8">
+            Open Source • Free Forever 
           </div>
         </section>
 
-        {/* Overview Section */}
-        <section id="about" className="min-h-screen flex flex-col items-center justify-center py-24 bg-gradient-to-b from-slate-700 to-slate-600">
-          <div className="max-w-6xl mx-auto text-center px-4">
-            {/* Main heading and description */}
-            <h2 className="text-4xl md:text-5xl font-thin mb-8 text-white">Where Tasks Find Their Flow</h2>
-            <p className="text-xl text-slate-300 max-w-3xl mx-auto mb-12">
-              Tremendo brings clarity to task management through beautifully simple design. Our clean, intuitive interface helps you organize work without the clutter, letting you focus on what matters most.
-            </p>
-            
-            {/* Feature cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
-              <div className="p-8 bg-slate-800 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-slate-700">
-                <div className="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Layout className="w-6 h-6 text-blue-400" />
-                </div>
-                <h3 className="text-xl font-medium mb-2 text-white">Visualize Your Work</h3>
-                <p className="text-slate-300">See your projects come to life with our intuitive board layout</p>
-              </div>
+        
 
-              <div className="p-8 bg-slate-800 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-slate-700">
-                <div className="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Users className="w-6 h-6 text-blue-400" />
-                </div>
-                <h3 className="text-xl font-medium mb-2 text-white">Team Collaboration</h3>
-                <p className="text-slate-300">Work together seamlessly with real-time updates and sharing</p>
-              </div>
-
-              <div className="p-8 bg-slate-800 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-slate-700">
-                <div className="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Sparkles className="w-6 h-6 text-blue-400" />
-                </div>
-                <h3 className="text-xl font-medium mb-2 text-white">Beautiful Interface</h3>
-                <p className="text-slate-300">Enjoy a clean, modern design that makes productivity beautiful</p>
-              </div>
-            </div>
-          </div>
-        </section>
+       
       
 
         {/* Features Section */}
-        <section id='features' className="min-h-screen bg-gradient-to-b from-slate-600 to-slate-800 py-24">
+        <section id='about' className="min-h-screen bg-gradient-to-b from-slate-600 to-slate-800 py-24">
           <div className="max-w-6xl mx-auto px-4">
             <h2 className="text-4xl md:text-5xl font-thin text-center mb-16 text-white">Features You'll Love</h2>
             
@@ -466,24 +451,40 @@ const LandingPage = () => {
 
 
 
-// <header className={`w-full py-4 px-6 fixed top-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/80 backdrop-blur-md' : 'bg-transparent'}`}>
-//         <nav className={`flex ${isScrolled ? 'justify-between' : 'justify-end'}  items-center max-w-7xl mx-auto`}>
-//           <a href="#" onClick={scrollToTop} className={`text-4xl font-bold ${isScrolled ? 'text-black font-thin' : 'hidden'}`}>
-//             Tremendo
-//           </a>
-//           <div className="space-x-4">
-//             <a href="#about" onClick={scrollToAbout} className={`text-sm font-medium hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}>
-//               About
-//             </a>
-//             <a href="#demo" onClick={scrollToDemo} className={`text-sm font-medium hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}>
-//               Demo
-//             </a>
-//             <Link to="/login" className={`text-sm font-medium hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}>
-//               Login
-//             </Link>
-//             <Link to="/register" className={`text-sm font-medium hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}>
-//               Register
-//             </Link>
-//           </div>
-//         </nav>
-//       </header>
+//  {/* Overview Section */}
+//  <section id="about" className="min-h-screen flex flex-col items-center justify-center py-24 bg-gradient-to-b from-slate-700 to-slate-600">
+//  <div className="max-w-6xl mx-auto text-center px-4">
+//    {/* Main heading and description */}
+//    <h2 className="text-4xl md:text-5xl font-thin mb-8 text-white">Simplify Your Process</h2>
+//    <p className="text-xl text-slate-300 max-w-3xl mx-auto mb-12">
+//      Tremendo brings clarity to task management through beautifully simple design. Our clean, intuitive interface helps you organize work without the clutter, letting you focus on what matters most.
+//    </p>
+   
+//    {/* Feature cards */}
+//    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-16">
+//      <div className="p-8 bg-slate-800 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-slate-700">
+//        <div className="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
+//          <Layout className="w-6 h-6 text-blue-400" />
+//        </div>
+//        <h3 className="text-xl font-medium mb-2 text-white">Visualize Your Work</h3>
+//        <p className="text-slate-300">See your projects come to life with our intuitive board layout</p>
+//      </div>
+
+//      <div className="p-8 bg-slate-800 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-slate-700">
+//        <div className="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
+//          <Users className="w-6 h-6 text-blue-400" />
+//        </div>
+//        <h3 className="text-xl font-medium mb-2 text-white">Team Collaboration</h3>
+//        <p className="text-slate-300">Work together seamlessly with real-time updates and sharing</p>
+//      </div>
+
+//      <div className="p-8 bg-slate-800 rounded-lg shadow-md hover:shadow-lg transition-shadow border border-slate-700">
+//        <div className="w-12 h-12 bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4">
+//          <Sparkles className="w-6 h-6 text-blue-400" />
+//        </div>
+//        <h3 className="text-xl font-medium mb-2 text-white">Beautiful Interface</h3>
+//        <p className="text-slate-300">Enjoy a clean, modern design that makes productivity beautiful</p>
+//      </div>
+//    </div>
+//  </div>
+// </section>
