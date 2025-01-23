@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { DragDropContext, Droppable } from '@hello-pangea/dnd';
 import List from '../components/List';
 import DemoBoardNav from '../components/DemoBoardNav';
@@ -9,6 +9,11 @@ const DemoBoard = () => {
   const { colors, accent, theme } = useTheme();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isPageSettingsModalOpen, setIsPageSettingsModalOpen] = useState(false);
+
+  const [isAddingList, setIsAddingList] = useState(false);
+  const [newListName, setNewListName] = useState('');
+  const newListInputRef = useRef(null);
+  const newListButtonRef = useRef(null);
 
   // Create a demo board ID to mimic MongoDB ObjectId
   const demoBoardId = 'demo123456789';
@@ -141,6 +146,33 @@ const DemoBoard = () => {
     }
   ]);
 
+
+  useEffect(() => {
+    if (isAddingList && newListInputRef.current) {
+      newListInputRef.current.focus();
+    }
+  }, [isAddingList]);
+
+  // Handle clicking outside of the new list input
+  const handleClickOutside = (event) => {
+    if (
+      newListInputRef.current && 
+      !newListInputRef.current.contains(event.target) && 
+      newListButtonRef.current && 
+      !newListButtonRef.current.contains(event.target)
+    ) {
+      setIsAddingList(false);
+      setNewListName('');
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   // Counter for new IDs
   const [newListId, setNewListId] = useState(4);
   const [newCardId, setNewCardId] = useState(10);
@@ -150,15 +182,18 @@ const DemoBoard = () => {
 
   // Create new list
   const handleCreateList = (name) => {
+    if (!newListName.trim()) return;
+
     const newList = {
       _id: `list${newListId}`,
-      name,
+      name: newListName.trim(),
       boardId: demoBoardId,
       position: lists.length + 1,
       color: null
     };
     setLists([...lists, newList]);
     setNewListId(newListId + 1);
+    setNewListName('');
   };
 
    // Update list name
@@ -173,6 +208,13 @@ const DemoBoard = () => {
       delete newState[listId];
       return newState;
     });
+  };
+
+  // Handle enter key press for list creation
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleCreateList();
+    }
   };
 
   // Delete list
@@ -360,17 +402,66 @@ const DemoBoard = () => {
                 {provided.placeholder}
                 
                 {/* Add list button */}
-                <div className="w-72 shrink-0">
-                  <button
-                    onClick={() => handleCreateList('New List')}
-                    className="w-full py-2 px-4 rounded"
-                    style={{
-                      backgroundColor: colors.background.secondary,
-                      color: colors.text.primary
-                    }}
-                  >
-                    + Add another list
-                  </button>
+                <div className="w-[264px] shrink-0">
+                  {!isAddingList ? (
+                    <button
+                      onClick={() => setIsAddingList(true)}
+                      className="w-full py-2 px-4 rounded shadow-xl"
+                      style={{
+                        backgroundColor: colors.background.secondary,
+                        color: colors.text.primary,
+                        transition: 'background-color 0.2s, color 0.2s'
+                      }}
+                    >
+                      + Add another list
+                    </button>
+                  ) : (
+                    <div 
+                      className="p-2 rounded"
+                      style={{
+                        backgroundColor: colors.background.secondary,
+                        transition: 'background-color 0.2s'
+                      }}
+                    >
+                      <input
+                        type="text"
+                        value={newListName}
+                        onChange={(e) => setNewListName(e.target.value)}
+                        onKeyPress={handleKeyPress}
+                        placeholder="Enter list title..."
+                        className="w-full p-2 rounded mb-2"
+                        style={{
+                          backgroundColor: colors.background.tertiary,
+                          color: colors.text.primary,
+                          transition: 'background-color 0.2s, color 0.2s'
+                        }}
+                        ref={newListInputRef}
+                      />
+                      <div className="flex justify-between">
+                        <button
+                          onClick={handleCreateList}
+                          className="px-4 py-2 rounded hover:opacity-90"
+                          style={{
+                            backgroundColor: accent.primary,
+                            color: '#ffffff',
+                            transition: 'background-color 0.2s'
+                          }}
+                          ref={newListButtonRef}
+                        >
+                          Add List
+                        </button>
+                        <button
+                          onClick={() => {
+                            setIsAddingList(false);
+                            setNewListName('');
+                          }}
+                          style={{ color: colors.text.secondary }}
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
