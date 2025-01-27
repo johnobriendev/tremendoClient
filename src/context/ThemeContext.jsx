@@ -27,7 +27,7 @@ export const ThemeProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem('theme', theme);
     //  update the document's class for global CSS changes
-    document.documentElement.classList.remove('light', 'dark');
+    document.documentElement.classList.remove('light', 'dark', 'forest', 'space');
     document.documentElement.classList.add(theme);
   }, [theme]);
 
@@ -35,7 +35,7 @@ export const ThemeProvider = ({ children }) => {
   const contextValue = useMemo(() => ({
     ...themeColors,
     setTheme,
-    toggleTheme: () => setTheme(prev => prev === 'light' ? 'dark' : 'light'),
+    availableThemes: ['light', 'dark', 'forest', 'space']
   }), [themeColors]);
 
   return (

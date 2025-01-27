@@ -24,6 +24,30 @@ export const colors = {
       secondary: '#d0d7df',    // Light ocean grey
     }
   },
+  forest: {
+    background: {
+      primary: '#2c4a34',      // Deep forest green
+      secondary: '#395240',    // Medium forest green
+      navbar: '#1e352b',       // Dark forest green
+      tertiary: '#466b4f',     // Light forest green
+    },
+    text: {
+      primary: '#e6ede8',      // Soft mint
+      secondary: '#c8d6cc',    // Light sage
+    }
+  },
+  space: {
+    background: {
+      primary: '#1a1b26',      // Deep space blue
+      secondary: '#24253a',    // Cosmic purple
+      navbar: '#13141f',       // Dark space
+      tertiary: '#2f3147',     // Nebula purple
+    },
+    text: {
+      primary: '#e1e2f5',      // Star white
+      secondary: '#b3b4d1',    // Cosmic grey
+    }
+  },
   accent: {
     primary: '#5f7185',        // Ocean blue-grey
     success: '#7f958a',        // Misty green

@@ -5,7 +5,7 @@ import { useTheme } from '../context/ThemeContext.jsx';
 
 
 const PageSettingsModal = ({ isOpen, onClose }) => {
-  const { colors, accent, theme, toggleTheme } = useTheme();
+  const { colors, accent, theme, setTheme, availableThemes } = useTheme();
   const modalRef = useRef(null);
 
   useEffect(() => {
@@ -56,29 +56,21 @@ const PageSettingsModal = ({ isOpen, onClose }) => {
           {/* Theme Section */}
           <div className="mb-6">
             <p className="font-medium mb-2">Theme</p>
-            <div className="flex gap-2">
-              <button
-                  className="px-4 py-2 rounded-lg hover:opacity-90 transition-all"
-                  style={{
-                    backgroundColor: theme === 'light' ? accent.primary : colors.background.tertiary,
-                    color: theme === 'light' ? '#ffffff' : colors.text.primary,
-                    transition: 'background-color 0.2s, color 0.2s'
-                  }}
-                  onClick={() => toggleTheme('light')}
-                >
-                  Light Mode
-                </button>
+            <div className="grid grid-cols-2 gap-2">
+              {availableThemes.map((themeName) => (
                 <button
-                  className="px-4 py-2 rounded-lg hover:opacity-90 transition-all"
+                  key={themeName}
+                  className="px-4 py-2 rounded-lg hover:opacity-90 transition-all capitalize"
                   style={{
-                    backgroundColor: theme === 'dark' ? accent.primary : colors.background.tertiary,
-                    color: theme === 'dark' ? '#ffffff' : colors.text.primary,
+                    backgroundColor: theme === themeName ? accent.primary : colors.background.tertiary,
+                    color: theme === themeName ? '#ffffff' : colors.text.primary,
                     transition: 'background-color 0.2s, color 0.2s'
                   }}
-                  onClick={() => toggleTheme('dark')}
+                  onClick={() => setTheme(themeName)}
                 >
-                  Dark Mode
+                  {themeName} Theme
                 </button>
+              ))}
             </div>
           </div>
 

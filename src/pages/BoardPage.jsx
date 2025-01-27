@@ -157,15 +157,6 @@ function BoardPage() {
     }
   };
 
-  // const handleUpdateCard = async (cardId, updates) => {
-  //   try {
-  //     const updatedCard = await api.updateCard(cardId, updates);
-  //     setCards(cards.map(card => card._id === cardId ? updatedCard : card));
-  //   } catch (error) {
-  //     console.error('Error updating card:', error);
-  //     throw error;
-  //   }
-  // };
 
   const handleUpdateCard = async (cardId, updates, isCommentUpdate = false) => {
     try {
