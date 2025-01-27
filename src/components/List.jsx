@@ -24,6 +24,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
   const menuRef = useRef(null);
   const modalRef = useRef(null);
   const cardInputRef = useRef(null);
+  const listNameInputRef = useRef(null);
   const addCardButtonRef = useRef(null);
   const listIdRef = useRef(list._id);
 
@@ -67,6 +68,14 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
       cardInputRef.current.style.height = `${cardInputRef.current.scrollHeight}px`;
     }
   }, [newCardName[list._id]]);
+
+
+  useEffect(() => {
+    if (listNameInputRef.current) {
+      listNameInputRef.current.style.height = 'auto';
+      listNameInputRef.current.style.height = `${listNameInputRef.current.scrollHeight}px`;
+    }
+  }, [editListName[list._id]]);
 
 
   const handleDeleteClick = (e) => {
@@ -194,7 +203,7 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
           }}
         >
           <div className="flex items-center justify-between gap-2 mb-4 ">
-            <input
+            {/* <input
               type="text"
               //value={editListName[list._id] || list.name}
               value={editListName.hasOwnProperty(list._id) ? editListName[list._id] : list.name}
@@ -208,6 +217,22 @@ function List({ list, cards, newCardName, editListName, setEditListName, setNewC
                 color: colors.text.primary,
                 transition: 'background-color 0.2s, color 0.2s'
               }}
+            /> */}
+            <textarea
+              value={editListName.hasOwnProperty(list._id) ? editListName[list._id] : list.name}
+              onChange={(e) => setEditListName({ ...editListName, [list._id]: e.target.value })}
+              onBlur={() => handleListNameChange(list._id, editListName[list._id])}
+              onKeyPress={handleListNameKeyPress}
+              placeholder="List Name"
+              className="p-2 rounded w-full resize-none overflow-hidden"
+              style={{
+                backgroundColor: colors.background.tertiary,
+                color: colors.text.primary,
+                transition: 'background-color 0.2s, color 0.2s',
+                minHeight: '2.5rem'
+              }}
+              rows={1}
+              ref={listNameInputRef}
             />
             <div className="relative" ref={menuRef}>
               <button
