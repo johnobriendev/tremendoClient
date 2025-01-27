@@ -98,6 +98,14 @@ function BoardPage() {
   }, [isAddingList]);
 
 
+  useEffect(() => {
+    if (newListInputRef.current) {
+      newListInputRef.current.style.height = 'auto';
+      newListInputRef.current.style.height = `${newListInputRef.current.scrollHeight}px`;
+    }
+  }, [newListName]);
+
+
   //allows the user to use the enter key to add a new list
   const handleKeyPress = (event) => {
     if (event.key === 'Enter') {
@@ -397,7 +405,7 @@ function BoardPage() {
                         backgroundColor: colors.background.secondary,
                         transition: 'background-color 0.2s'
                       }}>
-                        <input
+                        {/* <input
                           type="text"
                           value={newListName}
                           onChange={(e) => setNewListName(e.target.value)}
@@ -410,6 +418,21 @@ function BoardPage() {
                             transition: 'background-color 0.2s, color 0.2s'
                           }}
                           ref={newListInputRef}
+                        /> */}
+                        <textarea
+                          value={newListName}
+                          onChange={(e) => setNewListName(e.target.value)}
+                          onKeyPress={handleKeyPress}
+                          placeholder="Enter list title..."
+                          className="w-full p-2 rounded mb-2 resize-none overflow-hidden"
+                          style={{
+                            backgroundColor: colors.background.tertiary,
+                            color: colors.text.primary,
+                            transition: 'background-color 0.2s, color 0.2s',
+                            minHeight: '2.5rem'
+                          }}
+                          ref={newListInputRef}
+                          rows={1}
                         />
                         <div className="flex justify-between">
                           <button
