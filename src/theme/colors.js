@@ -48,6 +48,56 @@ export const colors = {
       secondary: '#b3b4d1',    // Cosmic grey
     }
   },
+  sunset: {
+    background: {
+      primary: '#2d1b2d',      // Deep purple sunset
+      secondary: '#432639',    // Warm dusk purple
+      navbar: '#1f1520',       // Dark evening
+      tertiary: '#5c3548',     // Twilight rose
+    },
+    text: {
+      primary: '#ffd6e0',      // Soft pink
+      secondary: '#ffb8c6',    // Muted coral
+    }
+  },
+  ocean: {
+    background: {
+      primary: '#1a2c38',      // Deep ocean blue
+      secondary: '#2a4150',    // Medium sea blue
+      navbar: '#132029',       // Dark water
+      tertiary: '#385869',     // Wave blue
+    },
+    text: {
+      primary: '#e0f2ff',      // Seafoam white
+      secondary: '#b3d9ff',    // Light azure
+    }
+  },
+  mint: {
+    background: {
+      primary: '#1a2b2b',      // Deep mint
+      secondary: '#2a4141',    // Medium mint
+      navbar: '#131f1f',       // Dark mint
+      tertiary: '#385555',     // Light mint
+    },
+    text: {
+      primary: '#d5f2f2',      // Soft mint
+      secondary: '#b3e6e6',    // Light mint
+    }
+  },
+  cyberpunk: {
+    background: {
+      primary: '#0d0f1b',      // Deep cyber night
+      secondary: '#1a1c2e',    // Neon darkness
+      navbar: '#080a14',       // Dark tech
+      tertiary: '#252840',     // Electric shadow
+    },
+    text: {
+      primary: '#ff2a6d',      // Hot pink
+      secondary: '#05d9e8',    // Cyan blue
+    }
+  },
+
+
   accent: {
     primary: '#5f7185',        // Ocean blue-grey
     success: '#7f958a',        // Misty green

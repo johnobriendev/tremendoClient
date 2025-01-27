@@ -7,7 +7,7 @@ const ThemeContext = createContext();
 export const ThemeProvider = ({ children }) => {
   // Initialize theme from localStorage
   const [theme, setTheme] = useState(() => {
-    return localStorage.getItem('theme') || 'light';
+    return localStorage.getItem('theme') || 'dark';
   });
 
   // Use useMemo to compute the color values
@@ -27,7 +27,7 @@ export const ThemeProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem('theme', theme);
     //  update the document's class for global CSS changes
-    document.documentElement.classList.remove('light', 'dark', 'forest', 'space');
+    document.documentElement.classList.remove('light', 'dark', 'forest', 'space', 'sunset', 'ocean', 'mint', 'cyberpunk');
     document.documentElement.classList.add(theme);
   }, [theme]);
 
@@ -35,7 +35,7 @@ export const ThemeProvider = ({ children }) => {
   const contextValue = useMemo(() => ({
     ...themeColors,
     setTheme,
-    availableThemes: ['light', 'dark', 'forest', 'space']
+    availableThemes: ['light', 'dark', 'forest', 'space', 'sunset', 'ocean', 'mint', 'cyberpunk']
   }), [themeColors]);
 
   return (
