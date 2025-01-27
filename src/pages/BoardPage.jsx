@@ -157,15 +157,43 @@ function BoardPage() {
     }
   };
 
-  const handleUpdateCard = async (cardId, updates) => {
+  // const handleUpdateCard = async (cardId, updates) => {
+  //   try {
+  //     const updatedCard = await api.updateCard(cardId, updates);
+  //     setCards(cards.map(card => card._id === cardId ? updatedCard : card));
+  //   } catch (error) {
+  //     console.error('Error updating card:', error);
+  //     throw error;
+  //   }
+  // };
+
+  const handleUpdateCard = async (cardId, updates, isCommentUpdate = false) => {
     try {
-      const updatedCard = await api.updateCard(cardId, updates);
-      setCards(cards.map(card => card._id === cardId ? updatedCard : card));
+      // If it's a comment update, we already have the updated card
+      const updatedCard = isCommentUpdate ? updates : await api.updateCard(cardId, updates);
+      
+      setCards(prevCards => 
+        prevCards.map(card => 
+          card._id === cardId 
+            ? {
+                ...card,
+                ...updatedCard,
+                // For comment updates, use the populated data directly
+                comments: isCommentUpdate ? updatedCard.comments : card.comments
+              }
+            : card
+        )
+      );
     } catch (error) {
       console.error('Error updating card:', error);
       throw error;
     }
   };
+  
+
+  
+
+  
 
   const handleDeleteCard = async (cardId) => {
     try {

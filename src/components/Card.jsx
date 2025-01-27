@@ -240,7 +240,7 @@ function Card({ card, index, onUpdateCard, onDeleteCard, theme }) {
     setIsLoading(true);
     try {
       const updatedCard = await addCardComment(card._id, newComment);
-      onUpdateCard(card._id, updatedCard); // Update local state with the returned card
+      await onUpdateCard(card._id, updatedCard, true); // add true to fix state problems
       setNewComment('');
     } catch (error) {
       console.error("Error adding comment:", error);
