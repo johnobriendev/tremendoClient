@@ -8,7 +8,6 @@ import ProtectedRoute from './components/ProtectedRoute';
 import VerifyEmail from './pages/VerifyEmail';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
-import AboutPage from './pages/AboutPage';
 import WorkInProgress from './pages/WorkInProgressPage';
 import { ThemeProvider } from './context/ThemeContext';
 import AuthRoute from './components/AuthRoute';
@@ -23,10 +22,7 @@ const router = createBrowserRouter([
       </AuthRoute>
     ),
   },
-  {
-    path: '/about',
-    element: <AboutPage />,
-  },
+
   {
     path: '/workinprogress',
     element: <WorkInProgress />,
