@@ -197,7 +197,7 @@ const LandingPage = () => {
           <h1 className="text-4xl md:text-6xl font-thin  text-white mb-4 mt-24 text-center">Tremendo</h1>
           <p className="text-l md:text-xl text-white font-light max-w-2xl mx-auto text-center">
             Simplify your workflow. Visualize your progress.
-            The open-source project management tool that works the way you think.
+            The project management tool that works the way you think.
           </p>
           <div className=" flex flex-col sm:flex-row items-center justify-center gap-4 mt-8">
             <Link 
@@ -219,9 +219,7 @@ const LandingPage = () => {
               Try Demo
             </button>
           </div>
-          <div className="text-white text-sm mt-8">
-            Open Source • Free Forever 
-          </div>
+         
         </section>
 
           {/*workflow simplification section  */}
