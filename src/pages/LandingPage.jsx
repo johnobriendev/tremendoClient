@@ -92,26 +92,26 @@ const LandingPage = () => {
             <a 
               href="#about" 
               onClick={scrollToAbout} 
-              className={`text-sm font-medium hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}
+              className={`text-sm hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}
             >
               About
             </a>
             <a 
               href="#demo" 
               onClick={scrollToDemo} 
-              className={`text-sm font-medium hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}
+              className={`text-sm hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}
             >
               Demo
             </a>
             <Link 
               to="/login" 
-              className={`text-sm font-medium hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}
+              className={`text-sm hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}
             >
               Login
             </Link>
             <Link 
               to="/register" 
-              className={`text-sm font-medium hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}
+              className={`text-sm hover:underline ${isScrolled ? 'text-black' : 'text-white'}`}
             >
               Register
             </Link>
